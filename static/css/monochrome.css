@@ -1,0 +1,85 @@
+/* Monochrome table styling to match sim.php across all pages */
+:root {
+  /* Fallbacks for pages without theme vars */
+  --monochrome-bg-1: #0f0f10;
+  --monochrome-bg-2: #151517;
+  --monochrome-bg-3: #1e1e22;
+  --monochrome-text-0: #ffffff;
+  --monochrome-text-1: #e6e6e6;
+  --monochrome-border: #2a2a2a;
+}
+
+/* Table headers */
+.table thead th,
+.dataTablesCard .card-table .table thead th,
+table.dataTable thead th {
+  background: var(--bg-3, var(--monochrome-bg-3)) !important;
+  color: var(--text-1, var(--monochrome-text-1)) !important;
+  border-bottom-color: var(--border, var(--monochrome-border)) !important;
+}
+
+/* Table body and rows */
+.table,
+.table tbody td,
+.table tbody tr,
+table.dataTable tbody td,
+table.dataTable tbody tr {
+  background: var(--bg-2, var(--monochrome-bg-2)) !important;
+  color: var(--text-1, var(--monochrome-text-1)) !important;
+}
+
+/* Stripes and hover */
+.table-striped tbody tr:nth-of-type(odd),
+table.dataTable.stripe tbody tr:nth-of-type(odd) {
+  background-color: var(--bg-1, var(--monochrome-bg-1)) !important;
+}
+
+.table-hover tbody tr:hover,
+table.dataTable.hover tbody tr:hover {
+  background-color: var(--bg-2, var(--monochrome-bg-2)) !important;
+}
+
+/* Borders */
+.table td, .table th,
+table.dataTable td, table.dataTable th {
+  border-color: var(--border, var(--monochrome-border)) !important;
+}
+
+/* Buttons inside tables */
+.table .btn,
+table.dataTable .btn {
+  background: var(--bg-3, var(--monochrome-bg-3)) !important;
+  color: var(--text-1, var(--monochrome-text-1)) !important;
+  border: 1px solid var(--border, var(--monochrome-border)) !important;
+}
+
+.table .btn:hover,
+table.dataTable .btn:hover {
+  background: var(--bg-2, var(--monochrome-bg-2)) !important;
+}
+
+/* DataTables pagination */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  background: var(--bg-3, var(--monochrome-bg-3)) !important;
+  color: var(--text-1, var(--monochrome-text-1)) !important;
+  border-color: var(--border, var(--monochrome-border)) !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background: var(--bg-2, var(--monochrome-bg-2)) !important;
+  color: var(--text-0, var(--monochrome-text-0)) !important;
+}
+
+/* Neutralize brand colors inside tables */
+.table .text-primary, .table .text-success, .table .text-danger,
+.table .text-info, .table .text-warning,
+table.dataTable .text-primary, table.dataTable .text-success, table.dataTable .text-danger,
+table.dataTable .text-info, table.dataTable .text-warning {
+  color: var(--text-1, var(--monochrome-text-1)) !important;
+}
+
+.table .badge, table.dataTable .badge {
+  background: var(--bg-3, var(--monochrome-bg-3)) !important;
+  color: var(--text-1, var(--monochrome-text-1)) !important;
+}

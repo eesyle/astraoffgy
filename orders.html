@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+
+    <title>Astradox Pro :: Orders </title>
+    <meta property="og:title" content="Astradox Pro — Orders">
+    <meta property="og:description" content="Explicit Dumps">
+    <meta property="og:image" content="https://astradox.pro/favicon.png">
+    <meta property="og:url" content="https://astradox.pro/">
+
+    <!-- FAVICONS ICON -->
+    <link rel="shortcut icon" type="image/png" href="https://astradox.pro/xui-main/images/favicon.png">
+    <link rel="stylesheet" href="https://astradox.pro/xui-main/vendor/toastr/css/toastr.min.css">
+    <link href="https://astradox.pro/xui-main/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+    <link href="https://astradox.pro/xui-main/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://astradox.pro/xui-main/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="https://astradox.pro/xui-main/vendor/jquery-autocomplete/jquery-ui.css" rel="stylesheet">
+
+    <!-- Style css -->
+
+    <link href="https://astradox.pro/xui-main/css/style.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+    <!-- **********************************
+        Main wrapper start
+    *********************************** -->
+    <div id="main-wrapper">
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+            <a href="./" class="brand-logo">
+                <div class="logo">
+                    <img class="logo-abbr" src="https://astradox.pro/favicon.png" style="width: 50px; height: 45px;"></img>
+                    <h1 class="brand-title font-w600 text-white">Astradox</h1>
+                </div>
+
+            </a>
+            <div class="nav-control">
+                <div class="hamburger">
+                    <span class="line"></span>
+                    <span class="line"></span>
+                    <span class="line"></span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.4" d="M16.7548 0.333313H20.7051C22.341 0.333313 23.6667 1.67014 23.6667 3.31994V7.30359C23.6667 8.95339 22.341 10.2902 20.7051 10.2902H16.7548C15.1188 10.2902 13.7932 8.95339 13.7932 7.30359V3.31994C13.7932 1.67014 15.1188 0.333313 16.7548 0.333313Z" fill="white"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M3.29492 0.333313H7.24522C8.8812 0.333313 10.2068 1.67014 10.2068 3.31994V7.30359C10.2068 8.95339 8.8812 10.2902 7.24522 10.2902H3.29492C1.65894 10.2902 0.333313 8.95339 0.333313 7.30359V3.31994C0.333313 1.67014 1.65894 0.333313 3.29492 0.333313ZM3.29492 13.7097H7.24522C8.8812 13.7097 10.2068 15.0466 10.2068 16.6964V20.68C10.2068 22.3287 8.8812 23.6666 7.24522 23.6666H3.29492C1.65894 23.6666 0.333313 22.3287 0.333313 20.68V16.6964C0.333313 15.0466 1.65894 13.7097 3.29492 13.7097ZM20.705 13.7097H16.7547C15.1188 13.7097 13.7931 15.0466 13.7931 16.6964V20.68C13.7931 22.3287 15.1188 23.6666 16.7547 23.6666H20.705C22.341 23.6666 23.6666 22.3287 23.6666 20.68V16.6964C23.6666 15.0466 22.341 13.7097 20.705 13.7097Z" fill="white"/>
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header" style="background: #2d2362; opacity: .9;">
+            <div class="header-content">
+                <nav class="navbar navbar-expand">
+                    <div class="collapse navbar-collapse justify-content-between">
+                        <div class="header-left">
+                            <div class="dashboard_bar">
+                                Orders </div>
+                        </div>
+
+                        <div class="dropdown header-profile2 ">
+                            <ul class="navbar-nav header-right">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link user-" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
+                                        <div class="header-info2 d-flex align-items-center">
+                                            <img src="https://astradox.pro/uploads/default-user.png" alt="">
+                                            <div class="d-flex align-items-center sidebar-info">
+                                                <div class="user-info">
+                                                    <span class="font-w500 d-block  fs-5 text-white">udukundaelysee@gmail.com</span>
+                                                    <small class="text-end font-w600 mt-2"><img src="https://astradox.pro/dollar-sign.png" style="width:15px; height: 15px;">0.00</small>
+                                                </div>
+                                                <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M12.8334 1.08331L7.00002 6.91665L1.16669 1.08331" stroke="#FFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="dropdown-menu profile dropdown-menu-end">
+                                        <a href="./top-up" class="dropdown-item ai-icon">
+                                            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="text-success" width="18" height="18"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                                            <span class="ms-2">Top Up</span>
+                                        </a>
+                                        <a href="./profile" class="dropdown-item ai-icon ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                            <span class="ms-2">Profile</span>
+                                        </a>
+                                        <a href="javascript:;" aria-expanded="false" data-bs-toggle="modal" data-bs-target="#contactSupport" class="dropdown-item ai-icon ">
+                                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                            <span class="ms-2">Support</span>
+                                        </a>
+                                        <a href="./logout" class="dropdown-item ai-icon">
+                                            <svg  xmlns="http://www.w3.org/2000/svg" class="text-danger" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                            <span class="ms-2">Logout</span>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="dlabnav">
+            <div class="dlabnav-scroll">
+
+                <ul class="metismenu" id="menu">
+                    <li class="">
+                        <a href="./" aria-expanded="false">
+                            <div class="menu-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="IconlyHome"><g id="Home">
+                                <path id="Home_2" d="M9.13478 20.7733V17.7156C9.13478 16.9351 9.77217 16.3023 10.5584 16.3023H13.4326C13.8102 16.3023 14.1723 16.4512 14.4393 16.7163C14.7063 16.9813 14.8563 17.3408 14.8563 17.7156V20.7733C14.8539 21.0978 14.9821 21.4099 15.2124 21.6402C15.4427 21.8705 15.7561 22 16.0829 22H18.0438C18.9596 22.0023 19.8388 21.6428 20.4872 21.0008C21.1356 20.3588 21.5 19.487 21.5 18.5778V9.86686C21.5 9.13246 21.1721 8.43584 20.6046 7.96467L13.934 2.67587C12.7737 1.74856 11.1111 1.7785 9.98539 2.74698L3.46701 7.96467C2.87274 8.42195 2.51755 9.12064 2.5 9.86686V18.5689C2.5 20.4639 4.04738 22 5.95617 22H7.87229C8.55123 22 9.103 21.4562 9.10792 20.7822L9.13478 20.7733Z" fill="#130F26"/>
+                                </g></g>
+                            </svg>
+                            </div>
+                            <span class="nav-text">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <div class="menu-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"/>
+                            </svg>
+                            </div>
+                            <span class="nav-text">Bank Logs</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">US BANKS</a>
+                                <ul aria-expanded="false">
+                                    <li><a href="./us-banks?_c=b865e8d1404fc283b306b26382cebf67">Chase Bank</a></li>
+                                    <li><a href="./us-banks?_c=b7a7b9e0ed6f102305e0c9e724876171">Bank of America</a></li>
+                                    <li><a href="./us-banks?_c=a3c4c0bd470f6d24dddf7a262200c2ad">WellsFargo Bank</a></li>
+                                    <li><a href="./us-banks?_c=799e7fa8125b1205b39363cde5db5fc6">Chime Bank</a></li>
+                                    <li><a href="./us-banks?_c=b5a6eaca34a36ab2d61617f28f9384ba">Citi Bank</a></li>
+                                    <li><a href="./us-banks?_c=9304ae98cc8ac5c45ce98a1db838e78f">Woodforest Bank</a></li>
+                                    <li><a href="./us-banks?_c=27ed7c1edca5ee0a25756ce3c5cf180c">PNC Bank</a></li>
+                                    <li><a href="./us-banks?_c=d149a5e182d481adc21df46004adbcb2">TD Bank</a></li>
+                                    <li><a href="./us-banks?_c=632f7156f73d57105e8292f70ce922c4">Capital One Bank</a></li>
+                                    <li><a href="./us-banks?_c=04b27f35cc633aaaf4107c0df34f06ef">Citizens Bank</a></li>
+                                    <li><a href="./us-banks?_c=18e53ceaab47df9e13c62947dc487422">HSBC Bank USA</a></li>
+                                    <li><a href="./us-banks?_c=399f87c7b5b958891e0bb86cee79652e">KeyBank</a></li>
+                                    <li><a href="./us-banks?_c=bed54fbc9b4b003cde733e73481ac041">First Republic Bank</a></li>
+                                    <li><a href="./us-banks?_c=8f39ab162a73dc54e0df89381bb2462e">Huntington National Bank</a></li>
+                                    <li><a href="./us-banks?_c=f0d2a6c82903c2141f02c79bb1cfab40">Regions Bank</a></li>
+                                    <li><a href="./us-banks?_c=46b781d591350f63752c9349f94ef887">American Express National</a></li>
+                                </ul>
+                            </li>
+                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">UK BANKS</a>
+                                <ul aria-expanded="false">
+                                    <li><a href="./uk-banks?_c=5c2959f7ad1f3dddafd7c22053145cb4">HSBC Holdings</a></li>
+                                    <li><a href="./uk-banks?_c=71b43bf957c627f90c08035d946eac2a">Lloyds Banking Group</a></li>
+                                    <li><a href="./uk-banks?_c=3026daf9f25dee6c6725e1aabb122cb3">Barclays</a></li>
+                                    <li><a href="./uk-banks?_c=eaac60f04440c9722bea78c253c88ea3">Standard Chartered</a></li>
+                                    <li><a href="./uk-banks?_c=1537ecbf9fbf03749f3c7cf233246c28">Santander UK</a></li>
+                                    <li><a href="./uk-banks?_c=f3dddf38bf2cae61afd8580b8c6b9195">Close Brothers</a></li>
+                                    <li><a href="./uk-banks?_c=5f853e6cb9aaf143a789b8371f5687d7">Schroders</a></li>
+                                    <li><a href="./uk-banks?_c=f49ce7df5fb72a53ead4c5972079efc7">Bank of England</a></li>
+                                    <li><a href="./uk-banks?_c=cd87c98e44f8ebfa9f7d147e8a79df4c">Tesco Bank</a></li>
+                                    <li><a href="./uk-banks?_c=b4a2b77ce8f089235e19454a74b70fa8">Royal Bank of Scotland</a></li>
+                                    <li><a href="./uk-banks?_c=5460f46219887c95576112a29c27a84c">TSB Bank</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="" href="./dumps-and-pins" aria-expanded="false">
+                            <div class="menu-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"/>
+                            </svg>
+                            </div>
+                            <span class="nav-text">Dumps + Pins</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="" href="./paypal-logs" aria-expanded="false">
+                            <div class="menu-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"/>
+                            </svg>
+                            </div>
+                            <span class="nav-text">Paypal Logs</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="" href="./orders" aria-expanded="false">
+                            <div class="menu-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="IconlyDocument">
+                                <g id="Document">
+                                <path id="Document_2" fill-rule="evenodd" clip-rule="evenodd" d="M7.81 2H16.191C19.28 2 21 3.78 21 6.83V17.16C21 20.26 19.28 22 16.191 22H7.81C4.77 22 3 20.26 3 17.16V6.83C3 3.78 4.77 2 7.81 2ZM8.08 6.66V6.65H11.069C11.5 6.65 11.85 7 11.85 7.429C11.85 7.87 11.5 8.22 11.069 8.22H8.08C7.649 8.22 7.3 7.87 7.3 7.44C7.3 7.01 7.649 6.66 8.08 6.66ZM8.08 12.74H15.92C16.35 12.74 16.7 12.39 16.7 11.96C16.7 11.53 16.35 11.179 15.92 11.179H8.08C7.649 11.179 7.3 11.53 7.3 11.96C7.3 12.39 7.649 12.74 8.08 12.74ZM8.08 17.31H15.92C16.319 17.27 16.62 16.929 16.62 16.53C16.62 16.12 16.319 15.78 15.92 15.74H8.08C7.78 15.71 7.49 15.85 7.33 16.11C7.17 16.36 7.17 16.69 7.33 16.95C7.49 17.2 7.78 17.35 8.08 17.31Z" fill="#130F26"/>
+                                </g>
+                                </g>
+                            </svg>
+                            </div>
+                            <span class="nav-text">Orders</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="has-arrow " href="javascript:void()" aria-expanded="false">
+                            <div class="menu-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.34933 14.8577C5.38553 14.8577 2 15.47 2 17.9174C2 20.3666 5.364 21 9.34933 21C13.3131 21 16.6987 20.3877 16.6987 17.9404C16.6987 15.4911 13.3347 14.8577 9.34933 14.8577Z" fill="#B9A8FF"/>
+                                <path opacity="0.4" d="M9.34935 12.5248C12.049 12.5248 14.2124 10.4062 14.2124 7.76241C14.2124 5.11865 12.049 3 9.34935 3C6.65072 3 4.48633 5.11865 4.48633 7.76241C4.48633 10.4062 6.65072 12.5248 9.34935 12.5248Z" fill="#763ed0"/>
+                                <path opacity="0.4" d="M16.1734 7.84875C16.1734 9.19507 15.7605 10.4513 15.0364 11.4948C14.9611 11.6021 15.0276 11.7468 15.1587 11.7698C15.3407 11.7995 15.5276 11.8177 15.7184 11.8216C17.6167 11.8704 19.3202 10.6736 19.7908 8.87118C20.4885 6.19676 18.4415 3.79543 15.8339 3.79543C15.5511 3.79543 15.2801 3.82418 15.0159 3.87688C14.9797 3.88454 14.9405 3.90179 14.921 3.93246C14.8955 3.97174 14.9141 4.02253 14.9395 4.05607C15.7233 5.13216 16.1734 6.44207 16.1734 7.84875Z" fill="#763ed0"/>
+                                <path d="M21.7791 15.1693C21.4317 14.444 20.5932 13.9466 19.3172 13.7023C18.7155 13.5586 17.0853 13.3545 15.5697 13.3832C15.5472 13.3861 15.5344 13.4014 15.5325 13.411C15.5295 13.4263 15.5364 13.4493 15.5658 13.4656C16.2663 13.8048 18.9738 15.2805 18.6333 18.3928C18.6186 18.5289 18.7292 18.6439 18.8671 18.6247C19.5335 18.5318 21.2478 18.1705 21.7791 17.0475C22.0736 16.4534 22.0736 15.7635 21.7791 15.1693Z" fill="#B9A8FF"/>
+                                </svg>
+                            </div>
+                            <span class="nav-text">Account</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="./top-up">Top Up</a></li>
+                            <li><a href="./profile">Profile</a></li>
+                            <li><a class="text-danger" href="./logout">Logout</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <div class="menu-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="IconlyFilter">
+                                <g id="Filter">
+                                <path id="Filter_2" fill-rule="evenodd" clip-rule="evenodd" d="M8.87774 6.37856C8.87774 8.24523 7.33886 9.75821 5.43887 9.75821C3.53999 9.75821 2 8.24523 2 6.37856C2 4.51298 3.53999 3 5.43887 3C7.33886 3 8.87774 4.51298 8.87774 6.37856ZM20.4933 4.89833C21.3244 4.89833 22 5.56203 22 6.37856C22 7.19618 21.3244 7.85989 20.4933 7.85989H13.9178C13.0856 7.85989 12.4101 7.19618 12.4101 6.37856C12.4101 5.56203 13.0856 4.89833 13.9178 4.89833H20.4933ZM3.50777 15.958H10.0833C10.9155 15.958 11.5911 16.6217 11.5911 17.4393C11.5911 18.2558 10.9155 18.9206 10.0833 18.9206H3.50777C2.67555 18.9206 2 18.2558 2 17.4393C2 16.6217 2.67555 15.958 3.50777 15.958ZM18.5611 20.7778C20.4611 20.7778 22 19.2648 22 17.3992C22 15.5325 20.4611 14.0196 18.5611 14.0196C16.6623 14.0196 15.1223 15.5325 15.1223 17.3992C15.1223 19.2648 16.6623 20.7778 18.5611 20.7778Z" fill="#130F26"></path>
+                                </g></g></svg>
+                            </div>
+                            <span class="nav-text">Theme Switcher</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="javascript:void()">
+                                <input class="chk-col-primary filled-in" id="themecolor_2" name="themecolor_bg" type="radio" value="theme_2" />
+                                <label for="themecolor_2" class="theme-bg">Theme 1</label></a>
+                            </li>
+                            <li><a href="javascript:void()">
+                                <input class="chk-col-primary filled-in" id="themecolor_4" name="themecolor_bg" type="radio" value="theme_4" />
+                                <label for="themecolor_4" class="theme-bg">Theme 2</label></a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a class="" href="javascript:;" aria-expanded="false" data-bs-toggle="modal" data-bs-target="#contactSupport">
+                            <div class="menu-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path opacity="0.4" d="M11.7759 21.8374C9.49286 20.4273 7.37056 18.7645 5.44782 16.8796C4.09044 15.5338 3.0538 13.8905 2.4171 12.0753C1.27947 8.53523 2.60374 4.48948 6.30105 3.2884C8.25256 2.67553 10.375 3.05175 12.007 4.29983C13.6396 3.05315 15.7613 2.67705 17.7129 3.2884C21.4102 4.48948 22.7434 8.53523 21.6058 12.0753C20.9742 13.8888 19.9438 15.5319 18.5928 16.8796C16.6683 18.7625 14.5463 20.4251 12.2647 21.8374L12.0159 22L11.7759 21.8374Z" fill="#B9A8FF"></path>
+                                <path d="M12.0109 22L11.776 21.8374C9.49013 20.4274 7.36487 18.7647 5.43902 16.8796C4.0752 15.5356 3.03238 13.8922 2.39052 12.0753C1.26177 8.53523 2.58605 4.48948 6.28335 3.2884C8.23486 2.67553 10.3853 3.05204 12.0109 4.31057V22Z" fill="#B9A8FF"></path>
+                                <path d="M18.2304 9.99922C18.0296 9.98629 17.8425 9.8859 17.7131 9.72157C17.5836 9.55723 17.5232 9.3434 17.5459 9.13016C17.5677 8.4278 17.168 7.78851 16.5517 7.53977C16.1609 7.43309 15.9243 7.00987 16.022 6.59249C16.1148 6.18182 16.4993 5.92647 16.8858 6.0189C16.9346 6.027 16.9816 6.04468 17.0244 6.07105C18.2601 6.54658 19.0601 7.82641 18.9965 9.22576C18.9944 9.43785 18.9117 9.63998 18.7673 9.78581C18.6229 9.93164 18.4291 10.0087 18.2304 9.99922Z" fill="#763ed0"></path>
+                            </svg>
+                            </div>
+                            <span class="nav-text">Support</span>
+                        </a>
+                    </li>
+
+
+                </ul>
+
+                <div class="copyright">
+                    <p class="fs-14">&copy; 2021 <b style="font-weight: bold !important;">Astradox Pro</b></p>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="col-xl-12">
+
+                        <div class="">
+                            <div class=" border-0 flex-wrap">
+                                <h4 class="fs-18 font-w600">Orders</h4>
+                                <!-- <p>Having any issue? Contact the <a href="mailto:support@astradox.pro"><u>support team</u></a>.</p> -->
+                            </div>
+                            <div class="">
+                                <div class="table-responsive">
+                                    <table class="table-responsive-lg table display mb-4 dataTablesCard order-table card-table text-black dataTable no-footer student-tbl" id="example5">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#O-ID</th>
+                                                <th scope="col">Order Type</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--/column-->
+
+                </div>
+
+
+            </div>
+
+        </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
+
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!-- Modal -->
+    <div class="modal fade" id="topUpAccountModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="./top-up">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel1">Top Up your account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="amount1" class="form-label d-block">Enter Amount (in USD)</label>
+                        <input type="text" id="amount1" class="form-control w-100 mb-3" placeholder="Enter how much you want to topup" name="top-up-amount" required />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-sm" name="init-top-up">Continue</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /Modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="contactSupport">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="mailto:support@astradox.pro">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel1">Contact Support</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <span style="font-size: large;">Get in touch with the support team at <a href="mailto:support@astradox.pro"><u>support@astradox.pro</u></a>, in case of any queries or inquiries.</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info btn-sm btn-rounded mt-3 px-5" name="contact_us">Contact Us</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /Modal -->
+
+
+
+    <!-- Reset-Password Modal -->
+    <div class="modal fade" id="updateUserPassword">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="post" action="">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel1">Reset Password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="password" id="passInput1" class="form-control w-100 mb-3" placeholder="Enter New Password" name="newpass" required /><br>
+                        <input type="password" id="passInput2" class="form-control w-100 mb-3" placeholder="Confirm New Password" name="confirmPass" required />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm btn-rounded" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-sm btn-rounded" name="resetPassword">Update Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- /Reset-Password Modal -->
+
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="https://astradox.pro/xui-main/vendor/global/global.min.js"></script>
+    <script src="https://astradox.pro/xui-main/vendor/chart.js/Chart.bundle.min.js"></script>
+    <script src="https://astradox.pro/xui-main/vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+    <script src="https://astradox.pro/xui-main/vendor/toastr/js/toastr.min.js"></script>
+    <!-- Apex Chart -->
+    <script src="https://astradox.pro/xui-main/vendor/apexchart/apexchart.js"></script>
+    <!-- Chart piety plugin files -->
+    <script src="https://astradox.pro/xui-main/vendor/peity/jquery.peity.min.js"></script>
+    <!-- Chartist -->
+    <script src="https://astradox.pro/xui-main/vendor/chartist/js/chartist.min.js"></script>
+    <script src="https://astradox.pro/xui-main/vendor/jquery-autocomplete/jquery-ui.js"></script>
+    <!-- Dashboard 1 -->
+    <script src="https://astradox.pro/xui-main/js/dashboard/dashboard-1.js"></script>
+    <script src="https://astradox.pro/xui-main/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="https://astradox.pro/xui-main/js/plugins-init/datatables.init.js"></script>
+    <script src="https://astradox.pro/xui-main/js/custom.min.js"></script>
+    <script src="https://astradox.pro/xui-main/js/dlabnav-init.js"></script>
+    <script src="https://astradox.pro/xui-main/js/styleSwitcher.js"></script>
+    <script src="https://astradox.pro/xui-main/js/demo.js"></script>
+
+    <script type="text/javascript">
+        function copyToClip(c) {
+            // Copy the text inside the text field
+            navigator.clipboard.writeText(c);
+
+            // Alert the copied text
+            alert("Copied: " + c);
+        }
+    </script>
+
+</body>
+
+</html>

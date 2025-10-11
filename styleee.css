@@ -1,0 +1,133 @@
+/* Reset some default styles */
+body, h1, h2, p, ul, li, a {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121B31;
+    color: #333;
+    scroll-behavior: smooth; /* Smooth scrolling */
+}
+
+/* Main container layout */
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar styling */
+.sidebar {
+    width: 250px;
+    background-color: #1B33C1;
+    color: #ecf0f1;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+}
+
+.sidebar-header {
+    margin-bottom: 20px;
+}
+
+.sidebar-header h2 {
+    font-size: 24px;
+    text-align: center;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar-nav ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar-nav ul li a {
+    color: #fff;
+    display: block;
+    padding: 10px;
+    background-color: #7647FF;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-nav ul li a:hover,
+.sidebar-nav ul li a.active {
+    background-color: #;
+}
+
+/* Main content styling */
+.main-content {
+    margin-left: 270px; /* Adjusted to account for sidebar width */
+    padding: 20px;
+    flex: 1;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2B235D;
+    color: #fff;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.admin-header h1 {
+    font-size: 24px;
+}
+
+.logout-btn {
+    background-color: #e74c3c;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Content section styling */
+.content-section {
+    background-color: #121B31;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.bank-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.bank-list li {
+    margin-bottom: 10px;
+}
+
+.bank-list li a {
+    display: block;
+    padding: 10px;
+    background-color: #34495e;
+    color: #ecf0f1;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.bank-list li a:hover {
+    background-color: #1abc9c;
+}
+

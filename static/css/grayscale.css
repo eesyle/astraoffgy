@@ -1,0 +1,250 @@
+/* Grayscale theme: modern, neat mix of gray, black, and white */
+
+:root {
+  --bg-0: #0f0f10; /* page background */
+  --bg-1: #151517; /* surfaces */
+  --bg-2: #1d1d20; /* cards/modal body */
+  --bg-3: #232327; /* headers */
+  --text-0: #ffffff; /* pure white */
+  --text-1: #e6e6e9; /* main text */
+  --text-2: #bfbfc5; /* secondary text */
+  --accent: #3f3f45; /* primary accent */
+  --accent-hover: #5a5a62; /* hover accent */
+  --border: #2b2b30; /* borders */
+  --muted: #9a9aa1; /* placeholders */
+}
+
+html, body {
+  background: var(--bg-0);
+  color: var(--text-1);
+}
+
+a { color: var(--text-2); }
+a:hover { color: var(--text-0); text-decoration: underline; }
+
+/* Navigation & headers */
+.nav-header, .header, .dlabnav, .sidebar, .navbar {
+  background: var(--bg-1) !important;
+  border-color: var(--border) !important;
+}
+
+.dlabnav .metismenu > li > a, .navbar .nav-link {
+  color: var(--text-2) !important;
+}
+.dlabnav .metismenu > li > a:hover, .navbar .nav-link:hover {
+  color: var(--text-0) !important;
+}
+
+/* Cards, modals, and panels */
+.card, .modal-content, .dropdown-menu, .list-group-item, .toast, .offcanvas, .panel, .alert {
+  background: var(--bg-2) !important;
+  color: var(--text-1) !important;
+  border-color: var(--border) !important;
+}
+
+.card-header, .modal-header, .panel-heading, .table thead {
+  background: var(--bg-3) !important;
+  color: var(--text-1) !important;
+  border-bottom-color: var(--border) !important;
+}
+
+/* Tables */
+.table { color: var(--text-1) !important; background: var(--bg-2) !important; }
+.table td, .table tr { background: var(--bg-2) !important; }
+.table-striped tbody tr:nth-of-type(odd) { background: var(--bg-1) !important; }
+.table-bordered, .table thead th, .table td, .table th { border-color: var(--border) !important; }
+
+/* Buttons */
+.btn, .btn-primary, .btn-info, .btn-success, .btn-warning, .btn-danger,
+.btn-outline-primary, .btn-outline-info, .btn-outline-success, .btn-outline-warning, .btn-outline-danger {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: var(--text-0) !important;
+}
+.btn:hover, .btn:focus {
+  background: var(--accent-hover) !important;
+  border-color: var(--accent-hover) !important;
+  color: var(--text-0) !important;
+}
+.btn-outline-primary, .btn-outline-info, .btn-outline-success, .btn-outline-warning, .btn-outline-danger {
+  background: transparent !important;
+  color: var(--text-0) !important;
+}
+.btn-outline-primary:hover, .btn-outline-info:hover, .btn-outline-success:hover, .btn-outline-warning:hover, .btn-outline-danger:hover {
+  background: var(--accent-hover) !important;
+}
+
+/* SVG icons in nav/sidebar to neutral grays */
+.dlabnav svg path, .dlabnav svg rect, .dlabnav svg circle,
+.navbar svg path, .navbar svg rect, .navbar svg circle {
+  fill: var(--text-2) !important;
+  stroke: var(--text-2) !important;
+}
+
+/* Forms */
+.form-control, .form-select, input, select, textarea {
+  background: var(--bg-1) !important;
+  border-color: var(--border) !important;
+  color: var(--text-1) !important;
+}
+.form-control::placeholder, input::placeholder, textarea::placeholder {
+  color: var(--muted) !important;
+}
+
+/* Badges & labels */
+.badge, .label {
+  background: var(--bg-3) !important;
+  color: var(--text-1) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* Misc */
+hr { border-color: var(--border) !important; }
+
+/* Utility color class overrides to prevent conflicts */
+.text-primary, .text-success, .text-info, .text-warning, .text-danger {
+  color: var(--text-1) !important;
+}
+.bg-primary, .bg-success, .bg-info, .bg-warning, .bg-danger {
+  background-color: var(--bg-3) !important;
+  color: var(--text-1) !important;
+  border-color: var(--border) !important;
+}
+.badge-primary, .badge-success, .badge-info, .badge-warning, .badge-danger {
+  background-color: var(--bg-3) !important;
+  color: var(--text-1) !important;
+  border-color: var(--border) !important;
+}
+.alert-primary, .alert-success, .alert-info, .alert-warning, .alert-danger {
+  background-color: var(--bg-2) !important;
+  color: var(--text-1) !important;
+  border-color: var(--border) !important;
+}
+
+/* Tables: ensure headers and stripes adhere to grayscale */
+.table thead th {
+  background: var(--bg-3) !important;
+  color: var(--text-1) !important;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: var(--bg-1) !important;
+}
+.table-hover tbody tr:hover {
+  background-color: var(--bg-2) !important;
+}
+
+/* DataTables pagination to monochrome */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  background: var(--bg-3) !important;
+  color: var(--text-1) !important;
+  border-color: var(--border) !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background: var(--bg-2) !important;
+  color: var(--text-1) !important;
+}
+
+/* Links that look like buttons */
+.btn-link {
+  color: var(--text-1) !important;
+}
+
+/* Try to neutralize inline bright colors */
+[style*="background-color:#"], [style*="background:#"] {
+  background-color: var(--bg-2) !important;
+}
+[style*="color:#"] {
+  color: var(--text-1) !important;
+}
+
+/* Reviews page specific overrides */
+.reviews-container, .review-card, .review-form {
+  background: var(--bg-2) !important;
+  color: var(--text-1) !important;
+  border-color: var(--border) !important;
+}
+.reviews-container h1,
+.review-author,
+.review-text,
+.review-date small {
+  color: var(--text-1) !important;
+}
+.conversation-thread .admin-reply p,
+.conversation-thread .user-reply p,
+.conversation-thread small {
+  color: var(--text-1) !important;
+}
+.review-card:hover { transform: none !important; }
+.review-photo img { max-width: 100% !important; height: auto !important; }
+.review-form { left: auto !important; right: auto !important; margin: 20px auto !important; }
+.star-rating label { color: #ccc !important; }
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label { color: #ffcc00 !important; }
+.review-rating span[style*="color:#ffcc00"] { color: #ffcc00 !important; }
+.review-rating span[style*="color:#ccc"] { color: #ccc !important; }
+
+topb.php/* Global responsive helpers */
+img { max-width: 100%; height: auto; }
+
+@media (max-width: 768px) {
+  /* Make wide tables scrollable on mobile */
+  .table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .table td, .table th { padding: .5rem .5rem; }
+}
+
+@media (max-width: 576px) {
+  /* Slightly reduce button size for compact layouts */
+  .btn { padding: .375rem .5rem; font-size: .9rem; }
+
+  /* Compact card/modal margins to fit small screens */
+  .card, .panel, .modal-content { margin-left: .5rem; margin-right: .5rem; }
+
+  /* Ensure nav lists wrap nicely in tight spaces */
+  .navbar-nav { flex-wrap: wrap; gap: .25rem; }
+}
+
+/* Header responsive rules */
+.header-profile2 { width: 100%; }
+.header-profile2 .header-right {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.header-profile2 .header-info2 img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.header-profile2 .user-info span.font-w500 {
+  max-width: 40vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.header-profile2 .user-info small {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+}
+.header-profile2 .sidebar-info > svg { display: none; }
+@media (min-width: 576px) {
+  .header-profile2 .sidebar-info > svg { display: inline; }
+}
+@media (max-width: 576px) {
+  .header-profile2 .user-info .nav-link { font-size: 1rem !important; }
+}
+.dropdown-menu.profile { max-width: 90vw; }
