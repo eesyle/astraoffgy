@@ -157,7 +157,7 @@ function get_post($conn, $var)
                                     <div class="mb-3">
                                         <img src="assets/logo.png" style="width: 200px;"></img>
                                     </div>
-                                    <h5>Welco Login to access your account</h5>
+                                    <h5>Welcome Login to access your account</h5>
                                     <hr>
 
                                     <form action="" method="post">
