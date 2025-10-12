@@ -142,48 +142,81 @@ function get_post($conn, $var)
 </head>
 
 <body class="body h-100" style="min-height: 100%;
-  background: url(hacking.png);
+   
   background-size: cover;
   box-shadow: inset 0 0 0 2000px rgba(20, 50, 60, 0.7);">
 
-    <div class="container h-100" >
-        <div class="row h-100 align-items-center justify-contain-center"  >
-            <div class="col-xl-6">
-                <div class="card" style="background-color: #1d3bc1;">
-                    <div class="card-body ">
-                        <div class="row m-0 align-items-center justify-contain-center">
-                            <div class="">
-                                <div class="sign-in-your">
-                                    <div class="mb-3">
-                                        <img src="assets/logo.png" style="width: 200px;"></img>
-                                    </div>
-                                    <h5>Welcome Log to access your account</h5>
-                                    <hr>
+    <style>
+        .auth-layout { min-height: 100vh; }
+        .glass-card {
+            background: linear-gradient(135deg, rgba(18, 24, 38, 0.65), rgba(14, 20, 30, 0.55));
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border-radius: 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+        .auth-image {
+            position: relative;
+            background-image: url('ft.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 50vh;
+            border-radius: 0;
+        }
+        .auth-image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(8,12,18,0.55), rgba(8,12,18,0.2));
+        }
+        @media (min-width: 992px) {
+            .auth-image { min-height: 100vh; }
+        }
+        .brand-logo { width: 180px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35)); }
+        .btn-primary { box-shadow: 0 6px 16px rgba(62, 123, 255, 0.35); }
+        .btn-primary:hover { box-shadow: 0 10px 22px rgba(62, 123, 255, 0.45); transform: translateY(-1px); }
+    </style>
 
-                                    <form action="" method="post">
-                                        <div class="mb-3">
-                                            <label class="mb-1"><strong>Email</strong></label>
-                                            <input type="email" name="email" class="form-control" placeholder="hello@example.com" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="mb-1"><strong>Password</strong></label>
-                                            <input type="password" name="password" class="form-control" placeholder="Password" required>
-                                        </div>
-                                        <div class="row text-right mt-0 mb-4 float-right pull-right">
-                                            <u><a href="mailto:support@offggy.com">Forgot Password?</a></u>
-                                        </div>
+    <div class="container-fluid p-0 auth-layout">
+        <div class="row g-0 min-vh-100 align-items-stretch">
+            <!-- Left: Form -->
+            <div class="col-12 col-lg-6 d-flex">
+                <div class="card glass-card border-0 w-100 my-auto">
+                    <div class="card-body p-4 p-md-5">
+                        <div class="mb-4 text-center text-lg-start">
+                            <img src="assets/logo.png" class="brand-logo" alt="HoldLogix" />
+                        </div>
+                        <h5 class="mb-3 text-white">Welcome. Log in to access your account</h5>
+                        <hr class="border-secondary">
 
-                                        <div class="text-center">
-                                            <button type="submit" name="submit" class="btn btn-primary btn-block">Sign In</button>
-                                        </div>
-                                    </form>
-                                    <hr><br>
-                                    <span>Don't have an account? <a href="pee.php"><strong><u>Register</u></strong></a>.</span>
-                                </div>
+                        <form action="" method="post">
+                            <div class="mb-3">
+                                <label class="mb-1"><strong>Email</strong></label>
+                                <input type="email" name="email" class="form-control" placeholder="hello@example.com" required>
                             </div>
+                            <div class="mb-3">
+                                <label class="mb-1"><strong>Password</strong></label>
+                                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <a class="text-decoration-underline" href="mailto:support@holdlogix.com">Forgot Password?</a>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" name="submit" class="btn btn-primary btn-lg">Sign In</button>
+                            </div>
+                        </form>
+                        <hr class="border-secondary">
+                        <div class="mt-2 text-center text-lg-start">
+                            <span>Don't have an account? <a href="pee.php"><strong><u>Register</u></strong></a>.</span>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Right: Background Image -->
+            <div class="col-12 col-lg-6">
+                <div class="auth-image w-100 h-100"></div>
             </div>
         </div>
     </div>

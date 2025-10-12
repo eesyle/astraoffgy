@@ -36,6 +36,7 @@ function formatAddress($address) {
     <link href="xui-main/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="xui-main/vendor/jquery-autocomplete/jquery-ui.css" rel="stylesheet">
     <link href="xui-main/css/style.css" rel="stylesheet">
+    <link href="static/css/grayscale.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
@@ -55,7 +56,7 @@ function formatAddress($address) {
                 </nav>
             </div>
         </div>
-        <?php include 'sideBar.php'; ?>
+        <?php include './sideBar.php'; ?>
         <div class="content-body">
             <div class="container-fluid">
                 <div class="row">

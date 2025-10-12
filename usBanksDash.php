@@ -6,8 +6,12 @@
                                     <li><a href="ieei">Huntington</a></li>
                                     <li><a href="cud">DCU</a></li>
                                     <li><a href="niche">CHIME</a></li>
-                                    <li><a href="leo">cash app</a></li>
                                     <li><a href="rg"></a>Region</li>
                                     <li><a href="cp1">Capital One</a></li>
                                     <li><a href="cufat">afcu</a></li>
+                                    <li><a href="truist">Truist Bank</a></li>
+                                    <li><a href="navyfederal">Navy Federal Bank</a></li>
+                                    <li><a href="citizens">Citizen Bank</a></li>
+                                    <li><a href="pnc">PNC</a></li>
+                                    <li><a href="keybank">Key Bank</a></li>
                                   

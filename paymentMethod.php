@@ -31,6 +31,12 @@
     <link href="xui-main/css/style.css" rel="stylesheet">
     <!-- Grayscale theme and responsive overrides -->
     <link rel="stylesheet" href="static/css/grayscale.css">
+    <style>
+        .payment-card .coin-logo { width: 56px; height: 56px; object-fit: contain; }
+        .payment-card code { word-break: break-all; }
+        .payment-card .btn { border-radius: 6px; }
+        .payment-card .network-label { font-size: 12px; opacity: 0.8; }
+    </style>
 </head>
 <body>
 
@@ -90,18 +96,97 @@
                                 <h4 class="fs-18 font-w600">PAYMENT METHOD</h4>
                             </div>
                             <div class="card-body">
-                                <div class="row align-items-center justify-contain-center">
-                                    
-                                    <div class="col-md-7">
-                                        <div class="d-flex">
-    
-                                       
-                                        <p class="mb-2"><i class="fa fa-circle text-warning"></i> <b>Kindly choose a payment method of your choice</b></p><br>
-                                        <a class="btn btn-block btn-success" href="topb.php">BTC</a>
-                                        <a class="btn btn-block btn-success" href="tops.php">USDT</a>
-                                        <a class="btn btn-block btn-success" href="topeth.php">ETH</a>
-                                        <a class="btn btn-block btn-success" href="topltc.php">LTC</a>
-                                        <a class="btn btn-block btn-success" href="topton.php">TON</a>
+                                <p class="mb-3"><i class="fa fa-circle text-warning"></i> <b>Choose a payment method and copy the address</b></p>
+                                <div class="row">
+                                    <!-- BTC -->
+                                    <div class="col-md-6 col-lg-4 mb-4">
+                                        <div class="card h-100 shadow-sm payment-card">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <img class="coin-logo me-2" src="assets/btc.jpeg" alt="BTC logo">
+                                                    <div>
+                                                        <h5 class="mb-0">Bitcoin (BTC)</h5>
+                                                        <div class="network-label">Network: Bitcoin</div>
+                                                    </div>
+                                                </div>
+                                                <code class="d-block">bc1qza3spg8nza84vdex6l8ray748dphxkawzwt677hqk4hxr7qjgyrss9l69a</code>
+                                                <div class="mt-2">
+                                                    <a class="btn btn-sm btn-primary" href="topb.php">Continue</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- USDT -->
+                                    <div class="col-md-6 col-lg-4 mb-4">
+                                        <div class="card h-100 shadow-sm payment-card">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <img class="coin-logo me-2" src="assets/logo.png" alt="USDT logo">
+                                                    <div>
+                                                        <h5 class="mb-0">Tether (USDT)</h5>
+                                                        <div class="network-label">Network: TRON (TRC20)</div>
+                                                    </div>
+                                                </div>
+                                                <code class="d-block">TCGLrtDw4ZqFxmmRqwwQoHFDBTPi4YLdjV</code>
+                                                <div class="mt-2">
+                                                    <a class="btn btn-sm btn-primary" href="tops.php">Continue</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- ETH -->
+                                    <div class="col-md-6 col-lg-4 mb-4">
+                                        <div class="card h-100 shadow-sm payment-card">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <img class="coin-logo me-2" src="assets/etherium.jpg" alt="ETH logo">
+                                                    <div>
+                                                        <h5 class="mb-0">Ethereum (ETH)</h5>
+                                                        <div class="network-label">Network: Ethereum</div>
+                                                    </div>
+                                                </div>
+                                                <code class="d-block">0x92ac0123e292555d197201a8a72bb32f958a0f36</code>
+                                                <div class="mt-2">
+                                                    <a class="btn btn-sm btn-primary" href="topeth.php">Continue</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- LTC -->
+                                    <div class="col-md-6 col-lg-4 mb-4">
+                                        <div class="card h-100 shadow-sm payment-card">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <img class="coin-logo me-2" src="assets/litcoin.jpeg" alt="LTC logo">
+                                                    <div>
+                                                        <h5 class="mb-0">Litecoin (LTC)</h5>
+                                                        <div class="network-label">Network: Litecoin</div>
+                                                    </div>
+                                                </div>
+                                                <code class="d-block">ltc1qta55t4z2lqct98k3caxxwy954qz7pphyn365qcv30huls8fcd5zsjpzf5p</code>
+                                                <div class="mt-2">
+                                                    <a class="btn btn-sm btn-primary" href="topltc.php">Continue</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- TON -->
+                                    <div class="col-md-6 col-lg-4 mb-4">
+                                        <div class="card h-100 shadow-sm payment-card">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <img class="coin-logo me-2" src="assets/ton.jpg" alt="TON logo">
+                                                    <div>
+                                                        <h5 class="mb-0">TON</h5>
+                                                        <div class="network-label">Network: TON</div>
+                                                    </div>
+                                                </div>
+                                                <code class="d-block">UQDoL6JfSZgjqw769msWd1Y4iPZib6Aj90kipwEZe_D4VdfC</code>
+                                                <div class="mt-2">
+                                                    <a class="btn btn-sm btn-primary" href="topton.php">Continue</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

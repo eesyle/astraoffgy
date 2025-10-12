@@ -1,7 +1,7 @@
 <?php
  require_once "codeForLogs.php";
  if($balance>0){
-    $sql = "SELECT id, balance, info, price FROM paypal where price > $balance";
+    $sql = "SELECT id, balance, info, price FROM chase where price > $balance";
     $result = $conn->query($sql);
     
     if ($result->num_rows > 0) {
@@ -10,7 +10,7 @@
         $rows = [];
     }
 }else{
-    $sql = "SELECT id, balance, info, price FROM paypal";
+    $sql = "SELECT id, balance, info, price FROM chase";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -33,13 +33,17 @@ mysqli_close($conn);
     <meta name="format-detection" content="telephone=no">
 
     <title>HoldLogix</title>
- 
+    <meta property="og:title" content="HoldLogix — Canada Banks">
     <meta property="og:description" content="Explicit Dumps">
     <meta property="og:image" content="assets/logo.png">
  
 
     <!-- FAVICONS ICON -->
-    <link rel="shortcut icon" type="image/png" href="assets/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+    <link rel="manifest" href="assets/site.webmanifest">
+    <link rel="shortcut icon" type="image/png" href="assets/favicon-32x32.png">
     <link rel="stylesheet" href="xui-main/vendor/toastr/css/toastr.min.css">
     <link href="xui-main/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
     <link href="xui-main/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -55,6 +59,30 @@ mysqli_close($conn);
     <!-- Style css -->
     <link href="xui-main/css/style.css" rel="stylesheet">
     <link href="static/css/grayscale.css" rel="stylesheet">
+    <style>
+      /* Monochrome table: black / white / grey only */
+      #example5 thead th,
+      .dataTablesCard .card-table .table thead th {
+        background: var(--bg-3) !important;
+        color: var(--text-1) !important;
+        border-bottom-color: var(--border) !important;
+      }
+      #example5,
+      #example5 tbody td,
+      #example5 tbody tr {
+        background: var(--bg-2) !important;
+        color: var(--text-1) !important;
+      }
+      #example5 tbody tr:nth-of-type(odd) { background-color: var(--bg-1) !important; }
+      #example5 tbody tr:hover { background-color: var(--bg-2) !important; }
+      #example5 .bi-check { color: var(--text-1) !important; }
+      #example5 h2 strong { color: var(--text-0) !important; }
+      #example5 .btn { background: var(--bg-3) !important; color: var(--text-1) !important; border: 1px solid var(--border) !important; }
+      #example5 .btn:hover { background: var(--bg-2) !important; }
+      .dataTables_wrapper .dataTables_paginate .paginate_button { background: var(--bg-3) !important; color: var(--text-1) !important; border-color: var(--border) !important; }
+      .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+      .dataTables_wrapper .dataTables_paginate .paginate_button:hover { background: var(--bg-2) !important; }
+    </style>
 </head>
 
 <body>
@@ -66,7 +94,7 @@ mysqli_close($conn);
         <!--**********************************
             Nav header start
         ***********************************-->
-         <?php include "navHeader.php"; ?>
+        <?php include './navHeader.php'; ?>
         <!--**********************************
             Nav header end
         ***********************************-->
@@ -75,20 +103,33 @@ mysqli_close($conn);
         <!--**********************************
             Header start
         ***********************************-->
+
         <div class="header" style="background: #2d2362; opacity: .9;">
             <div class="header-content">
                 <nav class="navbar navbar-expand">
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
                             <div class="dashboard_bar">
-                                PayPal </div>
+                                Canada Banks </div>
                         </div>
 
-                        <?php include './header.php' ?>
+                        <?php
+ 
+ $headerFile = './header.php';
+ if (is_readable($headerFile)) {
+     include($headerFile);
+ } else {
+     echo "Error: Unable to include $headerFile";
+ }
+ ?>
+
+                         
                     </div>
                 </nav>
             </div>
         </div>
+   
+
         <!--**********************************
             Header end ti-comment-alt
         ***********************************-->
@@ -96,7 +137,7 @@ mysqli_close($conn);
         <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include './sidebar.php';?>
+        <?php include 'sidebar.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -106,7 +147,7 @@ mysqli_close($conn);
 
                 <div class="row page-titles">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Mobile Logs > Paypal</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">CA-Banks > Royal Bank of Canada</a></li>
                     </ol>
                 </div>
 
@@ -118,7 +159,9 @@ mysqli_close($conn);
                             <!-- --tab-pane -->
                             <div class="tab-pane fade active show" id="all-transactions" role="tabpanel">
                                 <div class="table-responsive ">
-                                <table class="table-responsive-lg table display mb-4 dataTablesCard order-table card-table text-black dataTable no-footer student-tbl" id="example5">
+ 
+
+                                <table class="table-responsive-lg table display mb-4 dataTablesCard order-table card-table dataTable no-footer student-tbl" id="example5">
         <thead>
             <tr>
                 <th class="d-none d-md-block d-lg-block">#</th>
@@ -135,7 +178,7 @@ mysqli_close($conn);
                         <td class="d-none d-md-block d-lg-block"><code class="text-light">#<?php echo htmlspecialchars($row['id']); ?></code></td>
                         <td>
                             <span style="font-size:5px; opacity: 0.015;"><?php echo htmlspecialchars($row['balance']); ?></span>
-                            <h2><sup>$</sup> <strong class="text-primary"><?php echo number_format($row['balance'], 2); ?></strong></h2>
+                            <h2><sup>$</sup> <strong class="text-white"><?php echo number_format($row['balance'], 2); ?></strong></h2>
                         </td>
                         <td class="whitesp-no">
                             <ul>
@@ -151,7 +194,7 @@ mysqli_close($conn);
                         <td>
                             <form method="post" action="buy.php">
                                 <input type="hidden" name="price" value="<?php echo htmlspecialchars($row['price']); ?>">
-                                <button type="submit" class="btn btn-rounded btn-primary btn-xs">Buy</button>
+                                <button type="submit" class="btn btn-rounded btn-xs">Buy</button>
                             </form>
                         </td>
                     </tr>
@@ -175,10 +218,9 @@ mysqli_close($conn);
             </div>
 
 
-             
-
             
-
+            
+              
 
 
         </div>
@@ -188,18 +230,14 @@ mysqli_close($conn);
     ***********************************-->
 
     <!-- Modal -->
-     <?php include './topModel.php'?>;
+  <?php include './supportModel.php';?>
     <!-- /Modal -->
 
-    <!-- Modal -->
-     <?php include './supportModel.php'?>;
-    <!-- /Modal -->
+  
 
 
-
-    <!-- Reset-Password Modal -->
  
-    <!-- /Reset-Password Modal -->
+
 
     <!--**********************************
         Scripts

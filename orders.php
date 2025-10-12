@@ -47,6 +47,47 @@ function getBalanceFromDatabase($twoDaysLater = null) {
 
     return $statusComplete;
 }
+// Dashboard counters: subtle, time-of-day biased updates per refresh
+$hour = (int)date('G');
+if (!isset($_SESSION['dashboardCounts'])) {
+    $_SESSION['dashboardCounts'] = [
+        'bank' => mt_rand(22, 30),
+        'mobile' => mt_rand(14, 22),
+        'dumps' => mt_rand(14, 22),
+        'ongoing' => mt_rand(9, 15),
+    ];
+}
+// Bias deltas by time of day: higher during business hours
+if ($hour >= 9 && $hour <= 18) {
+    $bankDelta = mt_rand(-1, 3);
+    $mobileDelta = mt_rand(-1, 3);
+    $dumpsDelta = mt_rand(-1, 3);
+    $ongoingDelta = mt_rand(-1, 2);
+} elseif ($hour >= 19 && $hour <= 22) {
+    $bankDelta = mt_rand(-1, 2);
+    $mobileDelta = mt_rand(-1, 2);
+    $dumpsDelta = mt_rand(-1, 2);
+    $ongoingDelta = mt_rand(-1, 2);
+} else { // late night / early morning
+    $bankDelta = mt_rand(-2, 1);
+    $mobileDelta = mt_rand(-2, 1);
+    $dumpsDelta = mt_rand(-2, 1);
+    $ongoingDelta = mt_rand(-2, 1);
+}
+// Apply and clamp to sensible ranges
+$_SESSION['dashboardCounts']['bank']   = max(20, min(40, $_SESSION['dashboardCounts']['bank'] + $bankDelta));
+$_SESSION['dashboardCounts']['mobile'] = max(12, min(32, $_SESSION['dashboardCounts']['mobile'] + $mobileDelta));
+$_SESSION['dashboardCounts']['dumps']  = max(12, min(32, $_SESSION['dashboardCounts']['dumps'] + $dumpsDelta));
+$_SESSION['dashboardCounts']['ongoing']= max(8,  min(24, $_SESSION['dashboardCounts']['ongoing'] + $ongoingDelta));
+// Keep relations plausible
+if ($_SESSION['dashboardCounts']['mobile'] > $_SESSION['dashboardCounts']['bank'] - 1) {
+    $_SESSION['dashboardCounts']['bank'] = $_SESSION['dashboardCounts']['mobile'] + mt_rand(1, 3);
+}
+// Ongoing typically smaller than mobile
+$_SESSION['dashboardCounts']['ongoing'] = max(8, min(
+    24,
+    (int)round($_SESSION['dashboardCounts']['mobile'] * mt_rand(40, 70) / 100)
+));
 ?>
 
 <!DOCTYPE html>
@@ -58,7 +99,7 @@ function getBalanceFromDatabase($twoDaysLater = null) {
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="format-detection" content="telephone=no">
 
-    <title>Alteryx  </title>
+    <title>Orders</title>
     <meta property="og:title" content="Astradox Pro — Us Banks">
     <meta property="og:description" content="Explicit Dumps">
     <meta property="og:image" content="assets/logo.png">
@@ -100,7 +141,7 @@ function getBalanceFromDatabase($twoDaysLater = null) {
                 <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sidebar.php'; ?>
+        <?php include 'sideBar.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -108,19 +149,70 @@ function getBalanceFromDatabase($twoDaysLater = null) {
 
         <div class="content-body">
             <div class="container-fluid">
+                <style>
+                    .stat-card{background:#1f2a38;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.25);color:#e5e7eb;padding:16px;position:relative}
+                    .stat-card .accent{height:4px;border-radius:0 0 12px 12px;position:absolute;bottom:0;left:0;right:0;opacity:.9}
+                    .stat-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+                </style>
+                <div class="row mb-4">
+                    <div class="col-xl-8">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background:#2d3b4f"><i class="bi bi-bank text-info"></i></div>
+                                    <h3 class="mb-0"><?= htmlspecialchars($_SESSION['dashboardCounts']['bank']); ?></h3>
+                                    <small>Updated Bank Logs</small>
+                                    <div class="accent" style="background:#3b82f6"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background:#2d3b4f"><i class="bi bi-phone text-warning"></i></div>
+                                    <h3 class="mb-0"><?= htmlspecialchars($_SESSION['dashboardCounts']['mobile']); ?></h3>
+                                    <small>Added Mobile Logs</small>
+                                    <div class="accent" style="background:#f59e0b"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background:#2d3b4f"><i class="bi bi-collection text-success"></i></div>
+                                    <h3 class="mb-0"><?= htmlspecialchars($_SESSION['dashboardCounts']['dumps']); ?></h3>
+                                    <small>Newly loaded dumps</small>
+                                    <div class="accent" style="background:#10b981"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="stat-card">
+                                    <div class="stat-icon" style="background:#2d3b4f"><i class="bi bi-arrow-repeat text-info"></i></div>
+                                    <h3 class="mb-0"><?= htmlspecialchars($_SESSION['dashboardCounts']['ongoing']); ?></h3>
+                                    <small>Ongoing Transactions</small>
+                                    <div class="accent" style="background:#22d3ee"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <style>
+                    /* Modern dark table styling */
+                    .card-dark{background:#1f2a38;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+                    .table-dark thead th{color:#9ca3af;border-bottom:1px solid rgba(255,255,255,.1)}
+                    .table-dark tbody tr:hover{background:#243344}
+                </style>
                 <div class="row">
                     <div class="col-xl-12">
-                        <div class="">
-                            <div class="border-0 flex-wrap">
-                                <h4 class="fs-18 font-w600">Orders</h4>
+                        <div class="card card-dark">
+                            <div class="card-header border-0 d-flex align-items-center justify-content-between">
+                                <h4 class="text-white mb-0">Orders</h4>
+                                <small class="text-muted">Your recent purchases</small>
                             </div>
-                            <div class="">
+                            <div class="card-body p-0">
                                 <div class="table-responsive">
-                                    <table class="table-responsive-lg table display mb-4 dataTablesCard order-table card-table text-black dataTable no-footer student-tbl" id="example5">
+                                    <table class="table-responsive-lg table table-hover table-dark mb-0 dataTablesCard order-table card-table text-white" id="example5">
                                         <thead>
                                             <tr>
                                                 <th scope="col">#O-ID</th>
-                                                <th scope="col">Order Type</th>
+                                                <th scope="col">Type</th>
                                                 <th scope="col">Date</th>
                                                 <th scope="col">Info</th>
                                                 <th scope="col">Status</th>
@@ -140,12 +232,12 @@ function getBalanceFromDatabase($twoDaysLater = null) {
                                                         <td scope="col">Purchase</td>
                                                         <td scope="col"><?= htmlspecialchars($amount['date']); ?></td>
                                                         <td scope="col">
-                                                        <ul>
+                                                        <ul class="pl-3 mb-0">
                                 <?php 
                                 $infoItems = explode('+', $amount['Info']); 
                                 foreach ($infoItems as $item): 
                                 ?>
-                                    <li><i class="bi bi-check" scope="col"></i> <?php echo htmlspecialchars($item); ?></li>
+                                    <li><i class="bi bi-check"></i> <?php echo htmlspecialchars(trim($item)); ?></li>
                                 <?php endforeach; ?>
                             </ul>
                                                         
