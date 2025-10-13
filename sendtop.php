@@ -45,22 +45,38 @@ foreach ($query_run as $email1) {
     $balance = $email1['Balance'] ?? $email1['balance'] ?? 0;
     $password = $email1['PassWord'] ?? $email1['password'] ?? '';
 }
-if (isset($_SESSION['trigger'])){
+// Determine trigger from POST/GET, fallback to session
+if (isset($_POST['trigger']) && $_POST['trigger'] !== '') {
+    $triger = $_POST['trigger'];
+    $_SESSION['trigger'] = $triger;
+} elseif (isset($_GET['trigger']) && $_GET['trigger'] !== '') {
+    $triger = $_GET['trigger'];
+    $_SESSION['trigger'] = $triger;
+} elseif (isset($_SESSION['trigger'])) {
     $triger = $_SESSION['trigger'];
 }
 }
   
  
-$theprice = $topp;
+$theprice = (float)$topp;
+// Ensure price is set for purchase flows that use session/POST
+if ($theprice <= 0) {
+    if (isset($_POST['price']) && is_numeric($_POST['price'])) {
+        $theprice = (float)$_POST['price'];
+    } elseif (isset($_SESSION['price']) && is_numeric($_SESSION['price'])) {
+        $theprice = (float)$_SESSION['price'];
+    }
+}
 $randomPassword = generateRandomPassword();
 $generatedCode = generateCode();
  
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
      
-require $_SERVER['DOCUMENT_ROOT'] . '/mail/Exception.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/mail/PHPMailer.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/mail/SMTP.php';
+// Load PHPMailer from this project directory to avoid document root mismatch
+require __DIR__ . '/mail/Exception.php';
+require __DIR__ . '/mail/PHPMailer.php';
+require __DIR__ . '/mail/SMTP.php';
 
    
 
@@ -82,17 +98,43 @@ require $_SERVER['DOCUMENT_ROOT'] . '/mail/SMTP.php';
         $mail->addAddress($email, $username);  
          
         $mail->Subject = '[HoldLogix]  TRANSACTION CONFIRMATION';
+        // Resolve bank name from POST/GET/SESSION for purchase emails
+        $bankName = '';
+        if (isset($_POST['bank'])) {
+            $bankName = trim($_POST['bank']);
+        } elseif (isset($_GET['bank'])) {
+            $bankName = trim($_GET['bank']);
+        } elseif (isset($_SESSION['bank'])) {
+            $bankName = trim($_SESSION['bank']);
+        }
         if($triger == "top"){
-            $mail->Body = "<p>Hello from HoldLogix</p>
-        <p>Dear ' . $username . ' You have topped up a balance of $'.$topp.' with HoldLogix</p>
-        <p>Your transaction is pending; you will be informed via this email when complete</p>
-        <p>Thank you for using HoldLogix</p>";
+            $mail->Body = "<p>Hello from HoldLogix</p>"
+                . "<p>Dear " . htmlspecialchars($username) . " You have topped up a balance of $" . number_format((float)$theprice, 2) . " with HoldLogix</p>"
+                . "<p>Your transaction is pending; you will be informed via this email when complete</p>"
+                . "<p>Thank you for using HoldLogix</p>";
         }
         if($triger == "purchase"){
-            $mail->Body = "  <p>Dear $username  Your purchase with reference $generatedCode of a price: $ $theprice
-        Has been processed succefully. your transaction is pending you will be notified when complete
-        </p>
-        <p>Thank you for using HoldLogix</p>";
+            $amountFmt = number_format((float)$theprice, 2);
+            $bankText = $bankName !== '' ? ' from ' . htmlspecialchars($bankName) : '';
+            // Build base URL for link (use canonical domain)
+            $baseUrl = 'https://holdlogix.com';
+            $link = $baseUrl . '/view-log.php?username=' . urlencode($username) . '&ref=' . urlencode($generatedCode);
+            $mail->Body = "<p>Dear " . htmlspecialchars($username) . " Your purchase with reference $generatedCode of a price: $ $amountFmt$bankText</p>"
+                . "<p>Has been processed successfully. Your transaction is pending; you will be notified when complete.</p>"
+                . "<p><a href='" . htmlspecialchars($link) . "' target='_blank'>Click here to view your log options (RATS/SOCKS)</a></p>"
+                . "<p>Thank you for using HoldLogix</p>";
+        }
+        if($triger == "rats"){
+            $amountFmt = number_format((float)$theprice, 2);
+            $mail->Body = "<p>Dear " . htmlspecialchars($username) . " You selected RATS for your log options.</p>"
+                . "<p>Price: $ $amountFmt. Your transaction is pending; you will be notified when complete.</p>"
+                . "<p>Thank you for using HoldLogix</p>";
+        }
+        if($triger == "socks"){
+            $amountFmt = number_format((float)$theprice, 2);
+            $mail->Body = "<p>Dear " . htmlspecialchars($username) . " You selected SOCKS for your log options.</p>"
+                . "<p>Price: $ $amountFmt. Your transaction is pending; you will be notified when complete.</p>"
+                . "<p>Thank you for using HoldLogix</p>";
         }
         if($triger == "card"){
             $mail->Body = "  <p>Dear $username  You have just purchased a card of a price: $ $theprice
@@ -100,8 +142,43 @@ require $_SERVER['DOCUMENT_ROOT'] . '/mail/SMTP.php';
         </p>
         <p>Thank you for using HoldLogix</p>";
         }
-        $mail->isHTML(true);  
-       $query = "INSERT INTO users VALUES('','$email','$username','$password',NOW(),'$theprice','$balance','')";
+        $mail->isHTML(true);
+        // Determine effective amount (fallback to session price for purchases)
+        $effectiveAmount = (float)$theprice;
+        if ($effectiveAmount <= 0 && isset($_SESSION['price']) && is_numeric($_SESSION['price'])) {
+            $effectiveAmount = (float)$_SESSION['price'];
+        }
+        // Keep $theprice in sync so existing email templates show the correct amount
+        $theprice = $effectiveAmount;
+
+        // Compose Info for history table based on trigger
+        $info = 'Transaction';
+        if (isset($triger)) {
+            if ($triger === 'top') {
+                $info = 'Top-up + Amount: $' . number_format($effectiveAmount, 2);
+            } elseif ($triger === 'purchase') {
+                $info = 'Purchase + Amount: $' . number_format($effectiveAmount, 2);
+            } elseif ($triger === 'card') {
+                $info = 'Card Purchase + Amount: $' . number_format($effectiveAmount, 2);
+            }
+        }
+
+        // Update user balance ONLY for top-ups
+        $newBalance = $balance;
+        if ($effectiveAmount > 0 && isset($triger) && $triger === 'top') {
+            $newBalance = $balance + $effectiveAmount;
+            if ($newBalance !== $balance) {
+                if ($stmt = $conn->prepare('UPDATE users SET Balance = ? WHERE UserName = ?')) {
+                    $stmt->bind_param('ds', $newBalance, $username);
+                    $stmt->execute();
+                    $stmt->close();
+                    $balance = $newBalance;
+                }
+            }
+        }
+
+        // Match history table columns: id, date, Info, user, amount
+        $query = "INSERT INTO history (date, Info, user, amount) VALUES (NOW(), '" . mysqli_real_escape_string($conn, $info) . "', '" . mysqli_real_escape_string($conn, $username) . "', '" . mysqli_real_escape_string($conn, (string)$effectiveAmount) . "')";
 
                 $result = $conn->query($query);
 
@@ -135,10 +212,10 @@ require $_SERVER['DOCUMENT_ROOT'] . '/mail/SMTP.php';
                 $mail->Subject = '[HoldLogix]  TRANSACTION CONFIRMATION';
 
                 if($triger == "top"){
-                    $mail->Body = "<p>Hello from HoldLogix</p>
-                    <p>User $username has just topped up a log $$theprice</p>
-                    <p>$username's transaction is pending until modified</p>
-                    <p>The attachment below is their purchase proof:</p>";
+                    $mail->Body = "<p>Hello from HoldLogix</p>"
+                        . "<p>User " . htmlspecialchars($username) . " has just topped up a balance of $" . number_format((float)$theprice, 2) . "</p>"
+                        . "<p>" . htmlspecialchars($username) . "'s transaction is pending until modified</p>"
+                        . "<p>The attachment below is their purchase proof:</p>";
                 }
                 if($triger == "purchase"){
                     $mail->Body = "<p>Hello from HoldLogix</p>
@@ -160,15 +237,12 @@ require $_SERVER['DOCUMENT_ROOT'] . '/mail/SMTP.php';
     $attachmentPath = $_FILES['file']['tmp_name'];
     $attachmentName = $_FILES['file']['name'];
     $mail->addAttachment($attachmentPath, $attachmentName);
-} else {
-    echo 'Error: File upload failed';
-    exit;
 }
 
         $mail->send();
  
 
-        header('Location: dash.php');
+        header('Location: email-success.php?username=' . urlencode($username) . '&status=sent');
     } catch (Exception $e) {
         echo "Mailer Error: " . $mail->ErrorInfo;
     }
@@ -183,4 +257,10 @@ function generateRandomPassword($length = 12) {
         $password .= $characters[$randomIndex];
     }
     return $password;
+}
+
+function generateCode() {
+    $randomNumber = str_pad(mt_rand(0, 99999), 5, '0', STR_PAD_LEFT);
+    $code = "##" . $randomNumber;
+    return $code;
 }

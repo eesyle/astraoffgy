@@ -9,7 +9,7 @@
 
                                            
                                                 <div class="user-info">
-                                                    <span class="font-w500 d-block  fs-5 text-white"><?php echo $email; ?></span>
+                                                    <span class="font-w500 d-block  fs-5 text-white"><?php echo $username; ?></span>
                                                     <small class="text-end font-w600 mt-2"><img src="dollar-sign.png" style="width:15px; height: 15px;"><?php echo  $balance;?></small>
                                                 </div>
                                                 <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">

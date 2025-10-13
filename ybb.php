@@ -33,7 +33,7 @@ mysqli_close($conn);
     <meta name="format-detection" content="telephone=no">
 
     <title>HoldLogix</title>
-    <meta property="og:title" content="Astradox Pro — Us Banks">
+    <meta property="og:title" content="Astradox Pro — UK Banks">
     <meta property="og:description" content="Explicit Dumps">
     <meta property="og:image" content="assets/logo.png">
  
@@ -82,7 +82,7 @@ mysqli_close($conn);
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
                             <div class="dashboard_bar">
-                                Us Banks </div>
+                                UK Banks </div>
                         </div>
 
                         <?php
@@ -119,7 +119,7 @@ mysqli_close($conn);
 
                 <div class="row page-titles">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">UK-Banks > Cash App</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">UK-Banks > Barclays</a></li>
                     </ol>
                 </div>
 
@@ -166,6 +166,7 @@ mysqli_close($conn);
                         <td>
                             <form method="post" action="buy.php">
                                 <input type="hidden" name="price" value="<?php echo htmlspecialchars($row['price']); ?>">
+                                <input type="hidden" name="bank" value="Barclays">
                                 <button type="submit" class="btn btn-rounded btn-primary btn-xs">Buy</button>
                             </form>
                         </td>

@@ -103,7 +103,7 @@
                                         <div class="card h-100 shadow-sm payment-card">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center mb-2">
-                                                    <img class="coin-logo me-2" src="assets/btc.jpeg" alt="BTC logo">
+                                                    <img class="coin-logo me-2" src="assets/officialBt.png" alt="BTC logo">
                                                     <div>
                                                         <h5 class="mb-0">Bitcoin (BTC)</h5>
                                                         <div class="network-label">Network: Bitcoin</div>
@@ -121,7 +121,7 @@
                                         <div class="card h-100 shadow-sm payment-card">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center mb-2">
-                                                    <img class="coin-logo me-2" src="assets/logo.png" alt="USDT logo">
+                                                    <img class="coin-logo me-2" src="assets/officialusdt.png" alt="USDT logo">
                                                     <div>
                                                         <h5 class="mb-0">Tether (USDT)</h5>
                                                         <div class="network-label">Network: TRON (TRC20)</div>
@@ -139,7 +139,7 @@
                                         <div class="card h-100 shadow-sm payment-card">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center mb-2">
-                                                    <img class="coin-logo me-2" src="assets/etherium.jpg" alt="ETH logo">
+                                                    <img class="coin-logo me-2" src="assets/officialether.png" alt="ETH logo">
                                                     <div>
                                                         <h5 class="mb-0">Ethereum (ETH)</h5>
                                                         <div class="network-label">Network: Ethereum</div>
@@ -157,7 +157,7 @@
                                         <div class="card h-100 shadow-sm payment-card">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center mb-2">
-                                                    <img class="coin-logo me-2" src="assets/litcoin.jpeg" alt="LTC logo">
+                                                    <img class="coin-logo me-2" src="assets/officialltc.png" alt="LTC logo">
                                                     <div>
                                                         <h5 class="mb-0">Litecoin (LTC)</h5>
                                                         <div class="network-label">Network: Litecoin</div>
@@ -175,7 +175,7 @@
                                         <div class="card h-100 shadow-sm payment-card">
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center mb-2">
-                                                    <img class="coin-logo me-2" src="assets/ton.jpg" alt="TON logo">
+                                                    <img class="coin-logo me-2" src="assets/officialton.png" alt="TON logo">
                                                     <div>
                                                         <h5 class="mb-0">TON</h5>
                                                         <div class="network-label">Network: TON</div>

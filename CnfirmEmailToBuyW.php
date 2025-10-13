@@ -293,8 +293,7 @@ if(!$_topbalance)
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary btn-md" data-dismiss="modal">Close</button>
 
-                                    <a href="paymentMethod"
- type="button" class="btn btn-primary">Load Balance</a>
+                                    <button type="button" class="btn btn-primary" id="openTopUpFromBalance">Load Balance</button>
 
                                 </div>
                             </div>
@@ -379,6 +378,110 @@ if(!$_topbalance)
             // Alert the copied text
             alert("Copied: " + c);
         }
+</script>
+    <script type="text/javascript">
+        // Robust sequencing: hide both Confirm and Balance modals, clean backdrops, then open TopUp
+        (function($){
+          $(function(){
+            var $btn = $('#openTopUpFromBalance');
+            var remainingAmount = Number(<?= json_encode(max(0, (float)$wfprice - (float)$_topbalance)) ?>);
+
+            function openTopUp(){
+              // Remove any leftover backdrops to prevent overlay issues
+              $('.modal-backdrop').remove();
+              // Ensure body class doesn't block interaction
+              $('body').removeClass('modal-open');
+
+              // Show TopUp modal
+              var $topUp = $('#topUpAccountModal');
+              if(typeof $.fn.modal === 'function'){
+                $topUp.modal({backdrop: true, keyboard: true});
+                $topUp.modal('show');
+              } else if (window.bootstrap && typeof window.bootstrap.Modal === 'function') {
+                var el = document.getElementById('topUpAccountModal');
+                var inst = window.bootstrap.Modal.getOrCreateInstance(el);
+                inst.show();
+              } else {
+                // Last resort
+                $topUp.addClass('show').css('display','block');
+              }
+
+              // Prefill amount
+              var $amt = $('#amount1');
+              if($amt.length){
+                $amt.val(remainingAmount > 0 ? remainingAmount : '');
+                // Optional focus for quicker edit
+                try { $amt[0].focus(); } catch(e){}
+              }
+            }
+
+            function hideIfVisible($m){
+              if(!$m.length) return false;
+              var visible = $m.hasClass('show') || $m.is(':visible');
+              if(!visible) return false;
+              $m.one('hidden.bs.modal', function(){
+                // no-op; handled via counter outside
+              });
+              $m.modal('hide');
+              return true;
+            }
+
+            if($btn.length){
+              $btn.on('click', function(e){
+                e.preventDefault();
+
+                var $balance = $('#exampleModal1');
+                var $confirm = $('#exampleModal');
+                var toHide = [];
+                if($balance.length && ($balance.hasClass('show') || $balance.is(':visible'))) toHide.push($balance);
+                if($confirm.length && ($confirm.hasClass('show') || $confirm.is(':visible'))) toHide.push($confirm);
+
+                var waitFor = toHide.length;
+
+                function onHidden(){
+                  waitFor--;
+                  if(waitFor <= 0){
+                    openTopUp();
+                  }
+                }
+
+                if(waitFor === 0){
+                  openTopUp();
+                  return;
+                }
+
+                // Bind handlers BEFORE triggering hides
+                toHide.forEach(function($m){
+                  $m.one('hidden.bs.modal', onHidden);
+                });
+
+                // Trigger hides
+                toHide.forEach(function($m){
+                  try {
+                    $m.modal('hide');
+                  } catch(err){
+                    // force hide fallback
+                    $m.removeClass('show').hide();
+                  }
+                });
+
+                // Fallback: if hidden events don't fire, cleanup overlays and proceed
+                setTimeout(function(){
+                  if(waitFor > 0){
+                    // Force-hide all that may still be visible
+                    toHide.forEach(function($m){
+                      $m.removeClass('show').hide();
+                    });
+                    // Remove any duplicate backdrops
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open');
+                    openTopUp();
+                  }
+                }, 450);
+              });
+            }
+          });
+        })(jQuery);
     </script>
 
 

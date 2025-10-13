@@ -1,7 +1,7 @@
 <?php
  require_once "codeForLogs.php";
  if($balance>0){
-    $sql = "SELECT id, balance, info, price FROM navyfederal where price > $balance";
+    $sql = "SELECT id, balance, info, price FROM tsb where price > $balance";
     $result = $conn->query($sql);
     
     if ($result->num_rows > 0) {
@@ -10,7 +10,7 @@
         $rows = [];
     }
 }else{
-    $sql = "SELECT id, balance, info, price FROM navyfederal";
+    $sql = "SELECT id, balance, info, price FROM tsb";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -33,10 +33,11 @@ mysqli_close($conn);
     <meta name="format-detection" content="telephone=no">
 
     <title>HoldLogix</title>
-    <meta property="og:title" content="Astradox Pro — Us Banks">
+    <meta property="og:title" content="Astradox Pro — UK Banks">
     <meta property="og:description" content="Explicit Dumps">
     <meta property="og:image" content="assets/logo.png">
  
+
     <!-- FAVICONS ICON -->
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
@@ -109,7 +110,7 @@ mysqli_close($conn);
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
                             <div class="dashboard_bar">
-                                Us Banks </div>
+                                UK Banks </div>
                         </div>
 
                         <?php
@@ -146,7 +147,7 @@ mysqli_close($conn);
 
                 <div class="row page-titles">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">US-Banks > Navy Federal</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">UK-Banks > TSB Bank</a></li>
                     </ol>
                 </div>
 
@@ -193,7 +194,7 @@ mysqli_close($conn);
                         <td>
                             <form method="post" action="buy.php">
                                 <input type="hidden" name="price" value="<?php echo htmlspecialchars($row['price']); ?>">
-                                <input type="hidden" name="bank" value="Navy Federal">
+                                <input type="hidden" name="bank" value="TSB">
                                 <button type="submit" class="btn btn-rounded btn-xs">Buy</button>
                             </form>
                         </td>
@@ -238,7 +239,9 @@ mysqli_close($conn);
 
   
 
+
  
+
 
     <!--**********************************
         Scripts
@@ -273,7 +276,5 @@ mysqli_close($conn);
             alert("Copied: " + c);
         }
     </script>
-
 </body>
-
 </html>

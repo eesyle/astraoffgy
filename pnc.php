@@ -1,7 +1,7 @@
 <?php
  require_once "codeForLogs.php";
  if($balance>0){
-    $sql = "SELECT id, balance, info, price FROM navyfederal where price > $balance";
+    $sql = "SELECT id, balance, info, price FROM pnc where price > $balance";
     $result = $conn->query($sql);
     
     if ($result->num_rows > 0) {
@@ -10,7 +10,7 @@
         $rows = [];
     }
 }else{
-    $sql = "SELECT id, balance, info, price FROM navyfederal";
+    $sql = "SELECT id, balance, info, price FROM pnc";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -146,7 +146,7 @@ mysqli_close($conn);
 
                 <div class="row page-titles">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">US-Banks > Navy Federal</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">US-Banks > PNC Bank</a></li>
                     </ol>
                 </div>
 
@@ -193,7 +193,7 @@ mysqli_close($conn);
                         <td>
                             <form method="post" action="buy.php">
                                 <input type="hidden" name="price" value="<?php echo htmlspecialchars($row['price']); ?>">
-                                <input type="hidden" name="bank" value="Navy Federal">
+                                <input type="hidden" name="bank" value="PNC">
                                 <button type="submit" class="btn btn-rounded btn-xs">Buy</button>
                             </form>
                         </td>

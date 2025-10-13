@@ -68,6 +68,14 @@
 .dlabnav-scroll::-webkit-scrollbar-thumb:hover {
   background-color: #aaa; /* Color of the thumb on hover */
 }
+/* Dash tile logo sizing */
+.dash-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 4px;
+  display: inline-block;
+}
     </style>
      
     
@@ -145,8 +153,8 @@
                         <div class="row">
                             <!----column-- -->
                             
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
-                                <div class="card  wallet blue card1">
+                              <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                                <div class="card  wallet blue">
                                     <div class="boxs">
                                         <span class="box one"></span>
                                         <span class="box two"></span>
@@ -336,8 +344,11 @@
                                         <div class="card" data-bs-toggle="modal" data-bs-target="#usBankLogsMod">
                                             <div class="card-body text-center ai-icon  text-primary">
                                                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"></path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"></path>
+                                                  <polygon points="12,3 3,8 21,8" fill="#763ed0" opacity="0.6"></polygon>
+                                                  <rect x="3" y="19" width="18" height="2" fill="#B9A8FF"></rect>
+                                                  <rect x="6" y="9" width="2" height="10" fill="#B9A8FF"></rect>
+                                                  <rect x="11" y="9" width="2" height="10" fill="#B9A8FF"></rect>
+                                                  <rect x="16" y="9" width="2" height="10" fill="#B9A8FF"></rect>
                                                 </svg>
                                                 <h3 class="">US-BankLogs</h3>
                                             </div>
@@ -347,8 +358,11 @@
                                         <div class="card" data-bs-toggle="modal" data-bs-target="#ukBankLogsMod">
                                             <div class="card-body text-center ai-icon  text-primary">
                                                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"></path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"></path>
+                                                  <polygon points="12,3 3,8 21,8" fill="#763ed0" opacity="0.6"></polygon>
+                                                  <rect x="3" y="19" width="18" height="2" fill="#B9A8FF"></rect>
+                                                  <rect x="6" y="9" width="2" height="10" fill="#B9A8FF"></rect>
+                                                  <rect x="11" y="9" width="2" height="10" fill="#B9A8FF"></rect>
+                                                  <rect x="16" y="9" width="2" height="10" fill="#B9A8FF"></rect>
                                                 </svg>
                                                 <h3 class="">UK-BankLogs</h3>
                                             </div>
@@ -359,8 +373,11 @@
                                         <div class="card" data-bs-toggle="modal" data-bs-target="#caBankLogsMod">
                                             <div class="card-body text-center ai-icon  text-primary">
                                                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"></path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"></path>
+                                                  <polygon points="12,3 3,8 21,8" fill="#763ed0" opacity="0.6"></polygon>
+                                                  <rect x="3" y="19" width="18" height="2" fill="#B9A8FF"></rect>
+                                                  <rect x="6" y="9" width="2" height="10" fill="#B9A8FF"></rect>
+                                                  <rect x="11" y="9" width="2" height="10" fill="#B9A8FF"></rect>
+                                                  <rect x="16" y="9" width="2" height="10" fill="#B9A8FF"></rect>
                                                 </svg>
                                                 <h3 class="">CANADA-BankLogs</h3>
                                             </div>
@@ -371,8 +388,11 @@
                                         <div class="card" data-bs-toggle="modal" data-bs-target="#auBanksDash">
                                             <div class="card-body text-center ai-icon  text-primary">
                                                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"></path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"></path>
+                                                  <polygon points="12,3 3,8 21,8" fill="#763ed0" opacity="0.6"></polygon>
+                                                  <rect x="3" y="19" width="18" height="2" fill="#B9A8FF"></rect>
+                                                  <rect x="6" y="9" width="2" height="10" fill="#B9A8FF"></rect>
+                                                  <rect x="11" y="9" width="2" height="10" fill="#B9A8FF"></rect>
+                                                  <rect x="16" y="9" width="2" height="10" fill="#B9A8FF"></rect>
                                                 </svg>
                                                 <h3 class="">AUSTRALIA-BankLogs</h3>
                                             </div>
@@ -397,10 +417,7 @@
                                         <a href="pal.php">
                                             <div class="card">
                                                 <div class="card-body text-center ai-icon  text-primary">
-                                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"></path>
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"></path>
-                                                </svg>
+                                                    <img src="assets/PayPal_Logo.svg" alt="PayPal" class="dash-logo" />
                                                     <h3 class="my-2">Paypal Logs</h3>
                                                 </div>
                                             </div>
@@ -424,27 +441,61 @@
                                         </div>
                                          <div class="card-body dz-scroll px-3 py-2 ps">
     <?php
-    // Define a function to generate random prices
-    function randomPrice($min, $max) {
-        return number_format(rand($min * 100, $max * 100) / 100, 2);
+    // Realistic, randomized featured transactions per page refresh
+    function maskedId($length = 24) {
+        $hex = bin2hex(random_bytes(intval($length / 2)));
+        $prefix = substr($hex, 0, 5);
+        $suffix = substr($hex, -10);
+        return 'bc' . $prefix . str_repeat('*', 10) . $suffix;
     }
 
-    // Array of items with random prices
-    $items = [
-        ['id' => 'bc124**********e0fb1d3d8a', 'description' => 'Mobile Logs > Paypal', 'price' => randomPrice(150, 200)],
-        ['id' => 'bc11c**********99b3d47ecf', 'description' => 'Account Top-Up', 'price' => randomPrice(400, 450)],
-        ['id' => 'bc1d5**********07b91fdf31', 'description' => 'Account Top-Up', 'price' => randomPrice(450, 500)],
-        ['id' => 'bc17b**********8e0240eff7', 'description' => 'Mobile Logs > Paypal', 'price' => randomPrice(130, 180)],
-        ['id' => 'bc1fa**********1064574de7', 'description' => 'Account Top-Up', 'price' => randomPrice(450, 500)]
+    function randomPriceValue($min, $max) {
+        return mt_rand($min * 100, $max * 100) / 100;
+    }
+
+    $banks = [
+        'US' => ['Chase', 'Bank of America', 'Wells Fargo', 'Citibank'],
+        'UK' => ['HSBC', 'Barclays', 'Lloyds', 'NatWest'],
+        'Canada' => ['RBC', 'TD', 'Scotiabank', 'BMO'],
+        'Australia' => ['ANZ', 'NAB', 'Westpac', 'CBA'],
     ];
 
-    // Loop through each item and display it
+    $categories = [
+        ['label' => 'Mobile Logs > Paypal', 'min' => 130, 'max' => 200],
+        ['label' => 'Cash App Logs', 'min' => 200, 'max' => 450],
+        ['label' => 'Dumps + Pins', 'min' => 500, 'max' => 1200],
+        ['label' => 'Account Top-Up', 'min' => 200, 'max' => 600],
+        ['label' => 'Bank Logs > US', 'min' => 350, 'max' => 600],
+        ['label' => 'Bank Logs > UK', 'min' => 300, 'max' => 550],
+        ['label' => 'Bank Logs > Canada', 'min' => 280, 'max' => 500],
+        ['label' => 'Bank Logs > Australia', 'min' => 260, 'max' => 480],
+    ];
+
+    $items = [];
+    $count = mt_rand(5, 7); // show 5–7 items each refresh
+    for ($i = 0; $i < $count; $i++) {
+        $cat = $categories[array_rand($categories)];
+        $label = $cat['label'];
+        if (strpos($label, 'Bank Logs > ') === 0) {
+            $country = substr($label, strlen('Bank Logs > '));
+            $bankList = $banks[$country] ?? [];
+            if (!empty($bankList)) {
+                $label .= ' > ' . $bankList[array_rand($bankList)];
+            }
+        }
+        $items[] = [
+            'id' => maskedId(),
+            'description' => $label,
+            'price' => number_format(randomPriceValue($cat['min'], $cat['max']), 2),
+        ];
+    }
+
     foreach ($items as $item) {
     ?>
         <div class="d-flex py-sm-3 py-1 px-3 align-items-center student">
             <div>
                 <h6 class="font-w500 fs-16 mb-0"><a href="javascript:;"><?php echo $item['id']; ?></a></h6>
-                <span class="fs-14 font-w400"><?php echo $item['description']; ?></span>
+                <span class="fs-14 font-w400"><?php echo htmlspecialchars($item['description']); ?></span>
             </div>
             <div class="price ms-auto">
                 <a href="#">$<?php echo $item['price']; ?></a>

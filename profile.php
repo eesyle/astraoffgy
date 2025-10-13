@@ -142,11 +142,11 @@
                                             <table class="table verticle-middle table-responsive-md">
                                                 <thead>
                                                     <tr>
-                                                        <th scope="col">#T-ID</th>
-                                                        <th scope="col">Amount (BTC)</th>
-                                                        <th scope="col">Amount (USD)</th>
+                                                        <th scope="col">#O-ID</th>
+                                                        <th scope="col">Type</th>
+                                                        <th scope="col">Date</th>
+                                                        <th scope="col">Info</th>
                                                         <th scope="col">Status</th>
-                                                        <th scope="col"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

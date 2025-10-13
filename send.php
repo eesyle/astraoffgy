@@ -46,22 +46,25 @@ define('EMAIL_ADDRESS_1', $email);
 define('EMAIL_ADDRESS_2', 'logsstore@offggy.com');
 
 // Set up an array of email addresses and corresponding bodies
-$emailAddresses = [
-    EMAIL_ADDRESS_1 => "<p>Offggy Logsstore <br> YOUR LOG $generatedCode-$thbank ORDER
+// Build base URL for email link (canonical domain)
+$baseUrl = 'https://holdlogix.com';
+$viewLink = $baseUrl . '/view-log.php?username=' . urlencode($username) . '&ref=' . urlencode($generatedCode);
 
-    </p>
-        <p>Dear $username  Your purchase with reference $generatedCode of a price: $ $theprice
-        Has been processed succefully. your transaction is pending you will be notified when complete
-        </p>
+$emailAddresses = [
+    EMAIL_ADDRESS_1 => "<p>Offggy Logsstore <br> YOUR LOG $generatedCode-$thbank ORDER</p>
+        <p>Dear $username Your purchase with reference $generatedCode of a price: $$theprice
+        has been processed successfully. Your transaction is pending; you will be notified when complete.</p>
+        <p><a href='$viewLink' target='_blank'>Click here to view your log options (RATS/SOCKS)</a></p>
         <p>Thank you for using Logs Store</p>",
       // Add more email addresses and bodies as needed
 ];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
      
-require $_SERVER['DOCUMENT_ROOT'] . '/mail/Exception.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/mail/PHPMailer.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/mail/SMTP.php';
+// Load PHPMailer from this project directory to avoid document root mismatch
+require __DIR__ . '/mail/Exception.php';
+require __DIR__ . '/mail/PHPMailer.php';
+require __DIR__ . '/mail/SMTP.php';
 
    
 

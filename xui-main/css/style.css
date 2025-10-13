@@ -12,7 +12,8 @@
 @import url("../icons/flaticon/flaticon.css");
 @import url("../icons/flaticon-1/font/flaticon-1.css");
 @import url("../icons/icomoon/icomoon.css");
-@import url("../icons/bootstrap-icons/font/bootstrap-icons.css");
+/* Removed local bootstrap-icons import to avoid 404s; pages include CDN CSS */
+/* @import url("../icons/bootstrap-icons/font/bootstrap-icons.css"); */
 @import url(../vendor/animate/animate.min.css);
 @import url(../vendor/aos/css/aos.min.css);
 @import url(../vendor/perfect-scrollbar/css/perfect-scrollbar.css);

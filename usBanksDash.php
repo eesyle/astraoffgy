@@ -6,7 +6,7 @@
                                     <li><a href="ieei">Huntington</a></li>
                                     <li><a href="cud">DCU</a></li>
                                     <li><a href="niche">CHIME</a></li>
-                                    <li><a href="rg"></a>Region</li>
+                                    <li><a href="rg">Region</a></li>
                                     <li><a href="cp1">Capital One</a></li>
                                     <li><a href="cufat">afcu</a></li>
                                     <li><a href="truist">Truist Bank</a></li>

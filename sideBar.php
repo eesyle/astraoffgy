@@ -21,43 +21,33 @@
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <div class="menu-icon">
+                                <!-- Bank icon -->
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"/>
-                            </svg>
+                                    <path d="M12 3L3 7v2h18V7l-9-4z" fill="#7c3aed"/>
+                                    <path d="M5 11h2v7H5v-7zm4 0h2v7H9v-7zm4 0h2v7h-2v-7zm4 0h2v7h-2v-7z" fill="#B9A8FF"/>
+                                    <path d="M4 20h16v1H4v-1z" fill="#7c3aed"/>
+                                </svg>
                             </div>
                             <span class="nav-text">Bank Logs</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">CANADA BANKS</a>
-                                <ul aria-expanded="false">
-                                  <?php include 'caBanksDash.php'; ?>
-                                </ul>
-                            </li>
-                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">AUSTRALIA BANKS</a>
-                                <ul aria-expanded="false">
-                                   <?php include 'auBanksDash.php'; ?>
-                                </ul>
-                            </li>
-                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">UK BANKS</a>
-                                <ul aria-expanded="false">
-                                   <?php include 'ukBanksDash.php'; ?>
-                                </ul>
-                            </li>
-                            <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">US BANKS</a>
-                                <ul aria-expanded="false">
-                                  <?php include 'usBanksDash.php'; ?>
-                                </ul>
-                            </li>
+                            <li><a href="javascript:;" data-bs-toggle="modal" data-bs-target="#modalUS">USA BANKLOGS</a></li>
+                            <li><a href="javascript:;" data-bs-toggle="modal" data-bs-target="#modalUK">UK BANKLOGS</a></li>
+                            <li><a href="javascript:;" data-bs-toggle="modal" data-bs-target="#modalCA">CANADA BANKLOGS</a></li>
+                            <li><a href="javascript:;" data-bs-toggle="modal" data-bs-target="#modalAU">AUSTRALIA BANKLOGS</a></li>
                         </ul>
                     </li>
                     <li>
                         <a class="" href="./dmps" aria-expanded="false">
                             <div class="menu-icon">
+                                <!-- Card + PIN icon -->
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"/>
-                            </svg>
+                                    <rect x="2" y="5" width="20" height="14" rx="2" fill="#263447" stroke="#7c3aed" stroke-width="1.2"/>
+                                    <rect x="3.5" y="9" width="6" height="3" rx="1" fill="#B9A8FF"/>
+                                    <circle cx="18.5" cy="10.5" r="1.2" fill="#7c3aed"/>
+                                    <circle cx="16" cy="10.5" r="1.2" fill="#7c3aed"/>
+                                    <circle cx="13.5" cy="10.5" r="1.2" fill="#7c3aed"/>
+                                </svg>
                             </div>
                             <span class="nav-text">Dumps + Pins</span>
                         </a>
@@ -65,10 +55,8 @@
                     <li>
                         <a class="" href="./pal" aria-expanded="false">
                             <div class="menu-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"/>
-                            </svg>
+                                <!-- PayPal logo from assets -->
+                                <img src="assets/PayPal_Logo.svg" alt="PayPal" class="menu-logo" />
                             </div>
                             <span class="nav-text">Paypal Logs</span>
                         </a>
@@ -76,10 +64,8 @@
                     <li>
                         <a class="" href="./leo" aria-expanded="false">
                             <div class="menu-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path opacity="0.4" d="M16.0754 2H19.4614C20.8636 2 21.9999 3.14585 21.9999 4.55996V7.97452C21.9999 9.38864 20.8636 10.5345 19.4614 10.5345H16.0754C14.6731 10.5345 13.5369 9.38864 13.5369 7.97452V4.55996C13.5369 3.14585 14.6731 2 16.0754 2Z" fill="#763ed0"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.53852 2H7.92449C9.32676 2 10.463 3.14585 10.463 4.55996V7.97452C10.463 9.38864 9.32676 10.5345 7.92449 10.5345H4.53852C3.13626 10.5345 2 9.38864 2 7.97452V4.55996C2 3.14585 3.13626 2 4.53852 2ZM4.53852 13.4655H7.92449C9.32676 13.4655 10.463 14.6114 10.463 16.0255V19.44C10.463 20.8532 9.32676 22 7.92449 22H4.53852C3.13626 22 2 20.8532 2 19.44V16.0255C2 14.6114 3.13626 13.4655 4.53852 13.4655ZM19.4615 13.4655H16.0755C14.6732 13.4655 13.537 14.6114 13.537 16.0255V19.44C13.537 20.8532 14.6732 22 16.0755 22H19.4615C20.8637 22 22 20.8532 22 19.44V16.0255C22 14.6114 20.8637 13.4655 19.4615 13.4655Z" fill="#B9A8FF"/>
-                            </svg>
+                                <!-- Cash App logo from assets -->
+                                <img src="assets/official_cashapp_logo.png" alt="Cash App" class="menu-logo" />
                             </div>
                             <span class="nav-text">Cash App</span>
                         </a>
@@ -180,6 +166,96 @@
         <!--**********************************
             Sidebar end
         ***********************************-->
+
+        <style>
+            .modal-dark .modal-content{background:#1f2a38;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.06)}
+            .modal-dark .modal-header{border-bottom:1px solid rgba(255,255,255,.08)}
+            .modal-dark .modal-title{color:#fff}
+            .modal-dark .modal-body{color:#cbd5e1}
+            .modal-dark .accent{height:3px;background:linear-gradient(90deg,#7c3aed,#22d3ee);border-radius:0 0 14px 14px;opacity:.85}
+            /* Sidebar icons */
+            .menu-icon img.menu-logo{width:22px;height:22px;object-fit:contain;border-radius:4px;display:block}
+            /* Grid layout for banks: 3 columns, responsive */
+            .modal-bank-list{list-style:none;padding-left:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+            .modal-bank-list li{margin:0}
+            .modal-bank-list li a{display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px 14px;background:#263447;border-radius:10px;color:#e5e7eb;text-decoration:none;transition:.2s}
+            .modal-bank-list li a:hover{background:#2b3b50;color:#fff}
+            @media (max-width: 992px){.modal-bank-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+            @media (max-width: 576px){.modal-bank-list{grid-template-columns:repeat(1,minmax(0,1fr))}}
+        </style>
+
+        <!-- Country Bank Modals -->
+        <div class="modal fade modal-dark" id="modalUS" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">US Bank Logs</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-3 text-muted">Select a bank to view available logs.</p>
+                        <ul class="modal-bank-list">
+                            <?php include 'usBanksDash.php'; ?>
+                        </ul>
+                    </div>
+                    <div class="accent"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade modal-dark" id="modalUK" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">UK Bank Logs</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-3 text-muted">Select a bank to view available logs.</p>
+                        <ul class="modal-bank-list">
+                            <?php include 'ukBanksDash.php'; ?>
+                        </ul>
+                    </div>
+                    <div class="accent"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade modal-dark" id="modalCA" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Canada Bank Logs</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-3 text-muted">Select a bank to view available logs.</p>
+                        <ul class="modal-bank-list">
+                            <?php include 'caBanksDash.php'; ?>
+                        </ul>
+                    </div>
+                    <div class="accent"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade modal-dark" id="modalAU" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Australia Bank Logs</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-3 text-muted">Select a bank to view available logs.</p>
+                        <ul class="modal-bank-list">
+                            <?php include 'auBanksDash.php'; ?>
+                        </ul>
+                    </div>
+                    <div class="accent"></div>
+                </div>
+            </div>
+        </div>
 
         <!-- Modal -->
     <?php include 'topModel.php'; ?>

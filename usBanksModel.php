@@ -7,7 +7,7 @@
                                     <div class="col-md-6 mb-3"><a href="ieei" class="btn btn-outline-light btn-md btn-block">Huntington</a></div>
                                     <div class="col-md-6 mb-3"><a href="cud" class="btn btn-outline-light btn-md btn-block">DCU</a></div>
                                     <div class="col-md-6 mb-3"><a href="niche" class="btn btn-outline-light btn-md btn-block">CHIME</a></div>
-                                    <div class="col-md-6 mb-3"><a href="leo" class="btn btn-outline-light btn-md btn-block">cash app</a></div>
+                                    <div class="col-md-6 mb-3"><a href="leo" class="btn btn-outline-light btn-md btn-block">cashapp</a></div>
                                     <div class="col-md-6 mb-3"><a href="rg" class="btn btn-outline-light btn-md btn-block">Region</a></div>
                                     <div class="col-md-6 mb-3"><a href=" leo" class="btn btn-outline-light btn-md btn-block">Capital One</a></div>
                                     <div class="col-md-6 mb-3"><a href="rg" class="btn btn-outline-light btn-md btn-block">afcu</a></div>
