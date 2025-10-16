@@ -1,6 +1,7 @@
 <?php
- require_once 'auth_guard.php';
+
  require_once "codeForOther.php";
+  require_once "codeForLogs.php";
  $stmt = $conn->prepare("SELECT * FROM card1 ORDER BY RAND() LIMIT 1");
  $stmt->execute();
  $result = $stmt->get_result();
@@ -76,6 +77,35 @@
   border-radius: 4px;
   display: inline-block;
 }
+/* Larger sizing for Cash App tile logo */
+.dash-logo.cashapp-logo {
+  width: 70px;
+  height: 70px;
+}
+/* Bank modal list styles (match UK dash) */
+.modal-bank-list{list-style:none;padding-left:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.modal-bank-list li{margin:0}
+.modal-bank-list li a{display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px 14px;background:#263447;border-radius:10px;color:#e5e7eb;text-decoration:none;transition:.2s}
+.modal-bank-list li a:hover{background:#2b3b50;color:#fff}
+@media (max-width: 992px){.modal-bank-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width: 576px){.modal-bank-list{grid-template-columns:repeat(1,minmax(0,1fr))}}
+/* Mobile visibility and modern wallet styling */
+@media (max-width: 768px) {
+  .wallet { margin-bottom: 16px; }
+}
+.wallet.blue {
+  background: linear-gradient(135deg, rgba(118,62,208,0.95), rgba(45,35,98,0.95));
+  border: 1px solid rgba(185,168,255,0.25);
+  box-shadow: 0 12px 28px rgba(118,62,208,0.35);
+  backdrop-filter: blur(6px);
+}
+.wallet .card-header .wallet-info span,
+.wallet .card-header h4 {
+  color: #fff;
+}
+.wallet .card-body .value-data .fs-14 {
+  color: rgba(255,255,255,0.9);
+}
     </style>
      
     
@@ -146,10 +176,10 @@
             <div class="container-fluid">
                 <div class="row">
                     <!----column-- -->
-                    <div class="col-xl-12 d-none d-md-block d-lg-block">
+                    <div class="col-12">
                         <h4>Featured Cards..</h4>
                     </div>
-                    <div class="col-xl-12 d-none d-md-block d-lg-block">
+                    <div class="col-12">
                         <div class="row">
                             <!----column-- -->
                             
@@ -350,7 +380,7 @@
                                                   <rect x="11" y="9" width="2" height="10" fill="#B9A8FF"></rect>
                                                   <rect x="16" y="9" width="2" height="10" fill="#B9A8FF"></rect>
                                                 </svg>
-                                                <h3 class="">US-BankLogs</h3>
+                                                <h3 class="">USA BANKLOGS</h3>
                                             </div>
                                         </div>
                                     </div>
@@ -364,7 +394,7 @@
                                                   <rect x="11" y="9" width="2" height="10" fill="#B9A8FF"></rect>
                                                   <rect x="16" y="9" width="2" height="10" fill="#B9A8FF"></rect>
                                                 </svg>
-                                                <h3 class="">UK-BankLogs</h3>
+                                                <h3 class="">UK BANKLOGS</h3>
                                             </div>
                                         </div>
                                     </div>
@@ -419,6 +449,16 @@
                                                 <div class="card-body text-center ai-icon  text-primary">
                                                     <img src="assets/PayPal_Logo.svg" alt="PayPal" class="dash-logo" />
                                                     <h3 class="my-2">Paypal Logs</h3>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-xl-3 col-lg-3 col-6 col-sm-6 col-xs-6">
+                                        <a href="leo.php">
+                                            <div class="card">
+                                                <div class="card-body text-center ai-icon  text-primary">
+                                                    <img src="assets/official_cashapp_logo.png" alt="Cash App" class="dash-logo cashapp-logo" />
+                                                    <h3 class="my-2">Cash App Logs</h3>
                                                 </div>
                                             </div>
                                         </a>
@@ -527,13 +567,13 @@
                     <div class="modal-content">
                         <form method="post" action="mailto:support@HoldLogix.com">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel1">US Bank Logs</h5>
+                                <h5 class="modal-title" id="exampleModalLabel1">USA BANKLOGS</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="row">
-                                   <?php include 'usBanksModel.php'; ?>
-                                </div>
+                                <ul class="modal-bank-list">
+                                   <?php include 'usBanksDash.php'; ?>
+                                </ul>
                             </div>
                         </form>
                     </div>
@@ -546,15 +586,13 @@
                     <div class="modal-content">
                         <form method="post" action="mailto:support@HoldLogix.com">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel1">UK Bank Logs</h5>
+                                <h5 class="modal-title" id="exampleModalLabel1">UK BANKLOGS</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="row">
-                                   
-                                <?php include 'ukBanksModel.php'; ?>
-                                   
-                                </div>
+                                <ul class="modal-bank-list">
+                                   <?php include 'ukBanksDash.php'; ?>
+                                </ul>
                             </div>
                         </form>
                     </div>
@@ -573,11 +611,9 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="row">
-                                   
-                                <?php include 'caBanksModel.php'; ?>
-                                   
-                                </div>
+                                <ul class="modal-bank-list">
+                                   <?php include 'caBanksDash.php'; ?>
+                                </ul>
                             </div>
                         </form>
                     </div>
@@ -586,7 +622,7 @@
             <!-- /Modal -->
 
              <!-- Modal -->
-            <div class="modal fade" id="auBanksDash">
+             <div class="modal fade" id="auBanksDash">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <form method="post" action="mailto:support@HoldLogix.com">
@@ -595,11 +631,9 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <div class="row">
-                                   
-                                <?php include 'auBanksDash.php'; ?>
-                                   
-                                </div>
+                                <ul class="modal-bank-list">
+                                   <?php include 'auBanksDash.php'; ?>
+                                </ul>
                             </div>
                         </form>
                     </div>

@@ -1,25 +1,10 @@
 <?php
  require_once "codeForLogs.php";
- if($balance>0){
-    $sql = "SELECT id, balance, info, price FROM cashapp where price > $balance";
-    $result = $conn->query($sql);
-    
-    if ($result->num_rows > 0) {
-        $rows = $result->fetch_all(MYSQLI_ASSOC);
-    } else {
-        $rows = [];
-    }
-}else{
-    $sql = "SELECT id, balance, info, price FROM cashapp";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    $rows = $result->fetch_all(MYSQLI_ASSOC);
-} else {
-    $rows = [];
-}
-}
-mysqli_close($conn);
+ // Centralized query for banklogs using $is_active
+ $banklogs_table = "cashapp";
+ require_once "banklogs_query.php";
+ require_once "banklogs_logic.php";
+ mysqli_close($conn);
 ?>
 
 
@@ -33,7 +18,7 @@ mysqli_close($conn);
     <meta name="format-detection" content="telephone=no">
 
     <title>HoldLogix</title>
-    <meta property="og:title" content="Astradox Pro — Us Banks">
+    <meta property="og:title" content="HoldLogix — Cash App">
     <meta property="og:description" content="Explicit Dumps">
 <meta property="og:image" content="assets/logo.png">
  
@@ -86,7 +71,7 @@ mysqli_close($conn);
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
                             <div class="dashboard_bar">
-                                Us Banks </div>
+                                Cash App </div>
                         </div>
 
                         <?php
@@ -123,7 +108,7 @@ mysqli_close($conn);
 
                 <div class="row page-titles">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">US-Banks > Cash App</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Cash App</a></li>
                     </ol>
                 </div>
 
@@ -154,7 +139,7 @@ mysqli_close($conn);
                         <td class="d-none d-md-block d-lg-block"><code class="text-light">#<?php echo htmlspecialchars($row['id']); ?></code></td>
                         <td>
                             <span style="font-size:5px; opacity: 0.015;"><?php echo htmlspecialchars($row['balance']); ?></span>
-                            <h2><sup>$</sup> <strong class="text-primary"><?php echo number_format($row['balance'], 2); ?></strong></h2>
+                            <h2><strong class="text-primary"><?php echo number_format($row['balance'], 2); ?></strong></h2>
                         </td>
                         <td class="whitesp-no">
                             <ul>
@@ -166,7 +151,7 @@ mysqli_close($conn);
                                 <?php endforeach; ?>
                             </ul>
                         </td>
-                        <td class="whitesp-no amount">$<?php echo number_format($row['price'], 2); ?></td>
+                        <td class="whitesp-no amount"><?php echo number_format($row['price'], 2); ?></td>
                         <td>
                             <form method="post" action="buy.php">
                                 <input type="hidden" name="price" value="<?php echo htmlspecialchars($row['price']); ?>">

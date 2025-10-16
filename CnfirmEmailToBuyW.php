@@ -93,6 +93,15 @@ if(!$_topbalance)
     <!-- Grayscale theme and responsive overrides -->
     <link rel="stylesheet" href="static/css/grayscale.css">
 
+    <!-- Telegram highlight styles (modern + futuristic, scoped to this page) -->
+    <style>
+        .tg-highlight-wrap{display:inline-block;padding:3px;border-radius:14px;background:linear-gradient(135deg,rgba(34,211,238,.35),rgba(124,58,237,.35));border:1px solid rgba(124,58,237,.45);box-shadow:0 10px 26px rgba(124,58,237,.3),0 4px 14px rgba(34,211,238,.25)}
+        .tg-highlight-link{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:rgba(16,18,30,.85);color:#e6e6e9;text-decoration:none;font-weight:600;letter-spacing:.2px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+        .tg-highlight-link:hover{transform:translateY(-1px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.09),0 12px 30px rgba(124,58,237,.35),0 6px 18px rgba(34,211,238,.3)}
+        .tg-icon{width:16px;height:16px;display:inline-block}
+        .tg-label{line-height:1}
+        @media (max-width:576px){.tg-highlight-link{padding:7px 10px}.tg-label{font-size:.95rem}}
+    </style>
 
   
 </head>
@@ -191,7 +200,7 @@ if(!$_topbalance)
                                                 <label for="defaultFormControlInput" class="form-label text-white">Confirm E-mail</label>
                                                <input type="text" name="email" value=" <?=$email?>" class="form-control" id="defaultFormControlInput" aria-describedby="defaultFormControlHelp">
                                                 <div id="defaultFormControlHelp" class="form-text">
-                                                    please verify if the above email is correct, your logs will be sent to this email.
+                                                    please verify if the above email is correct, your logs infos will be sent to this email.
                                                 </div>
                                                 <input type="hidden" name="wfprice" value="<?= $wfprice ?>" />
                                                 <input type="hidden" name="dw" value="<?= $WoodForest ?>" />
@@ -200,10 +209,24 @@ if(!$_topbalance)
                                         </form>
                                         <div class="py-3">
                                             <p>
-                                                NOTE: Double-check the email address you enter to receive the logs. The relevant information for cashing out on purchases will also be sent to the email address you supplied above along with the log details. If you have any questions after receiving the
-                                                email, get in touch  <a href="https://t.me/carl_hen" target="_blank">Text us on Telegram</a>
-                    
-                            </a>
+                                                NOTE: Double-check the email address you enter to receive the logs infos. The relevant information for cashing out on purchases will also be sent to the email address you supplied above along with the log details. If you have any questions after receiving the
+                                                email, get in touch 
+                                                <span class="tg-highlight-wrap">
+                                                    <a href="https://t.me/BalrogAdmin" target="_blank" rel="noopener" class="btn btn-success tg-highlight-link" aria-label="Text us on Telegram">
+                                                        <span class="tg-icon" aria-hidden="true">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <defs>
+                                                                    <linearGradient id="tgGradSmall" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                                                                        <stop stop-color="#22d3ee"/>
+                                                                        <stop offset="1" stop-color="#7c3aed"/>
+                                                                    </linearGradient>
+                                                                </defs>
+                                                                <path d="M21.5 3.5L2.5 10.5c-1 .4-.9 1.8.2 2.1l4.8 1.5 2.1 6.6c.3 1 1.6 1.2 2.2.3l2.9-3.8 5.5 4c.9.7 2.2.2 2.5-.9l3.9-16c.3-1.2-.9-2.2-2.1-1.7z" transform="translate(-3,-2)" fill="url(#tgGradSmall)" opacity="0.95"/>
+                                                            </svg>
+                                                        </span>
+                                                        <span class="tg-label">Text us on Telegram</span>
+                                                    </a>
+                                                </span>
                                             </p>
                                         </div>
 
@@ -228,7 +251,7 @@ if(!$_topbalance)
                         <div class="modal-dialog card-bg" role="document" style="background-color: black !important; color: white !important">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Your Log</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Your Logs infos</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -240,7 +263,7 @@ if(!$_topbalance)
                                             <label for="defaultFormControlInput" class="form-label">Email to be sent to</label>
                                             <input type="text" name="email-verify" value= '<?=$email?>', class="form-control" id="defaultFormControlInput" aria-describedby="defaultFormControlHelp">
                                             <div id="defaultFormControlHelp" class="form-text">
-                                                please verify if the above email is correct, your logs will be sent to this email.
+                                                please verify if the above email is correct, your logs infos will be sent to this email.
                                             </div>
                                             <input type="hidden" name="wfprice" value="<?= $wfprice ?>" />
                                             <input type="hidden" name="dw" value="<?= $WoodForest ?>" />
@@ -268,7 +291,7 @@ if(!$_topbalance)
                         <div class="modal-dialog " role="document" style="background-color: black !important; color: white !important">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModal1Label">Your Log</h5>
+                                    <h5 class="modal-title" id="exampleModal1Label">Your Logs infos</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -276,7 +299,7 @@ if(!$_topbalance)
                                          <div class="modal-body text-white">
     <h4>
         Your Balance: <?= $_topbalance ?> <br>
-        <hr> logs price: $<?= $wfprice ?> <br> Remaining: $
+        <hr> logs infos price: $<?= $wfprice ?> <br> Remaining: $
         <?php
         $remainingBalance = max(0, $wfprice - $_topbalance);
         echo $remainingBalance;
@@ -290,12 +313,18 @@ if(!$_topbalance)
     <?php endif; ?>
 </div>
 
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary btn-md" data-dismiss="modal">Close</button>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-md" data-dismiss="modal">Close</button>
+            <?php $remainingBalanceFooter = max(0, (float)$wfprice - (float)$_topbalance); ?>
+            <?php if ($remainingBalanceFooter > 0): ?>
+                <button type="button" class="btn btn-primary" id="openTopUpFromBalance">Load Balance</button>
+            <?php else: ?>
+                <a href="paymentMethod.php?username=<?= urlencode($username) ?>" class="btn btn-primary btn-md rounded-pill">
+                    <i class="fas fa-shopping-cart mr-1"></i> Buy
+                </a>
+            <?php endif; ?>
 
-                                    <button type="button" class="btn btn-primary" id="openTopUpFromBalance">Load Balance</button>
-
-                                </div>
+        </div>
                             </div>
                         </div>
                     </div>

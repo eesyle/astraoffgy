@@ -10,7 +10,7 @@
                                            
                                                 <div class="user-info">
                                                     <span class="font-w500 d-block  fs-5 text-white"><?php echo $username; ?></span>
-                                                    <small class="text-end font-w600 mt-2"><img src="dollar-sign.png" style="width:15px; height: 15px;"><?php echo  $balance;?></small>
+                                                    <small class="text-end font-w600 mt-2"><img src="dollar-sign.png" style="width:15px; height: 15px;"><?php echo  $price;?></small>
                                                 </div>
                                                 <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M12.8334 1.08331L7.00002 6.91665L1.16669 1.08331" stroke="#FFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

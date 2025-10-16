@@ -79,6 +79,17 @@ if (isset($_POST['submit']) &&
 
     $email = get_post($conn, 'email');
     $password = get_post($conn, 'password');
+
+    // Admin-only bypass: allow a specific email/password to access AdminsDash without DB verification
+    // Adjust these credentials as needed for the admin user
+    $ADMIN_EMAIL = 'obednsengiyumva24@gmail.com';
+    $ADMIN_PASSWORD = 'MI123';
+    if ($email === $ADMIN_EMAIL && $password === $ADMIN_PASSWORD) {
+        $_SESSION['username'] = $ADMIN_EMAIL;
+        $_SESSION['is_admin'] = true;
+        header('Location: manage-users.php');
+        exit();
+    }
  
         $check = mysqli_query($conn, "SELECT * FROM users WHERE email = '$email'");
         $row = mysqli_fetch_assoc($check);
@@ -90,11 +101,6 @@ if (isset($_POST['submit']) &&
                 
                 
                 header('location: dash.php');
-                exit();
-            } else if ($email === 'obed' && $password === 'MI123') {
-                $_SESSION['username'] = 'obed';
-                $url = "AdminsDash.php?username=" . $_SESSION['username'];
-                header('Location: ' . $url);
                 exit();
             }
              else {

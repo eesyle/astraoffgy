@@ -13,9 +13,6 @@
                             <div>Telegram: <a href="https://t.me/BalrogAdmin" target="_blank"><u>@BalrogAdmin</u></a></div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-info btn-sm btn-rounded mt-3 px-5" name="contact_us">Contact Us</button>
-                    </div>
                 </form>
             </div>
         </div>

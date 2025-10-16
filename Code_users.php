@@ -6,7 +6,7 @@ if(isset($_POST['delete_student']))
 {
     $student_id = mysqli_real_escape_string($con, $_POST['delete_student']);
 
-    $query = "DELETE FROM  users WHERE ID='$student_id' ";
+    $query = "DELETE FROM users WHERE id='$student_id' ";
     $query_run = mysqli_query($con, $query);
 
     if($query_run)
@@ -23,18 +23,37 @@ if(isset($_POST['delete_student']))
     }
 }
 
+// Inline toggle for is_active from AddBalanceToAuser.php
+if (isset($_POST['update_active'])) {
+    $student_id = mysqli_real_escape_string($con, $_POST['user_id']);
+    $is_active = isset($_POST['is_active']) ? (int)mysqli_real_escape_string($con, $_POST['is_active']) : 0;
+
+    $query = "UPDATE users SET is_active='$is_active' WHERE id='$student_id' ";
+    $query_run = mysqli_query($con, $query);
+
+    if ($query_run) {
+        $_SESSION['message'] = $is_active ? "User activated" : "User deactivated";
+        header("Location: AddBalanceToAuser.php");
+        exit(0);
+    } else {
+        $_SESSION['message'] = "Failed to update active status";
+        header("Location: AddBalanceToAuser.php");
+        exit(0);
+    }
+}
+
 if(isset($_POST['update_student']))
 {
     $student_id = mysqli_real_escape_string($con, $_POST['student_id']);
     $Email = mysqli_real_escape_string($con, $_POST['email']);
     $UserName = mysqli_real_escape_string($con, $_POST['username']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
-    $Date = mysqli_real_escape_string($con, $_POST['Date']);
+    $Date = mysqli_real_escape_string($con, $_POST['date']);
     $price = mysqli_real_escape_string($con, $_POST['price']);
     $balance = mysqli_real_escape_string($con, $_POST['balance']);
     $stcomplete = mysqli_real_escape_string($con, $_POST['stcomplete']);
 
-    $query = "UPDATE  users SET Email='$Email', UserName='$UserName', PassWord='$password', price='$price',Balance='$balance',statusComplete = '$stcomplete' WHERE id='$student_id' ";
+    $query = "UPDATE users SET email='$Email', username='$UserName', password='$password', date='$Date', price='$price', balance='$balance', statuscomplete='$stcomplete' WHERE id='$student_id' ";
     $query_run = mysqli_query($con, $query);
 
     if($query_run)

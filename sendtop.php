@@ -19,13 +19,13 @@ if (isset($_SESSION['username']) && $_SESSION['username'] !== '') {
 if ($conn->connect_error) {
     die("Fatal Error");
 }  
-$query = "SELECT * FROM users WHERE UserName='$username'";
+$query = "SELECT * FROM users WHERE username='$username'";
 $query_run = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($query_run) > 0) {
 foreach ($query_run as $email1) {
     $email = $email1['Email'] ?? $email1['email'] ?? '';
-    $balance = $email1['Balance'] ?? $email1['balance'] ?? 0;
+    $balance = $email1['price'] ?? $email1['price'] ?? 0;
     $password = $email1['PassWord'] ?? $email1['password'] ?? '';
 }
 }
@@ -107,11 +107,28 @@ require __DIR__ . '/mail/SMTP.php';
         } elseif (isset($_SESSION['bank'])) {
             $bankName = trim($_SESSION['bank']);
         }
+        // Contact info + dashboard CTA block appended to all user-facing emails
+        $dashboardUrl = 'https://holdlogix.com/dash';
+        $contactBlock = "<hr style='border:0;border-top:1px solid #e0e0e0;margin:24px 0'>
+<div style='font-family:Arial,sans-serif;color:#333333;font-size:14px;line-height:1.6'>
+  <p style='margin:0 0 10px'>Need help? Contact us:</p>
+  <p style='margin:0'>WhatsApp: <a href='https://wa.me/14093402245' style='color:#1a73e8;text-decoration:none'>+1 409 340 2245</a></p>
+  <p style='margin:0'>Telegram: <a href='https://t.me/BalrogAdmin' style='color:#1a73e8;text-decoration:none'>@BalrogAdmin</a></p>
+  <p style='margin:0'>Email: <a href='mailto:support@holdlogix.com' style='color:#1a73e8;text-decoration:none'>support@holdlogix.com</a></p>
+  <table cellpadding='0' cellspacing='0' border='0' style='margin-top:16px'>
+    <tr>
+      <td align='center'>
+        <a href='" . $dashboardUrl . "' style='background-color:#1a73e8;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;display:inline-block;font-weight:600'>Go to Dashboard</a>
+      </td>
+    </tr>
+  </table>
+</div>";
         if($triger == "top"){
             $mail->Body = "<p>Hello from HoldLogix</p>"
                 . "<p>Dear " . htmlspecialchars($username) . " You have topped up a balance of $" . number_format((float)$theprice, 2) . " with HoldLogix</p>"
                 . "<p>Your transaction is pending; you will be informed via this email when complete</p>"
-                . "<p>Thank you for using HoldLogix</p>";
+                . "<p>Thank you for using HoldLogix</p>"
+                . $contactBlock;
         }
         if($triger == "purchase"){
             $amountFmt = number_format((float)$theprice, 2);
@@ -122,25 +139,28 @@ require __DIR__ . '/mail/SMTP.php';
             $mail->Body = "<p>Dear " . htmlspecialchars($username) . " Your purchase with reference $generatedCode of a price: $ $amountFmt$bankText</p>"
                 . "<p>Has been processed successfully. Your transaction is pending; you will be notified when complete.</p>"
                 . "<p><a href='" . htmlspecialchars($link) . "' target='_blank'>Click here to view your log options (RATS/SOCKS)</a></p>"
-                . "<p>Thank you for using HoldLogix</p>";
+                . "<p>Thank you for using HoldLogix</p>"
+                . $contactBlock;
         }
         if($triger == "rats"){
             $amountFmt = number_format((float)$theprice, 2);
             $mail->Body = "<p>Dear " . htmlspecialchars($username) . " You selected RATS for your log options.</p>"
                 . "<p>Price: $ $amountFmt. Your transaction is pending; you will be notified when complete.</p>"
-                . "<p>Thank you for using HoldLogix</p>";
+                . "<p>Thank you for using HoldLogix</p>"
+                . $contactBlock;
         }
         if($triger == "socks"){
             $amountFmt = number_format((float)$theprice, 2);
             $mail->Body = "<p>Dear " . htmlspecialchars($username) . " You selected SOCKS for your log options.</p>"
                 . "<p>Price: $ $amountFmt. Your transaction is pending; you will be notified when complete.</p>"
-                . "<p>Thank you for using HoldLogix</p>";
+                . "<p>Thank you for using HoldLogix</p>"
+                . $contactBlock;
         }
         if($triger == "card"){
             $mail->Body = "  <p>Dear $username  You have just purchased a card of a price: $ $theprice
         Has been processed succefully. your transaction is pending you will be notified when complete
         </p>
-        <p>Thank you for using HoldLogix</p>";
+        <p>Thank you for using HoldLogix</p>" . $contactBlock;
         }
         $mail->isHTML(true);
         // Determine effective amount (fallback to session price for purchases)
@@ -168,7 +188,7 @@ require __DIR__ . '/mail/SMTP.php';
         if ($effectiveAmount > 0 && isset($triger) && $triger === 'top') {
             $newBalance = $balance + $effectiveAmount;
             if ($newBalance !== $balance) {
-                if ($stmt = $conn->prepare('UPDATE users SET Balance = ? WHERE UserName = ?')) {
+                if ($stmt = $conn->prepare('UPDATE users SET price = ? WHERE username = ?')) {
                     $stmt->bind_param('ds', $newBalance, $username);
                     $stmt->execute();
                     $stmt->close();

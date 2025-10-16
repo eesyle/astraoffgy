@@ -16,6 +16,7 @@ if ($result) {
     $row = mysqli_fetch_assoc($result);
     $email = $row['email'];
     $balance = $row['balance'];
+    $price = $row['price'];
     mysqli_free_result($result);
 } else {
     echo "Error: " . mysqli_error($connection);

@@ -158,7 +158,7 @@ $_SESSION['dashboardCounts']['ongoing'] = max(8, min(
                     <div class="col-xl-8">
                         <div class="row">
                             <div class="col-md-6 mb-4">
-                                <div class="stat-card">
+                                <div class="stat-card" id="card-banklogs" style="cursor:pointer" title="Explore Bank Logs">
                                     <div class="stat-icon" style="background:#2d3b4f"><i class="bi bi-bank text-info"></i></div>
                                     <h3 class="mb-0"><?= htmlspecialchars($_SESSION['dashboardCounts']['bank']); ?></h3>
                                     <small>Updated Bank Logs</small>
@@ -166,7 +166,7 @@ $_SESSION['dashboardCounts']['ongoing'] = max(8, min(
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
-                                <div class="stat-card">
+                                <div class="stat-card" id="card-mobilelogs" style="cursor:pointer" title="Explore Mobile Logs">
                                     <div class="stat-icon" style="background:#2d3b4f"><i class="bi bi-phone text-warning"></i></div>
                                     <h3 class="mb-0"><?= htmlspecialchars($_SESSION['dashboardCounts']['mobile']); ?></h3>
                                     <small>Added Mobile Logs</small>
@@ -174,7 +174,7 @@ $_SESSION['dashboardCounts']['ongoing'] = max(8, min(
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
-                                <div class="stat-card">
+                                <div class="stat-card" id="card-dumps" style="cursor:pointer" title="View Dumps + Pins">
                                     <div class="stat-icon" style="background:#2d3b4f"><i class="bi bi-collection text-success"></i></div>
                                     <h3 class="mb-0"><?= htmlspecialchars($_SESSION['dashboardCounts']['dumps']); ?></h3>
                                     <small>Newly loaded dumps</small>
@@ -182,7 +182,7 @@ $_SESSION['dashboardCounts']['ongoing'] = max(8, min(
                                 </div>
                             </div>
                             <div class="col-md-6 mb-4">
-                                <div class="stat-card">
+                                <div class="stat-card" id="card-ongoing" style="cursor:pointer" title="View Ongoing Transactions">
                                     <div class="stat-icon" style="background:#2d3b4f"><i class="bi bi-arrow-repeat text-info"></i></div>
                                     <h3 class="mb-0"><?= htmlspecialchars($_SESSION['dashboardCounts']['ongoing']); ?></h3>
                                     <small>Ongoing Transactions</small>
@@ -226,6 +226,7 @@ $_SESSION['dashboardCounts']['ongoing'] = max(8, min(
                                                     $currentDate = strtotime(date('Y-m-d'));
                                                     $twoDaysLater = strtotime('+2 days', $date);
                                                     $statusComplete = getBalanceFromDatabase($twoDaysLater);
+                                                    $isActive = isset($amount['is_active']) ? (int)$amount['is_active'] : 0;
                                                     ?>
                                                     <tr>
                                                         <td scope="col"><?= htmlspecialchars($amount['id']); ?></td>
@@ -248,10 +249,14 @@ $_SESSION['dashboardCounts']['ongoing'] = max(8, min(
                                              </td>
                                                         <td scope="col">
                                                             <?php
-                                                            if ($statusComplete == 1) {
-                                                                echo 'Complete';
-                                                            } elseif ($statusComplete == 0 && $twoDaysLater <= $currentDate) {
+                                                            // New mapping:
+                                                            // - is_active = 1 => Complete
+                                                            // - is_active = 0 => Pending
+                                                            // - if two days old => Cancelled overrides
+                                                            if ($twoDaysLater <= $currentDate) {
                                                                 echo 'Cancelled';
+                                                            } elseif ($isActive === 1) {
+                                                                echo 'Complete';
                                                             } else {
                                                                 echo 'Pending';
                                                             }
@@ -275,6 +280,69 @@ $_SESSION['dashboardCounts']['ongoing'] = max(8, min(
         </div>
     </div>
 
+    <!-- Region Chooser Modal for Bank Logs -->
+    <style>
+      .modal-dark .modal-content{background:#0f172a;color:#e5e7eb;border:1px solid rgba(255,255,255,0.08);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.45)}
+      .modal-dark .modal-header{border-bottom:1px solid rgba(255,255,255,0.08)}
+      .modal-dark .modal-footer{border-top:1px solid rgba(255,255,255,0.08)}
+      .chip{display:inline-block;padding:10px 14px;border-radius:999px;background:#1f2937;color:#93c5fd;border:1px solid rgba(147,197,253,.3);margin:6px;cursor:pointer;transition:all .2s}
+      .chip:hover{background:#111827;color:#fff;box-shadow:0 0 0 2px rgba(59,130,246,.35), 0 6px 18px rgba(59,130,246,.25)}
+      .chip .bi{margin-right:8px}
+      .link-tile{display:inline-block;padding:12px 16px;border-radius:12px;background:#111827;color:#e5e7eb;border:1px solid rgba(255,255,255,.08);margin:6px;transition:all .2s;text-decoration:none}
+      .link-tile:hover{background:#0b1220;box-shadow:0 0 0 2px rgba(34,211,238,.35), 0 6px 18px rgba(34,211,238,.25)}
+      .link-tile .tile-logo{height:26px;width:auto;margin-right:10px;vertical-align:middle;filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
+      .link-tile span{vertical-align:middle}
+    </style>
+
+    <div class="modal fade modal-dark" id="regionModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="regionModalLabel"><i class="bi bi-globe2"></i> Choose Region</h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-2 text-muted">Select a region to view available banks.</div>
+            <div class="mb-3">
+              <span class="chip" data-target="US"><i class="bi bi-flag"></i> USA</span>
+              <span class="chip" data-target="AU"><i class="bi bi-flag"></i> Australia</span>
+              <span class="chip" data-target="CA"><i class="bi bi-flag"></i> Canada</span>
+              <span class="chip" data-target="UK"><i class="bi bi-flag"></i> UK</span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Logs Modal -->
+    <div class="modal fade modal-dark" id="mobileModal" tabindex="-1" role="dialog" aria-labelledby="mobileModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="mobileModalLabel"><i class="bi bi-phone"></i> Choose Mobile Log</h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <a class="link-tile" href="leo.php">
+              <img src="assets/official_cashapp_logo.png" alt="Cash App" class="tile-logo"> <span>Cash App</span>
+            </a>
+            <a class="link-tile" href="pal.php">
+              <img src="assets/PayPal_Logo.svg" alt="PayPal" class="tile-logo"> <span>PayPal</span>
+            </a>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Required vendors -->
     <script src="xui-main/vendor/global/global.min.js"></script>
     <script src="xui-main/vendor/chart.js/Chart.bundle.min.js"></script>
@@ -297,6 +365,63 @@ $_SESSION['dashboardCounts']['ongoing'] = max(8, min(
             navigator.clipboard.writeText(c);
             alert("Copied: " + c);
         }
+
+        // Helper to open modals with Bootstrap 5 or jQuery fallback
+        function openModalById(id){
+          var el = document.getElementById(id);
+          if(!el) return;
+          if(window.bootstrap && bootstrap.Modal){
+            var modal = new bootstrap.Modal(el);
+            modal.show();
+          } else if (window.jQuery && typeof jQuery(el).modal === 'function'){
+            jQuery(el).modal('show');
+          } else {
+            // Fallback: trigger click on backdrop-compatible elements
+            el.classList.add('show');
+            el.style.display = 'block';
+          }
+        }
+
+        // Helper to close modals with Bootstrap 5 or jQuery fallback
+        function closeModalById(id){
+          var el = document.getElementById(id);
+          if(!el) return;
+          if(window.bootstrap && bootstrap.Modal){
+            var instance = bootstrap.Modal.getInstance(el);
+            if(!instance){ instance = new bootstrap.Modal(el); }
+            instance.hide();
+          } else if (window.jQuery && typeof jQuery(el).modal === 'function'){
+            jQuery(el).modal('hide');
+          } else {
+            el.classList.remove('show');
+            el.style.display = 'none';
+          }
+        }
+
+        document.addEventListener('DOMContentLoaded', function(){
+          var bankCard = document.getElementById('card-banklogs');
+          var mobileCard = document.getElementById('card-mobilelogs');
+          var dumpsCard = document.getElementById('card-dumps');
+          var ongoingCard = document.getElementById('card-ongoing');
+
+          if(bankCard){ bankCard.addEventListener('click', function(){ openModalById('regionModal'); }); }
+          if(mobileCard){ mobileCard.addEventListener('click', function(){ openModalById('mobileModal'); }); }
+          if(dumpsCard){ dumpsCard.addEventListener('click', function(){ window.location.href = 'dmps.php'; }); }
+          if(ongoingCard){ ongoingCard.addEventListener('click', function(){ window.location.href = 'transactions.php'; }); }
+
+          // Region chips open existing detailed modals from sideBar.php
+          document.querySelectorAll('#regionModal .chip').forEach(function(el){
+            el.addEventListener('click', function(){
+              var target = this.getAttribute('data-target');
+              if(target){
+                // Close chooser first so the selected region modal is visible
+                closeModalById('regionModal');
+                // Small delay to allow fade-out before opening next modal
+                setTimeout(function(){ openModalById('modal' + target); }, 200);
+              }
+            });
+          });
+        });
     </script>
 </body>
 

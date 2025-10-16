@@ -32,6 +32,20 @@
     <link href="xui-main/css/style.css" rel="stylesheet">
     <link href="static/css/grayscale.css" rel="stylesheet">
     <link rel="stylesheet" href="styl.css">
+    <style>
+        /* Futuristic, modern styling for refund form without changing form flow */
+        .refund-wrapper{background:radial-gradient(circle at 10% 10%,#0f172a,#1e293b 40%,#0b1020);min-height:100vh}
+        .refund-card{background:rgba(30,41,59,.75);backdrop-filter:blur(8px);border-radius:16px;border:1px solid rgba(148,163,184,.2);box-shadow:0 12px 30px rgba(0,0,0,.35)}
+        .refund-title{display:flex;align-items:center;gap:12px;color:#e2e8f0}
+        .refund-title i{color:#60a5fa}
+        .contact-form-text{background:#0b1220;color:#cbd5e1;border:1px solid rgba(148,163,184,.25);border-radius:10px;padding:12px 14px}
+        .contact-form-text:focus{outline:none;border-color:#60a5fa;box-shadow:0 0 0 2px rgba(96,165,250,.25)}
+        .contact-form-btn{background:linear-gradient(135deg,#06b6d4,#3b82f6);border:none;border-radius:12px;color:#fff;padding:12px 16px;font-weight:600;transition:transform .15s ease,box-shadow .15s ease}
+        .contact-form-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(59,130,246,.4)}
+        .contact-hint{color:#94a3b8;font-size:.9rem;margin-top:6px}
+        .other-reason{display:none}
+        .label-muted{color:#94a3b8}
+    </style>
 </head>
 <body>
 
@@ -88,13 +102,13 @@
                     <div class="col-xl-12">
                         <div class="card balance-data">
                             <div class="card-header border-0 flex-wrap">
-                                <h4 class="fs-18 font-w600">REQUEST A REFUND</h4>
+                                <h4 class="fs-18 font-w600 refund-title"><i class="bi bi-shield-check"></i> REQUEST A REFUND</h4>
                             </div>
                             <div class="card-body">
-                                <div class="row align-items-center justify-contain-center">
+                                <div class="row align-items-center justify-contain-center refund-wrapper p-3">
                                     
                                     <div class="col-md-7">
-                                        <div class="d-flex">
+                                        <div class="refund-card p-4 w-100">
     
                                        
                                         <div class="contact-section">
@@ -104,7 +118,10 @@
             <input type="email" class="contact-form-text"  id="email" name="email" placeholder="Email address" value="<?=$email?>" required>     
             <input type="text" class="contact-form-text" id="btcId" name="btcId" placeholder="Your BTC or USDT address" required>
  
-        <p class="contact-form-text" style="color: #757574; background-color: #37356B;"> upload payment screenshot: <input type="file" name="file" id="file" required></p>
+        <label class="label-muted">Upload payment screenshot</label>
+        <p class="contact-form-text" style="color:#cbd5e1;background-color:#0b1220;border:1px solid rgba(148,163,184,.25);border-radius:10px;">
+            <input type="file" name="file" id="file" required style="color:#94a3b8;">
+        </p>
          <select class="contact-form-text" id="category" name="category" required>
         <option value="" disabled selected>What is the reason for refund? click here to Choose from the dropdown menu</option>
         <option value="incorrect">The log info not correct</option>
@@ -114,6 +131,11 @@
         <option value="delay">Delay in receiving the log info</option>
         <option value="other">Other</option>
     </select>
+    <div id="other-reason-wrap" class="other-reason">
+        <label for="other_reason" class="label-muted">Please describe your reason</label>
+        <textarea class="contact-form-text" id="other_reason" name="other_reason" rows="3" placeholder="Type your reason..."></textarea>
+        <div class="contact-hint">Be specific so we can process your request faster.</div>
+    </div>
     <button  class="contact-form-btn" type="submit" name ="submit">Submit Request</button>
     </form>
     </div>
@@ -181,6 +203,30 @@
  
             alert("Copied: " + c);
         }
+        // Toggle Other reason textarea visibility and required state
+        (function(){
+            var categoryEl = document.getElementById('category');
+            var otherWrap = document.getElementById('other-reason-wrap');
+            var otherInput = document.getElementById('other_reason');
+            function toggleOther(){
+                if (!categoryEl) return;
+                var show = categoryEl.value === 'other';
+                if (otherWrap) otherWrap.style.display = show ? 'block' : 'none';
+                if (otherInput) {
+                    if (show) {
+                        otherInput.setAttribute('required','required');
+                    } else {
+                        otherInput.removeAttribute('required');
+                        otherInput.value = '';
+                    }
+                }
+            }
+            if (categoryEl) {
+                categoryEl.addEventListener('change', toggleOther);
+                // Initialize on load
+                toggleOther();
+            }
+        })();
     </script>
 
 </body>

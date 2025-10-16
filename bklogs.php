@@ -232,7 +232,7 @@ $username = $_SESSION['username'];
     <div class="custom-card "  style="background-color: #fff;">
     <img src="banklogs/USA.png ">
  
-      <h3 style="color: #000;  ">USA BANK LOGS</h3>
+      <h3 style="color: #000;  ">USA BANKLOGS</h3>
      <a href="msal.php?username=<?= $username ?>">VIEW LOGS</a> 
     </div>
 

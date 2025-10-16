@@ -15,7 +15,7 @@
         <div class="main-content">
             <header class="admin-header">
                 <h1>Manage Banks</h1>
-                <button class="logout-btn">Logout</button>
+                <a class="logout-btn" href="dash.php">Logout</a>
             </header>
 
             <!-- Manage Banks Content -->
@@ -49,6 +49,13 @@
                     <li><a href="atew_index">EDIT T&D Bank</a></li>
                     <li><a href="dw_index">EDIT Wells Fargo Bank</a></li>
                     <li><a href="gw_index">EDIT Woodforest Bank</a></li>
+                    <!-- Missing banks added -->
+                    <li><a href="navyfederal_index">EDIT Navy Federal Credit Union</a></li>
+                    <li><a href="keybank_index">EDIT KeyBank</a></li>
+                    <li><a href="pnc_index">EDIT PNC Bank</a></li>
+                    <li><a href="truist_index">EDIT Truist Bank</a></li>
+                    <li><a href="boq_index">EDIT Bank of Queensland</a></li>
+                    <li><a href="bankaustralia_index">EDIT Bank Australia</a></li>
                 </ul>
             </section>
         </div>

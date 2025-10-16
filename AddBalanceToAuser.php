@@ -58,6 +58,7 @@
                                     <th>Price</th>
                                     <th>Balance</th>
                                     <th>STC</th>
+                                    <th>Active</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -72,18 +73,31 @@
                                         {
                                             ?>
                                             <tr  >
-                                                <td><?= $student['ID']; ?></td>
-                                                <td><?= $student['Email']; ?></td>
-                                                <td><?= $student['UserName']; ?></td>
-                                                <td><?= $student['PassWord']; ?></td>
-                                                <td><?= $student['Date']; ?></td>
+                                                <td><?= $student['id']; ?></td>
+                                                <td><?= $student['email']; ?></td>
+                                                <td><?= $student['username']; ?></td>
+                                                <td><?= $student['password']; ?></td>
+                                                <td><?= $student['date']; ?></td>
                                                 <td><?= $student['price']; ?></td>
-                                                <td><?= $student['Balance']; ?></td>
-                                                <td><?= $student['statusComplete']; ?></td>
+                                                <td><?= $student['balance']; ?></td>
+                                                <td><?= $student['statuscomplete']; ?></td>
                                                 <td>
-                                                    <a href="user_edit.php?id=<?= $student['ID']; ?>" class="btn btn-success btn-sm">Edit</a>
+                                                    <?php $active = isset($student['is_active']) ? (int)$student['is_active'] : 0; ?>
+                                                    <span class="badge <?= $active ? 'badge-success' : 'badge-secondary' ?>">
+                                                        <?= $active ? 'Active' : 'Inactive' ?>
+                                                    </span>
                                                     <form action="Code_users.php" method="POST" class="d-inline">
-                                                        <button type="submit" name="delete_student" value="<?=$student['ID'];?>" class="btn btn-danger btn-sm">Delete</button>
+                                                        <input type="hidden" name="user_id" value="<?= $student['id']; ?>">
+                                                        <input type="hidden" name="is_active" value="<?= $active ? 0 : 1; ?>">
+                                                        <button type="submit" name="update_active" class="btn btn-sm <?= $active ? 'btn-warning' : 'btn-success' ?>">
+                                                            <?= $active ? 'Deactivate' : 'Activate' ?>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <a href="user_edit.php?id=<?= $student['id']; ?>" class="btn btn-success btn-sm">Edit</a>
+                                                    <form action="Code_users.php" method="POST" class="d-inline">
+                                                        <button type="submit" name="delete_student" value="<?= $student['id']; ?>" class="btn btn-danger btn-sm">Delete</button>
                                                     </form>
                                                 </td>
                                             </tr>

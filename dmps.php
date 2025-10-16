@@ -1,25 +1,10 @@
 <?php
  require_once "codeForLogs.php";
- if($balance>0){
-    $sql = "SELECT id, balance, info, price FROM dmps where price > $balance";
-    $result = $conn->query($sql);
-    
-    if ($result->num_rows > 0) {
-        $rows = $result->fetch_all(MYSQLI_ASSOC);
-    } else {
-        $rows = [];
-    }
-}else{
-    $sql = "SELECT id, balance, info, price FROM dmps";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    $rows = $result->fetch_all(MYSQLI_ASSOC);
-} else {
-    $rows = [];
-}
-}
-mysqli_close($conn);
+ // Centralized query for banklogs using $is_active
+ $banklogs_table = "dmps";
+ require_once "banklogs_query.php";
+ require_once "banklogs_logic.php";
+ mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>

@@ -1,4 +1,4 @@
- <?php
+<?php
  session_start();
  ?>
 <!DOCTYPE html>
@@ -133,7 +133,7 @@
         
         <i class='menu-icon tf-icons bx bxs-bank'></i>
         
-        <div data-i18n="Basic">USA BANKS</div>
+        <div data-i18n="Basic">USA BANKLOGS</div>
       </a>
                         <ul class="menu-sub">
 
@@ -233,7 +233,7 @@
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
         
         <i class='menu-icon tf-icons bx bxs-bank'></i>
-         <div data-i18n="Basic"> AUSTRALIA BANKS</div>
+         <div data-i18n="Basic"> AU BANKLOGS</div>
       </a>
                         <ul class="menu-sub">
 
@@ -271,7 +271,7 @@
         
        
                             
-        <div data-i18n="Basic">UK BANKS</div>
+        <div data-i18n="Basic">UK BANKLOGS</div>
       </a>
                         <ul class="menu-sub">
 
@@ -296,7 +296,7 @@
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class='menu-icon tf-icons bx bxs-bank'></i>
         
-        <div data-i18n="Basic">CANADA BANKS</div>
+        <div data-i18n="Basic">CA BANKLOGS</div>
       </a>
                         <ul class="menu-sub">
                             

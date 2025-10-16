@@ -15,17 +15,16 @@
         <div class="main-content">
             <header class="admin-header">
                 <h1>Manage Users</h1>
-                <button class="logout-btn">Logout</button>
+                <a class="logout-btn" href="LogOut.php">Logout</a>
             </header>
 
             <!-- Manage Banks Content -->
             <section class="content-section">
                 <h2>Users Management Section</h2>
                 <ul class="bank-list">
-                <li>
-        <span><a href="AddBalanceToAuser">Edit users</a></span>
-    </li>
-                    
+                    <li>
+                        <a href="AddBalanceToAuser">Edit Users</a>
+                    </li>
                 </ul>
             </section>
         </div>

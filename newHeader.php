@@ -40,22 +40,22 @@
                                                             <ul class="dropdown-menu">
                                             <li data-menu-item="04b27f35cc633aaaf4107c0df34f06ef" class="menu-item menu-item-single">
                                             <a class="menu-item-link" href="usal">
-                                                        <span class="menu-item-text">USA Banks</span>
+                                                        <span class="menu-item-text">USA BANKLOGS</span>
                                                     </a>
                                             </li>
                                             <li data-menu-item="399f87c7b5b958891e0bb86cee79652e" class="menu-item menu-item-single">
                                                 <a class="menu-item-link" href="ukl">
-                                                        <span class="menu-item-text">UK Banks</span>
+    <span class="menu-item-text">UK BANKLOGS</span>
                                                     </a>
                                             </li>
                                             <li data-menu-item="632f7156f73d57105e8292f70ce922c4" class="menu-item menu-item-single">
                                                 <a class="menu-item-link" href="canl">
-                                                        <span class="menu-item-text">Canadian Banks</span>
+                                                        <span class="menu-item-text">CA BANKLOGS</span>
                                                     </a>
                                             </li>
                                             <li data-menu-item="799e7fa8125b1205b39363cde5db5fc6" class="menu-item menu-item-single">
                                                 <a class="menu-item-link" href="austrl">
-                                                        <span class="menu-item-text">Australian Banks</span>
+                                                        <span class="menu-item-text">AU BANKLOGS</span>
                                                     </a>
                                             </li>
                                              

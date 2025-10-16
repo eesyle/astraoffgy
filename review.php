@@ -10,7 +10,7 @@ require_once "codeForLogs.php";
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
 // Handle form submission for new review
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_review'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $author = $username;
     $text = $_POST['text'];
     $rating = isset($_POST['rating']) ? (int) $_POST['rating'] : 0;
@@ -416,7 +416,7 @@ h1 {
 
     <div class="review-form">
         <h2  style="color: #fff;">Submit Your Review</h2>
-        <form action=" " method="POST" enctype="multipart/form-data">
+        <form action="" method="POST" enctype="multipart/form-data">
         <div class="form-group">
     <label for="author" style="color: #fff;">Your Name</label>
     <input type="text" id="author" name="author" value="<?= htmlspecialchars($username); ?>" style=" font-size: 0.9rem;  

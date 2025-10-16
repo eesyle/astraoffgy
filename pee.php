@@ -20,7 +20,7 @@ if(
         }else{
             if($password == $password1){
                 $_SESSION['username'] = $username;
-                $query = "INSERT INTO users VALUES('','$email','$username','$password',NOW(),'','','')";
+                $query = "INSERT INTO users VALUES('','$email','$username','$password',NOW(),'','','','')";
                 
         $result = $conn->query($query);
         if($result){

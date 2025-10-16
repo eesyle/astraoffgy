@@ -1,25 +1,10 @@
 <?php
  require_once "codeForLogs.php";
- if($balance>0){
-    $sql = "SELECT id, balance, info, price FROM bankofamerica where price > $balance";
-    $result = $conn->query($sql);
-    
-    if ($result->num_rows > 0) {
-        $rows = $result->fetch_all(MYSQLI_ASSOC);
-    } else {
-        $rows = [];
-    }
-}else{
-    $sql = "SELECT id, balance, info, price FROM bankofamerica";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    $rows = $result->fetch_all(MYSQLI_ASSOC);
-} else {
-    $rows = [];
-}
-}
-mysqli_close($conn);
+ // Centralized query for banklogs using $is_active
+ $banklogs_table = "bankofamerica";
+ require_once "banklogs_query.php";
+ require_once "banklogs_logic.php";
+ mysqli_close($conn);
 ?>
 
 
@@ -33,7 +18,7 @@ mysqli_close($conn);
     <meta name="format-detection" content="telephone=no">
 
     <title>HoldLogix</title>
-    <meta property="og:title" content="Astradox Pro — Us Banks">
+    <meta property="og:title" content="Astradox Pro — USA BANKLOGS">
     <meta property="og:description" content="Explicit Dumps">
 <meta property="og:image" content="assets/logo.png">
  
@@ -86,7 +71,7 @@ mysqli_close($conn);
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
                             <div class="dashboard_bar">
-                                Us Banks </div>
+                                USA BANKLOGS </div>
                         </div>
 
                         <?php
@@ -123,7 +108,7 @@ mysqli_close($conn);
 
                 <div class="row page-titles">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">US-Banks > Bank of America</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">USA BANKLOGS > Bank of America</a></li>
                     </ol>
                 </div>
 

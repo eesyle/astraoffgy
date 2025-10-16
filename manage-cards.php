@@ -14,8 +14,8 @@
         <!-- Main Content -->
         <div class="main-content">
             <header class="admin-header">
-                <h1>Manage cards</h1>
-                <button class="logout-btn">Logout</button>
+                <h1>Manage Cards</h1>
+                <a class="logout-btn" href="LogOut.php">Logout</a>
             </header>
 
             <!-- Manage Banks Content -->

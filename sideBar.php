@@ -65,7 +65,7 @@
                         <a class="" href="./leo" aria-expanded="false">
                             <div class="menu-icon">
                                 <!-- Cash App logo from assets -->
-                                <img src="assets/official_cashapp_logo.png" alt="Cash App" class="menu-logo" />
+                                <img src="assets/official_cashapp_logo.png" alt="Cash App" class="menu-logo cashapp-logo" style="width:50px;height:50px;object-fit:contain;border-radius:4px;display:block" />
                             </div>
                             <span class="nav-text">Cash App</span>
                         </a>
@@ -175,6 +175,8 @@
             .modal-dark .accent{height:3px;background:linear-gradient(90deg,#7c3aed,#22d3ee);border-radius:0 0 14px 14px;opacity:.85}
             /* Sidebar icons */
             .menu-icon img.menu-logo{width:22px;height:22px;object-fit:contain;border-radius:4px;display:block}
+            /* Slightly larger Cash App logo */
+            .menu-icon img.cashapp-logo{width:26px;height:26px}
             /* Grid layout for banks: 3 columns, responsive */
             .modal-bank-list{list-style:none;padding-left:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
             .modal-bank-list li{margin:0}

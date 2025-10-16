@@ -1,269 +1,265 @@
 <?php
-if (!isset($_GET['username']))
-{
-      header('Location: htcm.php');
-}
-else{
-    $username = $_GET['username'];
-    $url = "balance.php?username=".$username;  
-}
+ require_once "codeForLogs.php";
+ // Centralized query for banklogs using $is_active
+ $banklogs_table = "nab";
+ require_once "banklogs_query.php";
+ require_once "banklogs_logic.php";
+ mysqli_close($conn);
 ?>
-<!DOCTYPE html>
 
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="{% static '" data-template="vertical-menu-template-free">
+
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
 
     <title>HoldLogix</title>
+    <meta property="og:title" content="HoldLogix — AU Banklogs">
+    <meta property="og:description" content="Explicit Dumps">
+    <meta property="og:image" content="assets/logo.png">
+ 
 
-    <meta name="description" content="" />
-
-    <!-- Favicon -->
+    <!-- FAVICONS ICON -->
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
     <link rel="manifest" href="assets/site.webmanifest">
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
-
-    <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="static\vendor\fonts\boxicons.css" />
-
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="static\vendor\css\core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="static\vendor\css\theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="static\css\dr.css" />
-
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="static\vendor\libs\perfect-scrollbar\perfect-scrollbar.css" />
-
-    <link rel="stylesheet" href="static\vendor\libs\apex-charts\apex-charts.css" />
-
-    <!-- Page CSS -->
-
-    <!-- Helpers -->
-    <script src="static\vendor\js\helpers.js"></script>
-
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="static\js\config.js"></script>
-
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.0/css/jquery.dataTables.css">
-
-  
+    <link rel="shortcut icon" type="image/png" href="assets/favicon-32x32.png">
+    <link rel="stylesheet" href="xui-main/vendor/toastr/css/toastr.min.css">
+    <link href="xui-main/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+    <link href="xui-main/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="xui-main/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="xui-main/vendor/jquery-autocomplete/jquery-ui.css" rel="stylesheet">
+      <!-- Bootstrap Icons -->
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Style css -->
+    <link href="xui-main/css/style.css" rel="stylesheet">
     <link href="static/css/grayscale.css" rel="stylesheet">
+    <style>
+      /* Monochrome table: black / white / grey only */
+      #example5 thead th,
+      .dataTablesCard .card-table .table thead th {
+        background: var(--bg-3) !important;
+        color: var(--text-1) !important;
+        border-bottom-color: var(--border) !important;
+      }
+      #example5,
+      #example5 tbody td,
+      #example5 tbody tr {
+        background: var(--bg-2) !important;
+        color: var(--text-1) !important;
+      }
+      #example5 tbody tr:nth-of-type(odd) { background-color: var(--bg-1) !important; }
+      #example5 tbody tr:hover { background-color: var(--bg-2) !important; }
+      #example5 .bi-check { color: var(--text-1) !important; }
+      #example5 h2 strong { color: var(--text-0) !important; }
+      #example5 .btn { background: var(--bg-3) !important; color: var(--text-1) !important; border: 1px solid var(--border) !important; }
+      #example5 .btn:hover { background: var(--bg-2) !important; }
+      .dataTables_wrapper .dataTables_paginate .paginate_button { background: var(--bg-3) !important; color: var(--text-1) !important; border-color: var(--border) !important; }
+      .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+      .dataTables_wrapper .dataTables_paginate .paginate_button:hover { background: var(--bg-2) !important; }
+    </style>
 </head>
 
 <body>
 
-
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-
-        <div class="layout-container">
-
-            <!-- Menu -->
-
-            <?php include 'dash.php'; ?>
-
-
-
-
-            <!-- / Menu -->
-
-            <!-- Layout container -->
-            <div class="layout-page">
+    <!-- **********************************
+        Main wrapper start
+    *********************************** -->
+    <div id="main-wrapper">
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <?php include './navHeader.php'?>;
+        <!--**********************************
+            Nav header end
+        ***********************************-->
 
 
+        <!--**********************************
+            Header start
+        ***********************************-->
 
+        <div class="header" style="background: #2d2362; opacity: .9;">
+            <div class="header-content">
+                <nav class="navbar navbar-expand">
+                    <div class="collapse navbar-collapse justify-content-between">
+                        <div class="header-left">
+                            <div class="dashboard_bar">
+                                AU BANKLOGS </div>
+                        </div>
 
+                        <?php
+ 
+ $headerFile = './header.php';
+ if (is_readable($headerFile)) {
+     include($headerFile);
+ } else {
+     echo "Error: Unable to include $headerFile";
+ }
+ ?>
 
-
-                <!-- Navbar -->
-
-
-                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center" id="layout-navbar" style="background-color: #0d0b2e !important; box-shadow: none !important;">
-                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-      <i class="bx bx-menu bx-sm"></i>
-    </a>
+                         
                     </div>
-                    <div class="d-xl-block text-white text-center w-100">
-        <div class="row mx-auto">
-            <div class="col-12">
-                <div class="h4 display-5 h4-display">
-                National Bank of Australia
-                </div>
-            </div>
-        </div>
-    </div>
                 </nav>
+            </div>
+        </div>
+   
 
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
 
-                <!-- / Navbar -->
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <?php include 'sidebar.php'; ?>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
 
-                <!-- Content wrapper -->
-                <div class="content-wrapper">
+                <div class="row page-titles">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">AU BANKLOGS > National Australia Bank (NAB)</a></li>
+                    </ol>
+                </div>
 
-                    <!-- Content -->
+                <!-- row -->
+                <div class="row">
+                    <!-- --column-- -->
+                    <div class="col-xl-12">
+                        <div class="tab-content">
+                            <!-- --tab-pane -->
+                            <div class="tab-pane fade active show" id="all-transactions" role="tabpanel">
+                                <div class="table-responsive ">
+ 
 
-                    <div class="container-fluid text-white">
-                        <div class="container">
-                            <div class="row align-items-center justify-content-center">
-                                <div class="col-md-6">
-                                     
-                                    <p>
-                                        [Online Access]+[Account/Routine Number]+[Name And Address]+[Email Access]+[Credit Card Details]
-                                    </p>
-                                </div>
-                                <div class="col-md-6 align-items-right ">
-                                    <a href="Dashboad.php?username=<?=$username?>" class="align-items-right">Dashabord</a> / National Bank of Australia
-                                </div>
-                            </div>
-
-                            <div class="row py-2">
-                                <div class="bg-dark2 text-white">
-                                    <h5 class="card-header text-white">National Bank of Australia</h5>
-                                </div>
-
-                                <div class="table-responsive text-noswrap pt-1">
-                                    <table class="table table-bordered table-responsive" id="boa">
-                                        <thead>
-                                            <tr>
-
-                                                <th class="text-white">#</th>
-                                                <th class="text-white">Balance</th>
-                                                <th class="text-white">Title</th>
-                                                <th class="text-white">Info</th>
-                                                <th class="text-white">Price</th>
-                                                <th class="text-white">Status</th>
-                                                <th class="text-white">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="">
-       
-                                        <?php
-require_once 'conkt.php';
-if ($conn->connect_error) die("Fatal Error");
-
-$query = "SELECT * FROM nab  ORDER BY RAND()";
-$query_run = mysqli_query($conn, $query);
-
-$labels = ["Available", "Sold"];
-$id = 0;
-
-if (mysqli_num_rows($query_run) > 0) {
-    foreach ($query_run as $bank) {
-        $id += 1;
-        shuffle($labels); // Shuffle the labels randomly for each row
-        $label = $labels[0]; // Select a shuffled label
-        $labelClass = ($label === "Sold") ? "btn btn-danger blink_me" : "btn btn-success blink_me";
-        $disabled = ($label === "Sold") ? "disabled" : "";
-        $link = ($label === "Sold") ? "javascript:void(0);" : "shyb.php";
-        ?>
-        <tr>
-            <td class='text-white'><?= $id; ?></td>
-            <td class='text-white'>$<?= $bank['Balance']; ?></td>
-            <td class='text-white'><?= $bank['Title']; ?></td>
-            <td class='text-white'><?= $bank['info']; ?></td>
-            <td class='text-white'>$<?= $bank['price']; ?></td>
-            <td>
-                <label class='<?= $labelClass; ?>'><?= $label; ?></label>
-            </td>
-
-            <td>
-            <form method="post" action="CnfirmEmailToBuynab.php?username=<?=$username?>">
-    <!-- Other form elements go here, if any -->
-    <input type="hidden" name="bank_id" value="<?= $bank['id']; ?>">
-    <a href="<?= $link; ?>">
-                    <button class='btn btn-primary' type='submit' role='button' name="buy" <?= $disabled; ?>>
-                        Buy
-                        <div>
-                            <i class='bx bxs-cart-alt'></i>
-</form>
-               
-                        </div>
-                    </button>
-                </a>
-            </td>
-        </tr>
-        <?php
-    }
-} else {
-    echo "<h5> No Record Found </h5>";
-}
-?>
-
-                                        </tbody>
-                                    </table>
+                                <table class="table-responsive-lg table display mb-4 dataTablesCard order-table card-table dataTable no-footer student-tbl" id="example5">
+        <thead>
+            <tr>
+                <th class="d-none d-md-block d-lg-block">#</th>
+                <th>Balance</th>
+                <th>Info</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($rows)): ?>
+                <?php foreach ($rows as $row): ?>
+                    <tr>
+                        <td class="d-none d-md-block d-lg-block"><code class="text-light">#<?php echo htmlspecialchars($row['id']); ?></code></td>
+                        <td>
+                            <span style="font-size:5px; opacity: 0.015;"><?php echo htmlspecialchars($row['balance']); ?></span>
+                            <h2><sup>$</sup> <strong class="text-white"><?php echo number_format($row['balance'], 2); ?></strong></h2>
+                        </td>
+                        <td class="whitesp-no">
+                            <ul>
+                                <?php 
+                                $infoItems = explode('+', $row['info']); 
+                                foreach ($infoItems as $item): 
+                                ?>
+                                    <li><i class="bi bi-check"></i> <?php echo htmlspecialchars($item); ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </td>
+                        <td class="whitesp-no amount">$<?php echo number_format($row['price'], 2); ?></td>
+                        <td>
+                            <form method="post" action="buy.php">
+                                <input type="hidden" name="price" value="<?php echo htmlspecialchars($row['price']); ?>">
+                                <button type="submit" class="btn btn-rounded btn-xs">Buy</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="5">No data available</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
                                 </div>
                             </div>
 
                         </div>
                     </div>
-
-
-                    <!-- Footer -->
-
-                    <!-- / Footer -->
-
-                    <div class="content-backdrop fade"></div>
+                    <!----/column-- -->
                 </div>
-                <!-- Content wrapper -->
+                <!-- /row -->
+
             </div>
-            <!-- / Layout page -->
+
+
+            
+            
+              <!-- Modal -->
+    <?php include 'topModel.php'; ?>
+    <!-- /Modal -->
+
+
+
         </div>
-
-        <!-- Overlay -->
-        <div class="layout-overlay layout-menu-toggle"></div>
-
-
-        <div id="toast-container" class="toast-top-left">
-            <div class="toast toast-success bg-success" aria-live="polite" style="background-color: black;">
-                <div class="toast-title"> </div>
-                <div class="toast-message"> </div>
-            </div>
-        </div>
-
-
     </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
 
-    </div>
-    <!-- / Layout wrapper -->
+    <!-- Modal -->
+  <?php include './supportModel.php';?>
+    <!-- /Modal -->
+
+  
 
 
+ 
 
-    <!-- Core JS -->
-    <!-- build:js assets/vendor/js/core.js -->
-    <script src="static\vendor\libs\jquery\jquery.js"></script>
-    <script src="static\vendor\libs\popper\popper.js"></script>
-    <script src="static\vendor\js\bootstrap.js"></script>
-    <script src="static\vendor\libs\perfect-scrollbar\perfect-scrollbar.js"></script>
 
-    <script src="static\vendor\js\menu.js"></script>
-    <!-- endbuild -->
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="xui-main/vendor/global/global.min.js"></script>
+    <script src="xui-main/vendor/chart.js/Chart.bundle.min.js"></script>
+    <script src="xui-main/vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+    <script src="xui-main/vendor/toastr/js/toastr.min.js"></script>
+    <!-- Apex Chart -->
+    <script src="xui-main/vendor/apexchart/apexchart.js"></script>
+    <!-- Chart piety plugin files -->
+    <script src="xui-main/vendor/peity/jquery.peity.min.js"></script>
+    <!-- Chartist -->
+    <script src="xui-main/vendor/chartist/js/chartist.min.js"></script>
+    <script src="xui-main/vendor/jquery-autocomplete/jquery-ui.js"></script>
+    <!-- Dashboard 1 -->
+    <script src="xui-main/js/dashboard/dashboard-1.js"></script>
+    <script src="xui-main/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="xui-main/js/plugins-init/datatables.init.js"></script>
+    <script src="xui-main/js/custom.min.js"></script>
+    <script src="xui-main/js/dlabnav-init.js"></script>
+    <script src="xui-main/js/styleSwitcher.js"></script>
+    <script src="xui-main/js/demo.js"></script>
 
-    <!-- Vendors JS -->
-    <script src="static\vendor\libs\apex-charts\apexcharts.js"></script>
+    <script type="text/javascript">
+        function copyToClip(c) {
+            // Copy the text inside the text field
+            navigator.clipboard.writeText(c);
 
-    <!-- Main JS -->
-    <script src="static\js\main.js"></script>
-
-    <!-- Page JS -->
-    <script src="static\js\dashboards-analytics.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-    <script src="static\js\toast.js"></script>
-
-    <script src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.js"></script>
-
+            // Alert the copied text
+            alert("Copied: " + c);
+        }
+    </script>
 
 </body>
 

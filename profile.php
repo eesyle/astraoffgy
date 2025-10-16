@@ -1,6 +1,41 @@
 <?php 
  include 'codeForOther.php';
  ?>
+<?php
+// Prepare history data and counters
+if ($conn && !$conn->connect_error) {
+    $query_history = "SELECT * FROM history";
+    $history_result = mysqli_query($conn, $query_history);
+    $ordersCount = 0;
+    if ($history_result) {
+        $ordersCount = mysqli_num_rows($history_result);
+    }
+} else {
+    $history_result = null;
+    $ordersCount = 0;
+}
+
+// Helper to compute status consistent with orders.php
+function getBalanceFromDatabase($twoDaysLater = null) {
+    global $conn, $username;
+
+    $currentDate = strtotime(date('Y-m-d'));
+    $result = "SELECT statusComplete, date FROM users WHERE username='$username'";
+    $query_run = mysqli_query($conn, $result);
+    $statusComplete = null;
+
+    if ($query_run && mysqli_num_rows($query_run) > 0) {
+        $user = mysqli_fetch_assoc($query_run);
+        $date = strtotime($user['date']);
+        $statusComplete = $user['statusComplete'];
+        if ($statusComplete != 1 && $date < strtotime('-2 days', $currentDate)) {
+            $statusComplete = 0;
+        }
+    }
+
+    return $statusComplete;
+}
+?>
 
 
 <!DOCTYPE html>
@@ -12,8 +47,8 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="format-detection" content="telephone=no">
 
-    <title>Alteryx Pro  </title>
-    <meta property="og:title" content="Astradox Pro — Us Banks">
+    <title>HoldLogix</title>
+    <meta property="og:title" content="HoldLogix">
     <meta property="og:description" content="Explicit Dumps">
     <meta property="og:image" content="assets/logo.png">
  
@@ -121,10 +156,10 @@
                                     <div class="card-footer pt-0 pb-0 text-center">
                                         <div class="row">
                                             <div class="col-6 pt-3 pb-3 border-end">
-                                                <h3 class="mb-1">0</h3><span>Orders</span>
+                                                <h3 class="mb-1"><?php echo (int)$ordersCount; ?></h3><span>Orders</span>
                                             </div>
                                             <div class="col-6 pt-3 pb-3">
-                                                <h3 class="mb-1">0</h3><span>Transactions</span>
+                                                <h3 class="mb-1" id="transactions-count">0</h3><span>Transactions</span>
                                             </div>
                                         </div>
                                     </div>
@@ -150,6 +185,50 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+<?php
+if (isset($history_result) && $history_result && mysqli_num_rows($history_result) > 0) {
+    // ensure pointer at start
+    mysqli_data_seek($history_result, 0);
+    while ($amount = mysqli_fetch_assoc($history_result)) {
+        $date = strtotime($amount['date']);
+        $currentDate = strtotime(date('Y-m-d'));
+        $twoDaysLater = strtotime('+2 days', $date);
+        $isActive = isset($amount['is_active']) ? (int)$amount['is_active'] : 0;
+        ?>
+        <tr>
+            <td scope="col"><?php echo htmlspecialchars($amount['id']); ?></td>
+            <td scope="col">Purchase</td>
+            <td scope="col"><?php echo htmlspecialchars($amount['date']); ?></td>
+            <td scope="col">
+                <ul class="pl-3 mb-0">
+                    <?php 
+                    $infoItems = explode('+', $amount['Info']); 
+                    foreach ($infoItems as $item): 
+                    ?>
+                        <li><i class="bi bi-check"></i> <?php echo htmlspecialchars(trim($item)); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </td>
+            <td scope="col">
+                <?php
+                // Unified mapping:
+                // - is_active = 1 => Complete
+                // - is_active = 0 => Pending
+                // - if two days old => Cancelled overrides
+                if ($twoDaysLater <= $currentDate) {
+                    echo 'Cancelled';
+                } elseif ($isActive === 1) {
+                    echo 'Complete';
+                } else {
+                    echo 'Pending';
+                }
+                ?>
+            </td>
+        </tr>
+        <?php
+    }
+}
+?>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -226,6 +305,22 @@
             // Alert the copied text
             alert("Copied: " + c);
         }
+    </script>
+
+    <script>
+    // Fluctuating Transactions counter
+    (function(){
+        var el = document.getElementById('transactions-count');
+        if (!el) return;
+        var count = Math.floor(Math.random() * 12) + 8; // initial 8–20
+        el.textContent = count;
+        setInterval(function(){
+            var delta = Math.random() < 0.6 ? 1 : -1; // mild upward bias
+            if (Math.random() < 0.1) delta *= 2;      // occasional larger step
+            count = Math.max(1, count + delta);
+            el.textContent = count;
+        }, 2000);
+    })();
     </script>
 
 </body>

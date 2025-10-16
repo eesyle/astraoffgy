@@ -136,6 +136,7 @@ let dataSet = [
         select: false,
         info: true,
         lengthChange: false,
+        order: [], // preserve server-side (SQL) random order
         language: {
             paginate: {
                 next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',

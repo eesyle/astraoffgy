@@ -43,23 +43,23 @@ require 'dbcon.php';
                                 $student = mysqli_fetch_array($query_run);
                                 ?>
                                 <form action="Code_users.php" method="POST">
-                                    <input type="hidden" name="student_id" value="<?= $student['ID']; ?>">
+                                    <input type="hidden" name="student_id" value="<?= $student['id']; ?>">
 
                                     <div class="mb-3">
                                         <label>User Email</label>
-                                        <input type="email" name="email" value="<?=$student['Email'];?>" class="form-control">
+                                        <input type="email" name="email" value="<?=$student['email'];?>" class="form-control">
                                     </div>
                                     <div class="mb-3">
                                         <label>User name</label>
-                                        <input type="text" name="username" value="<?=$student['UserName'];?>" class="form-control">
+                                        <input type="text" name="username" value="<?=$student['username'];?>" class="form-control">
                                     </div>
                                     <div class="mb-3">
                                         <label>Password</label>
-                                        <input type="password" name="password" value="<?=$student['PassWord'];?>" class="form-control">
+                                        <input type="password" name="password" value="<?=$student['password'];?>" class="form-control">
                                     </div>
                                     <div class="mb-3">
                                         <label>Date</label>
-                                        <input type="text" name="Date" value="<?=$student['Date'];?>" class="form-control">
+                                        <input type="text" name="date" value="<?=$student['date'];?>" class="form-control">
                                     </div>
                                     <div class="mb-3">
                                         <label>Price</label>
@@ -67,11 +67,11 @@ require 'dbcon.php';
                                     </div>
                                     <div class="mb-3">
                                         <label>Balance</label>
-                                        <input type="text" name="balance" value="<?=$student['Balance'];?>" class="form-control">
+                                        <input type="text" name="balance" value="<?=$student['balance'];?>" class="form-control">
                                     </div>
                                     <div class="mb-3">
                                         <label>Status Complete</label>
-                                        <input type="text" name="stcomplete" value="<?=$student['statusComplete'];?>" class="form-control">
+                                        <input type="text" name="stcomplete" value="<?=$student['statuscomplete'];?>" class="form-control">
                                     </div>
                                     <div class="mb-3">
                                         <button type="submit" name="update_student" class="btn btn-primary">

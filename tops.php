@@ -89,17 +89,17 @@
                     <div class="col-xl-12">
                         <div class="card balance-data">
                             <div class="card-header border-0 flex-wrap">
-                                <h4 class="fs-18 font-w600">USDT  NETWORK</h4>
+                                <h4 class="fs-18 font-w600">USDT (TRC20) NETWORK</h4>
                             </div>
                             <div class="card-body">
                                 <div class="row align-items-center justify-contain-center">
                                     <div class="profile-photo col-md-4">
-                                        <img src="assets/TCGLrtDw4ZqFxmmRqwwQoHFDBTPi4YLdjV.jpg" width="300" class="img-fluid" alt="USDT QR">
+                                        <img src="assets/TCGLrtDw4ZqFxmmRqwwQoHFDBTPi4YLdjV.jpg" width="300" class="img-fluid" alt="USDT (TRC20) QR">
                                     </div>
                                     <div class="col-md-7">
                                         <div class="d-flex">
                                             <h3 class="mt-2 mb-1"><code>TCGLrtDw4ZqFxmmRqwwQoHFDBTPi4YLdjV</code></h3>&nbsp;&nbsp;<a class="mt-3" href="javascript:;" onclick='copyToClip("TYWXMr4aR8c8ZqXtcPGcjG6AHL2nEP8Avw")'><span class="badge badge-primary">copy</span></a></div>
-                                        <p><i class="fa fa-circle"></i> Send <strong>USDT</strong> to the address above with the <b>USDT</b> Network.</p>
+                                        <p><i class="fa fa-circle"></i> Send <strong>USDT (TRC20)</strong> to the address above with the <b>USDT (TRC20)</b> Network.</p>
                                         <p class="mb-2"><i class="fa fa-circle"></i> Get in touch with the support team at <a href="mailto:support@HoldLogix.com"><u>support@HoldLogix.com</u></a> with regards to any challenge topping up your account</p>
                                         <p class="mb-2"><i class="fa fa-circle text-warning"></i> <b>NB:</b> Payments should be confirmed in less than 15 minutes</p>
                                         <form method="post" action="sendtop.php" enctype="multipart/form-data">

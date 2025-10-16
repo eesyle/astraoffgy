@@ -181,7 +181,7 @@
         <div class="row mx-auto">
             <div class="col-12">
                 <div class="h4 display-5 h4-display">
-                     USA BANK LOGS
+                     USA BANKLOGS
                 </div>
             </div>
         </div>

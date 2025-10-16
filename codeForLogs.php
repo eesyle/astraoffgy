@@ -13,12 +13,11 @@ if ($result) {
     $row = mysqli_fetch_assoc($result);
     $email = $row['email'];
     $balance = $row['balance'];
+    $price = $row['price'];
+    // Expose user is_active flag for centralized banklogs filtering
+    $is_active = isset($row['is_active']) ? (int)$row['is_active'] : 0;
     mysqli_free_result($result);
 } else {
     echo "Error: " . mysqli_error($connection);
 }
 
-
-
-
-?>
