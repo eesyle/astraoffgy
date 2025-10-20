@@ -46,6 +46,89 @@
                       
                         </h4>
                     </div>
+                    <!-- Bulk Balance & Price form wired to shared handler -->
+                    <div class="p-3">
+                      <form action="code.php" method="POST" class="card card-body mb-3">
+                        <input type="hidden" name="table" value="chime" />
+                        <input type="hidden" name="redirect_path" value="niche_index.php" />
+                        <div class="row">
+                          <div class="col-md-3 mb-2">
+                            <label class="form-label">Minimum Balance</label>
+                            <input type="number" step="0.01" name="min_balance" class="form-control" placeholder="e.g. 1000" required />
+                          </div>
+                          <div class="col-md-3 mb-2">
+                            <label class="form-label">Minimum Price</label>
+                            <input type="number" step="0.01" name="min_price" class="form-control" placeholder="e.g. 10.00" required />
+                            <small class="text-muted">Anchors autoscaled curve at Minimum Balance.</small>
+                          </div>
+                          <div class="col-md-3 mb-2">
+                            <label class="form-label">Maximum Price (exclusive)</label>
+                            <input type="number" step="0.01" name="max_price" class="form-control" placeholder="e.g. 99.99" required />
+                            <small class="text-muted">Prices strictly stay below this cap.</small>
+                          </div>
+                          <div class="col-md-3 mb-2">
+                            <label class="form-label">Balance Distribution</label>
+                            <select name="balance_distribution" class="form-select">
+                              <option value="none">None (keep balances)</option>
+                              <option value="even_spread">Even spread (min→max)</option>
+                              <option value="step_increment">Step increment</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3 mb-2">
+                            <label class="form-label">Balance Step</label>
+                            <input type="number" step="0.01" name="balance_step" class="form-control" placeholder="e.g. 500" />
+                          </div>
+                          <div class="col-md-4 mb-2 form-check">
+                            <input type="checkbox" name="recalc_price_only" class="form-check-input" id="niche_recalc_only">
+                            <label class="form-check-label" for="niche_recalc_only">Only recalc prices (keep balances)</label>
+                          </div>
+                        </div>
+                        <div>
+                          <button type="submit" name="bulk_edit_balance_price" class="btn btn-primary">Apply Bulk Balance & Price</button>
+                        </div>
+                      </form>
+                    </div>
+                    <!-- Bulk Info form wired to shared handler -->
+                    <div class="p-3">
+                      <form action="code.php" method="POST" class="card card-body mb-3">
+                        <input type="hidden" name="table" value="chime" />
+                        <input type="hidden" name="redirect_path" value="niche_index.php" />
+                        <div class="row">
+                          <div class="col-md-3 mb-2">
+                            <label class="form-label">Bulk Mode</label>
+                            <select name="bulk_mode" class="form-select">
+                              <option value="all">All rows</option>
+                              <option value="half">Random half</option>
+                            </select>
+                          </div>
+                          <div class="col-md-6 mb-2">
+                            <label class="form-label">Info Text</label>
+                            <input type="text" name="info_text" class="form-control" placeholder="Set same info for selected rows" />
+                          </div>
+                          <div class="col-md-3 mb-2 form-check">
+                            <input type="checkbox" name="apply_by_parts" class="form-check-input" id="niche_info_parts_chk">
+                            <label class="form-check-label" for="niche_info_parts_chk">Compose from parts</label>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="row">
+                              <div class="col-md-4 mb-2">
+                                <input type="text" name="info_parts[]" class="form-control" placeholder="Part 1" />
+                              </div>
+                              <div class="col-md-4 mb-2">
+                                <input type="text" name="info_parts[]" class="form-control" placeholder="Part 2" />
+                              </div>
+                              <div class="col-md-4 mb-2">
+                                <input type="text" name="info_parts[]" class="form-control" placeholder="Part 3" />
+                              </div>
+                            </div>
+                            <small class="text-muted">When checked, parts join with '+' into the info field.</small>
+                          </div>
+                        </div>
+                        <div>
+                          <button type="submit" name="bulk_edit_info" class="btn btn-secondary">Apply Bulk Info</button>
+                        </div>
+                      </form>
+                    </div>
                     <div class="table-responsive text-noswrap pt-1 " >
                         <table class="table table-bordered table-responsive table-striped" id="boa">
                             <thead>

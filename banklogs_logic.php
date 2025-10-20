@@ -12,11 +12,14 @@ if (!isset($rows) || !is_array($rows)) {
 }
 
 // Determine current user and page key for per-user/per-page behavior
-$usernameKey = isset($username) && !empty($username)
+$usernameKeyRaw = isset($username) && !empty($username)
     ? $username
     : (isset($_SESSION['username']) ? $_SESSION['username'] : 'guest');
+// Sanitize for cookie-safe name component
+$usernameKey = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $usernameKeyRaw);
 
-$pageKey = basename($_SERVER['SCRIPT_NAME'], '.php');
+$pageKeyRaw = basename($_SERVER['SCRIPT_NAME'], '.php');
+$pageKey = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $pageKeyRaw);
 
 $cookieName = "hl_last_half_{$pageKey}_{$usernameKey}";
 $sessionKey = "hl_half_initialized_{$pageKey}_{$usernameKey}";
@@ -27,7 +30,9 @@ if (!isset($_SESSION[$sessionKey])) {
     $currentHalf = ($prevHalf === 'A') ? 'B' : 'A';
     // Persist selection to cookie for next login cycle (30 days)
     // Must be sent before any output; ensure this file is included before HTML
-    setcookie($cookieName, $currentHalf, time() + 60 * 60 * 24 * 30, "/");
+    if (!headers_sent()) {
+        setcookie($cookieName, $currentHalf, time() + 60 * 60 * 24 * 30, "/");
+    }
     $_SESSION[$sessionKey] = $currentHalf;
 } else {
     $currentHalf = $_SESSION[$sessionKey];
@@ -44,5 +49,3 @@ if (!empty($rows)) {
         $rows = array_slice($rows, $halfSize);
     }
 }
-
-?>

@@ -5,7 +5,7 @@
             <nav class="sidebar-nav">
                 <ul>
                     <li><a href="manage-users.php" class="active">Manage Users</a></li>
-                    <!--<li><a href="manage-banks.php" class="active">Manage Banks</a></li>-->
+                    <li><a href="manage-banks.php" class="active">Manage Banks</a></li>
                     <!--<li><a href="manage-cards.php" class="active">Manage Cards</a></li>-->
                     <li><a href="manage-review.php" class="active">Manage Reviews</a></li>
                     <li><a href="more.php" class="active">Miscellaneous</a></li>

@@ -18,7 +18,7 @@
     <meta name="format-detection" content="telephone=no">
 
     <title>HoldLogix</title>
-    <meta property="og:title" content="HoldLogix — Cash App">
+    <meta property="og:title" content="HoldLogix — Cashapp">
     <meta property="og:description" content="Explicit Dumps">
 <meta property="og:image" content="assets/logo.png">
  
@@ -71,7 +71,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
                             <div class="dashboard_bar">
-                                Cash App </div>
+                               Cashapp</div>
                         </div>
 
                         <?php
@@ -108,7 +108,7 @@
 
                 <div class="row page-titles">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Cash App</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)"> Mobile Logs > Cashapp </a></li>
                     </ol>
                 </div>
 

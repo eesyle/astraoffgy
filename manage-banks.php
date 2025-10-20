@@ -47,8 +47,8 @@
                     <li><a href="eat_index">EDIT M&T Bank</a></li>
                     <li><a href="ly_index">EDIT PayPal Bank</a></li>
                     <li><a href="atew_index">EDIT T&D Bank</a></li>
-                    <li><a href="dw_index">EDIT Wells Fargo Bank</a></li>
-                    <li><a href="gw_index">EDIT Woodforest Bank</a></li>
+                    <li><a href="gw_index.php">EDIT Wells Fargo Bank</a></li>
+                    <li><a href="dw_index">EDIT Woodforest Bank</a></li>
                     <!-- Missing banks added -->
                     <li><a href="navyfederal_index">EDIT Navy Federal Credit Union</a></li>
                     <li><a href="keybank_index">EDIT KeyBank</a></li>

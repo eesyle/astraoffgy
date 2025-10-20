@@ -48,50 +48,178 @@
                     </div>
                     <div class="table-responsive text-noswrap pt-1 " >
                         <table class="table table-bordered table-responsive table-striped" id="boa">
-                            <thead>
-                                <tr >
-                                    <th>ID</th>
-                                    <th>Balance</th>
-                                    <th>Title</th>
-                                    <th>Info</th>
-                                    <th>Price</th>
-                                    <th>Action</th>
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="white-space:nowrap;">ID</th>
+                                    <th style="white-space:nowrap;">Balance</th>
+                                    <th style="white-space:nowrap;">Title</th>
+                                    <th style="white-space:nowrap;">Info</th>
+                                    <th style="white-space:nowrap;">Price</th>
+                                    <th style="white-space:nowrap;">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php 
-                                    $query = "SELECT * FROM t_d";
-                                    $query_run = mysqli_query($con, $query);
-
-                                    if(mysqli_num_rows($query_run) > 0)
-                                    {
-                                        foreach($query_run as $student)
-                                        {
-                                            ?>
-                                            <tr  >
-                                                <td><?= $student['id']; ?></td>
-                                                <td><?= $student['Balance']; ?></td>
-                                                <td><?= $student['Title']; ?></td>
-                                                <td><?= $student['info']; ?></td>
-                                                <td><?= $student['price']; ?></td>
-                                                <td>
-                                                    <a href="atew_edit.php?id=<?= $student['id']; ?>" class="btn btn-success btn-sm">Edit</a>
-                                                    <form action="code_atew.php" method="POST" class="d-inline">
-                                                        <button type="submit" name="delete_student" value="<?=$student['id'];?>" class="btn btn-danger btn-sm">Delete</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            <?php
-                                        }
-                                    }
-                                    else
-                                    {
-                                        echo "<tr><td colspan='6'>No Record Found</td></tr>";
-                                    }
+                            <tbody id="boaBody">
+                                <?php
+                                $query_table = "t_d";
+                                $is_active = 1;
+                                include 'banklogs_query.php';
                                 ?>
                             </tbody>
                         </table>
-                    </div>
+
+                        <!-- Bulk Edit Info -->
+                        <div class="px-3 mt-4">
+                            <div class="card mb-3 border-0 shadow-sm">
+                                <div class="card-header d-flex align-items-center justify-content-between">
+                                    <span class="fw-bold">Bulk Edit Info</span>
+                                    <span class="text-muted small">Add/remove info parts across selected logs</span>
+                                </div>
+                                <div class="card-body">
+                                    <form action="code.php" method="POST" id="bulkEditInfoForm">
+                                        <input type="hidden" name="bulk_edit_info" value="1">
+                                        <input type="hidden" name="table" value="t_d">
+                                        <input type="hidden" name="redirect_path" value="atew_index.php">
+
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">New Info Part</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="newInfoPart" placeholder="e.g., Verified Phone" />
+                                                    <button type="button" class="btn btn-outline-primary" id="addInfoPart">Add Part</button>
+                                                </div>
+                                                <small class="text-muted">Add an info part to all selected logs</small>
+
+                                                <div class="mt-2">
+                                                    <label class="form-label small">Current Parts</label>
+                                                    <div id="infoPartsList" class="d-flex flex-wrap gap-2"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Remove Info Part</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="removeInfoPart" placeholder="e.g., Email Verified" />
+                                                    <button type="button" class="btn btn-outline-danger" id="removeInfoPartBtn">Remove Part</button>
+                                                </div>
+                                                <small class="text-muted">Remove an info part from all selected logs</small>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end mt-4">
+                                            <button class="btn btn-primary">Apply Info Changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bulk Balance & Price: correlated updates -->
+                        <div class="px-3">
+                            <div class="card mb-3 border-0 shadow-sm">
+                                <div class="card-header d-flex align-items-center justify-content-between">
+                                    <span class="fw-bold">Bulk Balance & Price</span>
+                                    <span class="text-muted small">Ensure prices correspond to balances</span>
+                                </div>
+                                <div class="card-body">
+                                    <form action="code.php" method="POST" id="bulkBalancePriceForm">
+                                        <input type="hidden" name="bulk_edit_balance_price" value="1">
+                                        <input type="hidden" name="table" value="t_d">
+                                        <input type="hidden" name="redirect_path" value="atew_index.php">
+
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Minimum Balance</label>
+                                                <input type="number" step="0.01" class="form-control" name="min_balance" placeholder="900" value="900">
+                                                <small class="text-muted">Example: 900</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Minimum Price</label>
+                                                <input type="number" step="0.01" class="form-control" name="min_price" placeholder="80" value="80">
+                                                <small class="text-muted">Minimum Price anchors the curve; prices spread up to the cap (exclusive).</small>
+                                                <small class="text-muted">Example: 80</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Options</label>
+                                                <div class="mb-2">
+                                                    <label class="form-label small">Maximum Price</label>
+                                                    <input type="number" step="0.01" class="form-control" name="max_price" placeholder="1000" value="1000">
+                                                    <small class="text-muted">Cap prices strictly below this value (exclusive).</small>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label class="form-label small">Balance Distribution</label>
+                                                    <select class="form-select" name="balance_distribution">
+                                                        <option value="none">None (preserve balances)</option>
+                                                        <option value="even_spread">Even spread (min→cap)</option>
+                                                        <option value="step_increment">Step increment from Minimum Balance</option>
+                                                    </select>
+                                                    <small class="text-muted">Systematically edit balances; prices follow the curve.</small>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <label class="form-label small">Balance Step</label>
+                                                    <input type="number" step="0.01" class="form-control" name="balance_step" placeholder="100.00">
+                                                    <small class="text-muted">Used when Step increment is selected.</small>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="clampBalance" name="clamp_balance">
+                                                    <label class="form-check-label" for="clampBalance">Clamp balances below minimum</label>
+                                                </div>
+                                                <div class="form-check form-switch mt-1">
+                                                    <input class="form-check-input" type="checkbox" id="recalcPriceOnly" name="recalc_price_only">
+                                                    <label class="form-check-label" for="recalcPriceOnly">Only recalc prices (keep balances)</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end mt-4">
+                                            <button class="btn btn-primary">Apply Balance+Price Logic</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const infoParts = ['Email Verified', 'OTP Enabled', 'SSN Present'];
+                                const infoPartsList = document.getElementById('infoPartsList');
+                                const newInfoPartInput = document.getElementById('newInfoPart');
+                                const addInfoPartBtn = document.getElementById('addInfoPart');
+                                const removeInfoPartInput = document.getElementById('removeInfoPart');
+                                const removeInfoPartBtn = document.getElementById('removeInfoPartBtn');
+
+                                function renderInfoParts() {
+                                    infoPartsList.innerHTML = '';
+                                    infoParts.forEach(part => {
+                                        const badge = document.createElement('span');
+                                        badge.className = 'badge bg-secondary';
+                                        badge.textContent = part;
+                                        infoPartsList.appendChild(badge);
+                                    });
+                                }
+
+                                addInfoPartBtn.addEventListener('click', function() {
+                                    const part = newInfoPartInput.value.trim();
+                                    if (part) {
+                                        infoParts.push(part);
+                                        renderInfoParts();
+                                        newInfoPartInput.value = '';
+                                    }
+                                });
+
+                                removeInfoPartBtn.addEventListener('click', function() {
+                                    const part = removeInfoPartInput.value.trim();
+                                    if (part) {
+                                        const index = infoParts.indexOf(part);
+                                        if (index !== -1) {
+                                            infoParts.splice(index, 1);
+                                            renderInfoParts();
+                                            removeInfoPartInput.value = '';
+                                        }
+                                    }
+                                });
+
+                                renderInfoParts();
+                            });
+                        </script>                    </div>
                 </div>
             </div>
         </div>

@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
  require_once "codeForLogs.php";
  // Centralized query for banklogs using $is_active
  $banklogs_table = "dcu";
@@ -55,7 +59,8 @@
         <!--**********************************
             Nav header start
         ***********************************-->
-        <?php include './navHeader.php'?>;
+    <?php include './navHeader.php'; ?>
+
         <!--**********************************
             Nav header end
         ***********************************-->
@@ -193,10 +198,7 @@
         Main wrapper end
     ***********************************-->
 
-    <!-- Modal -->
-    <?php include './supportModel.php';?>
-    <!-- /Modal -->
-
+  
   
 
 

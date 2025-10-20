@@ -32,7 +32,7 @@ require 'dbcon.php'; ?>
     <script src="static\js\config.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.0/css/jquery.dataTables.css">
-    <title>EDIT NAVY FEDERAL</title>
+    <title>EDIT TRUIST</title>
     <link rel="stylesheet" href="styleee.css">
 </head>
 
@@ -40,18 +40,17 @@ require 'dbcon.php'; ?>
     <div class="content-wrapper"><?php include('message.php'); ?>
         <div class="card">
             <div class="card-header">
-                <h4>NAVY FEDERAL</h4>
+                <h4>TRUIST</h4>
             </div>
             <div class="card-body">
                 <form action="code.php" method="POST" style="margin-bottom:16px">
-                    <input type="hidden" name="bulk_edit_info" value="1"><input type="hidden" name="table" value="navyfederal"><input type="hidden" name="redirect_path" value="navyfederal_index.php">
+                    <input type="hidden" name="bulk_edit_info" value="1"><input type="hidden" name="table" value="truist"><input type="hidden" name="redirect_path" value="truist_index.php">
                     <label>Mode:</label> <label><input type="radio" name="bulk_mode" value="all" checked> All</label> <label><input type="radio" name="bulk_mode" value="half"> Half</label>
                     <div style="margin-top:8px"><label>Info text</label><input type="text" class="form-control" name="info_text" placeholder="PartA+PartB+PartC"></div>
                     <div style="margin-top:8px"><button class="btn btn-success">Apply Bulk Info</button></div>
                 </form>
-
                 <form action="code.php" method="POST">
-                    <input type="hidden" name="bulk_edit_balance_price" value="1"><input type="hidden" name="table" value="navyfederal"><input type="hidden" name="redirect_path" value="navyfederal_index.php">
+                    <input type="hidden" name="bulk_edit_balance_price" value="1"><input type="hidden" name="table" value="truist"><input type="hidden" name="redirect_path" value="truist_index.php">
                     <div><label>Min Balance</label><input type="number" step="0.01" class="form-control" name="min_balance" value="900"></div>
                     <div><label>Min Price</label><input type="number" step="0.01" class="form-control" name="min_price" value="80"></div>
                     <div><label>Max Price</label><input type="number" step="0.01" class="form-control" name="max_price" value="1000"></div>
@@ -67,7 +66,6 @@ require 'dbcon.php'; ?>
                 </form>
             </div>
         </div>
-
         <div class="table-responsive" style="margin-top:16px">
             <table class="table table-bordered table-striped">
                 <thead>
@@ -81,10 +79,10 @@ require 'dbcon.php'; ?>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $query = "SELECT * FROM navyfederal";
+                    <?php $query = "SELECT * FROM truist";
                     $query_run = mysqli_query($con, $query);
-                    $hasEdit = file_exists('navyfederal_edit.php');
-                    $hasDel = file_exists('code_navyfederal.php');
+                    $hasEdit = file_exists('truist_edit.php');
+                    $hasDel = file_exists('code_truist.php');
                     if ($query_run && mysqli_num_rows($query_run) > 0) {
                         foreach ($query_run as $row) { ?>
                             <tr>
@@ -93,10 +91,10 @@ require 'dbcon.php'; ?>
                                 <td><?= $row['Title']; ?></td>
                                 <td><?= $row['info']; ?></td>
                                 <td><?= $row['price']; ?></td>
-                                <td><?php if ($hasEdit) { ?><a href="navyfederal_edit.php?id=<?= $row['id']; ?>" class="btn btn-success btn-sm">Edit</a><?php } else {
-                                                                                                                                                        echo '—';
-                                                                                                                                                    } ?>
-                                    <?php if ($hasDel) { ?><form action="code_navyfederal.php" method="POST" class="d-inline"><button type="submit" name="delete_student" value="<?= $row['id']; ?>" class="btn btn-danger btn-sm">Delete</button></form><?php } ?></td>
+                                <td><?php if ($hasEdit) { ?><a href="truist_edit.php?id=<?= $row['id']; ?>" class="btn btn-success btn-sm">Edit</a><?php } else {
+                                                                                                                                                    echo '—';
+                                                                                                                                                } ?>
+                                    <?php if ($hasDel) { ?><form action="code_truist.php" method="POST" class="d-inline"><button type="submit" name="delete_student" value="<?= $row['id']; ?>" class="btn btn-danger btn-sm">Delete</button></form><?php } ?></td>
                             </tr>
                     <?php }
                     } else {

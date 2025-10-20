@@ -96,12 +96,7 @@
                                 <div class="">
                                     <div class="card card-bg p-5 m-2 bg-main">
                                         <h2>Password Change Done</h2>
-
-
                                         <p>Your password has been changed.</p>
-
-
-
                                         <br>
                                     </div>
                                 </div>
