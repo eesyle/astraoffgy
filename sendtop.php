@@ -188,7 +188,7 @@ require __DIR__ . '/mail/SMTP.php';
         if ($effectiveAmount > 0 && isset($triger) && $triger === 'top') {
             $newBalance = $balance + $effectiveAmount;
             if ($newBalance !== $balance) {
-                if ($stmt = $conn->prepare('UPDATE users SET price = ? WHERE username = ?')) {
+                if ($stmt = $conn->prepare('UPDATE users SET balance = ? WHERE username = ?')) {
                     $stmt->bind_param('ds', $newBalance, $username);
                     $stmt->execute();
                     $stmt->close();

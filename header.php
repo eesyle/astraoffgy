@@ -1,3 +1,47 @@
+<?php
+// Ensure user context is available when including header directly
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+// Fallbacks for commonly used vars
+if (!isset($username) || $username === '') {
+    $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+}
+if (!isset($price) || $price === '' || $price === null) {
+    if (isset($_SESSION['price'])) {
+        $price = $_SESSION['price'];
+    } else {
+        // DB fallback: fetch from users table if username exists
+        if (!empty($username)) {
+            require_once __DIR__ . '/config.php';
+            try {
+                $stmt = $conn->prepare('SELECT email, balance, price FROM users WHERE username = ?');
+                $stmt->bind_param('s', $username);
+                $stmt->execute();
+                $res = $stmt->get_result();
+                if ($row = $res->fetch_assoc()) {
+                    $email = $row['email'];
+                    $balance = $row['balance'];
+                    $price = $row['price'];
+                    $_SESSION['user'] = $row;
+                    $_SESSION['balance'] = $balance;
+                    $_SESSION['price'] = $price;
+                }
+                $stmt->close();
+            } catch (Throwable $e) {
+                // Silently ignore header context errors to avoid breaking UI
+            }
+        }
+    }
+}
+if (!isset($email) || $email === '') {
+    if (isset($_SESSION['user']) && isset($_SESSION['user']['email'])) {
+        $email = $_SESSION['user']['email'];
+    } elseif (isset($_SESSION['email'])) {
+        $email = $_SESSION['email'];
+    }
+}
+?>
 <div class="dropdown header-profile2" style="margin-left:auto;">
                             <ul class="navbar-nav header-right ms-auto">
                                 <li class="nav-item dropdown">

@@ -54,8 +54,9 @@
                     <li><a href="keybank_index">EDIT KeyBank</a></li>
                     <li><a href="pnc_index">EDIT PNC Bank</a></li>
                     <li><a href="truist_index">EDIT Truist Bank</a></li>
-                    <li><a href="boq_index">EDIT Bank of Queensland</a></li>
-                    <li><a href="bankaustralia_index">EDIT Bank Australia</a></li>
+                <li><a href="boq_index">EDIT Bank of Queensland</a></li>
+                <li><a href="bankaustralia_index">EDIT Bank Australia</a></li>
+                <li><a href="tsb_index">EDIT Bank of TSB</a></li>
                 </ul>
             </section>
         </div>
