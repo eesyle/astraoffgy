@@ -49,7 +49,7 @@
                     <!-- Bulk Balance & Price form wired to shared handler -->
                     <div class="p-3">
                       <form action="code.php" method="POST" class="card card-body mb-3">
-                        <input type="hidden" name="table" value="rbs" />
+                        <input type="hidden" name="table" value="strandsa" />
                         <input type="hidden" name="redirect_path" value="strandsa_index.php" />
                         <div class="row">
                           <div class="col-md-3 mb-2">
@@ -91,7 +91,7 @@
                     <!-- Bulk Info form wired to shared handler -->
                     <div class="p-3">
                       <form action="code.php" method="POST" class="card card-body mb-3">
-                        <input type="hidden" name="table" value="rbs" />
+                        <input type="hidden" name="table" value="strandsa" />
                         <input type="hidden" name="redirect_path" value="strandsa_index.php" />
                         <div class="row">
                           <div class="col-md-3 mb-2">
@@ -143,7 +143,7 @@
                             </thead>
                             <tbody>
                                 <?php 
-                                    $query = "SELECT * FROM rbs";
+                                    $query = "SELECT * FROM strandsa";
                                     $query_run = mysqli_query($con, $query);
 
                                     if(mysqli_num_rows($query_run) > 0)

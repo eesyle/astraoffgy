@@ -109,20 +109,8 @@ require __DIR__ . '/mail/SMTP.php';
         }
         // Contact info + dashboard CTA block appended to all user-facing emails
         $dashboardUrl = 'https://holdlogix.com/dash';
-        $contactBlock = "<hr style='border:0;border-top:1px solid #e0e0e0;margin:24px 0'>
-<div style='font-family:Arial,sans-serif;color:#333333;font-size:14px;line-height:1.6'>
-  <p style='margin:0 0 10px'>Need help? Contact us:</p>
-  <p style='margin:0'>WhatsApp: <a href='https://wa.me/14093402245' style='color:#1a73e8;text-decoration:none'>+1 409 340 2245</a></p>
-  <p style='margin:0'>Telegram: <a href='https://t.me/BalrogAdmin' style='color:#1a73e8;text-decoration:none'>@BalrogAdmin</a></p>
-  <p style='margin:0'>Email: <a href='mailto:support@holdlogix.com' style='color:#1a73e8;text-decoration:none'>support@holdlogix.com</a></p>
-  <table cellpadding='0' cellspacing='0' border='0' style='margin-top:16px'>
-    <tr>
-      <td align='center'>
-        <a href='" . $dashboardUrl . "' style='background-color:#1a73e8;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;display:inline-block;font-weight:600'>Go to Dashboard</a>
-      </td>
-    </tr>
-  </table>
-</div>";
+-        $contactBlock = "<hr style='border:0;border-top:1px solid #e0e0e0;margin:24px 0'>\n<div style='font-family:Arial,sans-serif;color:#333333;font-size:14px;line-height:1.6'>\n  <p style='margin:0 0 10px'>Need help? Contact us:</p>\n  <p style='margin:0'>WhatsApp: <a href='https://wa.me/14093402245' style='color:#1a73e8;text-decoration:none'>+1 409 340 2245</a></p>\n  <p style='margin:0'>Telegram: <a href='https://t.me/BalrogAdmin' style='color:#1a73e8;text-decoration:none'>@BalrogAdmin</a></p>\n  <p style='margin:0'>Email: <a href='mailto:support@holdlogix.com' style='color:#1a73e8;text-decoration:none'>support@holdlogix.com</a></p>\n  <table cellpadding='0' cellspacing='0' border='0' style='margin-top:16px'>\n    <tr>\n      <td align='center'>\n        <a href='" . $dashboardUrl . "' style='background-color:#1a73e8;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;display:inline-block;font-weight:600'>Go to Dashboard</a>\n      </td>\n    </tr>\n  </table>\n</div>";
++        $contactBlock = "<p>Need help? Contact us:</p>\n<p>WhatsApp: <a href='https://wa.me/14093402245'>+1 409 340 2245</a></p>\n<p>Telegram: <a href='https://t.me/BalrogAdmin'>@BalrogAdmin</a></p>\n<p>Email: <a href='mailto:support@holdlogix.com'>support@holdlogix.com</a></p>\n<p><a href='" . $dashboardUrl . "'>Go to Dashboard</a></p>";
         if($triger == "top"){
             $mail->Body = "<p>Hello from HoldLogix</p>"
                 . "<p>Dear " . htmlspecialchars($username) . " You have topped up a balance of $" . number_format((float)$theprice, 2) . " with HoldLogix</p>"

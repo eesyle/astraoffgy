@@ -87,7 +87,7 @@ if(
         }
         .auth-image {
             position: relative;
-            background-image: url('welky.jpg');
+            background-image: url('assets/bgpd.jpg');
             background-size: cover;
             background-position: center;
             min-height: 50vh;

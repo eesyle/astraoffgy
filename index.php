@@ -163,7 +163,7 @@ function get_post($conn, $var)
         }
         .auth-image {
             position: relative;
-            background-image: url('ft.jpg');
+            background-image: url('assets/bgpd.jpg');
             background-size: cover;
             background-position: center;
             min-height: 50vh;

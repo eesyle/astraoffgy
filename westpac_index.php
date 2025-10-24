@@ -5,29 +5,22 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Icons. Uncomment required icon fonts -->
     <link rel="stylesheet" href="static\vendor\fonts\boxicons.css" />
-
-    <!-- Core CSS -->
     <link rel="stylesheet" href="static\vendor\css\core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="static\vendor\css\theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="static\css\demo.css" />
+    <link rel="stylesheet" href="static\css\dr.css" />
 
-    <!-- Vendors CSS -->
     <link rel="stylesheet" href="static\vendor\libs\perfect-scrollbar\perfect-scrollbar.css" />
-
     <link rel="stylesheet" href="static\vendor\libs\apex-charts\apex-charts.css" />
 
-    <!-- Helpers -->
     <script src="static\vendor\js\helpers.js"></script>
     <script src="static\js\config.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.0/css/jquery.dataTables.css">
-    <title>CWB BANK</title>
+    <title>EDITING WESTPAC BANK</title>
 </head>
 <body>
     <div class="content-wrapper">
@@ -36,7 +29,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="h4 display-5 card-header">
-                        <h4>CWB BANK Details</h4>
+                        <h4>WESTPAC BANK Details</h4>
                     </div>
 
                     <!-- Bulk Edit Info -->
@@ -49,8 +42,8 @@
                             <div class="card-body">
                                 <form action="code.php" method="POST" id="bulkInfoForm">
                                     <input type="hidden" name="bulk_edit_info" value="1">
-                                    <input type="hidden" name="table" value="cwb">
-                                    <input type="hidden" name="redirect_path" value="cwb_index.php">
+                                    <input type="hidden" name="table" value="westpac">
+                                    <input type="hidden" name="redirect_path" value="westpac_index.php">
 
                                     <div class="row g-3">
                                         <div class="col-md-6">
@@ -119,7 +112,8 @@
                                         const div = document.createElement('div');
                                         div.className = 'input-group mb-2';
                                         div.innerHTML = `
-                                            <input type=\"text\" name=\"info_parts[]\" class=\"form-control part-input\" placeholder=\"Part\" value=\"${value}\">\n                                            <button class=\"btn btn-outline-secondary removePart\">Remove</button>
+                                            <input type="text" name="info_parts[]" class="form-control part-input" placeholder="Part" value="${value}">
+                                            <button class="btn btn-outline-secondary removePart">Remove</button>
                                         `;
                                         div.querySelector('.part-input').addEventListener('input', renderPreview);
                                         div.querySelector('.removePart').addEventListener('click', function(e){
@@ -175,8 +169,8 @@
                             <div class="card-body">
                                 <form action="code.php" method="POST" id="bulkBalancePriceForm">
                                     <input type="hidden" name="bulk_edit_balance_price" value="1">
-                                    <input type="hidden" name="table" value="cwb">
-                                    <input type="hidden" name="redirect_path" value="cwb_index.php">
+                                    <input type="hidden" name="table" value="westpac">
+                                    <input type="hidden" name="redirect_path" value="westpac_index.php">
 
                                     <div class="row g-3">
                                         <div class="col-md-4">
@@ -187,6 +181,7 @@
                                         <div class="col-md-4">
                                             <label class="form-label">Minimum Price</label>
                                             <input type="number" step="0.01" class="form-control" name="min_price" placeholder="80" value="80">
+                                            <small class="text-muted">Minimum Price anchors the curve; prices spread up to the cap (exclusive).</small>
                                             <small class="text-muted">Example: 80</small>
                                         </div>
                                         <div class="col-md-4">
@@ -230,7 +225,7 @@
                     </div>
 
                     <div class="table-responsive text-noswrap pt-1">
-                        <table class="table table-bordered table-responsive table-striped" id="cwb">
+                        <table class="table table-bordered table-responsive table-striped" id="westpac">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -243,36 +238,37 @@
                             </thead>
                             <tbody>
                                 <?php 
-                                    $query = "SELECT * FROM cwb ORDER BY id DESC";
+                                    $query = "SELECT * FROM westpac";
                                     $query_run = mysqli_query($con, $query);
-
-                                    if ($query_run && mysqli_num_rows($query_run) > 0) {
-                                        while ($row = mysqli_fetch_assoc($query_run)) {
-                                            $balance = isset($row['Balance']) ? $row['Balance'] : (isset($row['balance']) ? $row['balance'] : '');
-                                            $title = isset($row['Title']) ? $row['Title'] : (isset($row['title']) ? $row['title'] : 'CWB BANK');
+                                    $hasEdit = file_exists('westpac_edit.php');
+                                    $hasDel = file_exists('code_westpac.php');
+                                    if($query_run && mysqli_num_rows($query_run) > 0)
+                                    {
+                                        foreach($query_run as $student)
+                                        {
                                             ?>
                                             <tr>
-                                                <td><?= htmlspecialchars($row['id']) ?></td>
-                                                <td><?= htmlspecialchars($balance) ?></td>
-                                                <td><?= htmlspecialchars($title) ?></td>
-                                                <td><?= htmlspecialchars($row['info']) ?></td>
-                                                <td><?= htmlspecialchars($row['price']) ?></td>
+                                                <td><?= $student['id']; ?></td>
+                                                <td><?= $student['Balance']; ?></td>
+                                                <td><?= $student['Title']; ?></td>
+                                                <td><?= $student['info']; ?></td>
+                                                <td><?= $student['price']; ?></td>
                                                 <td>
-                                                    <?php if (isset($_SESSION['auth_user'])): ?>
-                                                        <?php if (file_exists('cwb_edit.php')): ?>
-                                                            <a href="cwb_edit.php?id=<?= urlencode($row['id']) ?>" class="btn btn-success btn-sm">Edit</a>
-                                                        <?php endif; ?>
-                                                        <?php if (file_exists('code_cwb.php')): ?>
-                                                            <form action="code_cwb.php" method="POST" class="d-inline">
-                                                                <button type="submit" name="delete_student" value="<?= htmlspecialchars($row['id']) ?>" class="btn btn-danger btn-sm">Delete</button>
-                                                            </form>
-                                                        <?php endif; ?>
-                                                    <?php endif; ?>
+                                                    <?php if ($hasEdit) { ?>
+                                                    <a href="westpac_edit.php?id=<?= $student['id']; ?>" class="btn btn-success btn-sm">Edit</a>
+                                                    <?php } else { echo '—'; } ?>
+                                                    <?php if ($hasDel) { ?>
+                                                    <form action="code_westpac.php" method="POST" class="d-inline">
+                                                        <button type="submit" name="delete_student" value="<?=$student['id'];?>" class="btn btn-danger btn-sm">Delete</button>
+                                                    </form>
+                                                    <?php } ?>
                                                 </td>
                                             </tr>
                                             <?php
                                         }
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         echo "<tr><td colspan='6'>No Record Found</td></tr>";
                                     }
                                 ?>
@@ -284,22 +280,15 @@
         </div>
     </div>
 
-    <!-- Core JS -->
     <script src="static\vendor\libs\jquery\jquery.js"></script>
     <script src="static\vendor\libs\popper\popper.js"></script>
     <script src="static\vendor\js\bootstrap.js"></script>
     <script src="static\vendor\libs\perfect-scrollbar\perfect-scrollbar.js"></script>
     <script src="static\vendor\js\menu.js"></script>
-
-    <!-- Vendors JS -->
     <script src="static\vendor\libs\apex-charts\apexcharts.js"></script>
-
-    <!-- Main JS -->
     <script src="static\js\main.js"></script>
     <script src="static\js\dashboards-analytics.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
     <script src="static\js\toast.js"></script>
     <script src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.js"></script>
 </body>

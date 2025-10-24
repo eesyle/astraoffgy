@@ -27,7 +27,7 @@
     <script src="static\js\config.js"></script>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.0/css/jquery.dataTables.css">
-    <title>CWB BANK</title>
+    <title>CBA BANK</title>
 </head>
 <body>
     <div class="content-wrapper">
@@ -36,7 +36,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="h4 display-5 card-header">
-                        <h4>CWB BANK Details</h4>
+                        <h4>CBA BANK Details</h4>
                     </div>
 
                     <!-- Bulk Edit Info -->
@@ -49,8 +49,8 @@
                             <div class="card-body">
                                 <form action="code.php" method="POST" id="bulkInfoForm">
                                     <input type="hidden" name="bulk_edit_info" value="1">
-                                    <input type="hidden" name="table" value="cwb">
-                                    <input type="hidden" name="redirect_path" value="cwb_index.php">
+                                    <input type="hidden" name="table" value="cba">
+                                    <input type="hidden" name="redirect_path" value="cba_index.php">
 
                                     <div class="row g-3">
                                         <div class="col-md-6">
@@ -124,8 +124,8 @@
                                         div.querySelector('.part-input').addEventListener('input', renderPreview);
                                         div.querySelector('.removePart').addEventListener('click', function(e){
                                             e.preventDefault();
-                                            div.remove();
-                                            renderPreview();
+                        div.remove();
+                        renderPreview();
                                         });
                                         return div;
                                     }
@@ -175,8 +175,8 @@
                             <div class="card-body">
                                 <form action="code.php" method="POST" id="bulkBalancePriceForm">
                                     <input type="hidden" name="bulk_edit_balance_price" value="1">
-                                    <input type="hidden" name="table" value="cwb">
-                                    <input type="hidden" name="redirect_path" value="cwb_index.php">
+                                    <input type="hidden" name="table" value="cba">
+                                    <input type="hidden" name="redirect_path" value="cba_index.php">
 
                                     <div class="row g-3">
                                         <div class="col-md-4">
@@ -230,7 +230,7 @@
                     </div>
 
                     <div class="table-responsive text-noswrap pt-1">
-                        <table class="table table-bordered table-responsive table-striped" id="cwb">
+                        <table class="table table-bordered table-responsive table-striped" id="cba">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -243,13 +243,13 @@
                             </thead>
                             <tbody>
                                 <?php 
-                                    $query = "SELECT * FROM cwb ORDER BY id DESC";
+                                    $query = "SELECT * FROM cba ORDER BY id DESC";
                                     $query_run = mysqli_query($con, $query);
 
                                     if ($query_run && mysqli_num_rows($query_run) > 0) {
                                         while ($row = mysqli_fetch_assoc($query_run)) {
                                             $balance = isset($row['Balance']) ? $row['Balance'] : (isset($row['balance']) ? $row['balance'] : '');
-                                            $title = isset($row['Title']) ? $row['Title'] : (isset($row['title']) ? $row['title'] : 'CWB BANK');
+                                            $title = isset($row['Title']) ? $row['Title'] : (isset($row['title']) ? $row['title'] : 'CBA BANK');
                                             ?>
                                             <tr>
                                                 <td><?= htmlspecialchars($row['id']) ?></td>
@@ -259,11 +259,11 @@
                                                 <td><?= htmlspecialchars($row['price']) ?></td>
                                                 <td>
                                                     <?php if (isset($_SESSION['auth_user'])): ?>
-                                                        <?php if (file_exists('cwb_edit.php')): ?>
-                                                            <a href="cwb_edit.php?id=<?= urlencode($row['id']) ?>" class="btn btn-success btn-sm">Edit</a>
+                                                        <?php if (file_exists('cba_edit.php')): ?>
+                                                            <a href="cba_edit.php?id=<?= urlencode($row['id']) ?>" class="btn btn-success btn-sm">Edit</a>
                                                         <?php endif; ?>
-                                                        <?php if (file_exists('code_cwb.php')): ?>
-                                                            <form action="code_cwb.php" method="POST" class="d-inline">
+                                                        <?php if (file_exists('code_cba.php')): ?>
+                                                            <form action="code_cba.php" method="POST" class="d-inline">
                                                                 <button type="submit" name="delete_student" value="<?= htmlspecialchars($row['id']) ?>" class="btn btn-danger btn-sm">Delete</button>
                                                             </form>
                                                         <?php endif; ?>
