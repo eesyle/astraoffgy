@@ -53,7 +53,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="" href="./pal" aria-expanded="false">
+                        <a class="" href="./pal.php" aria-expanded="false">
                             <div class="menu-icon">
                                 <!-- PayPal logo from assets -->
                                 <img src="assets/PayPal_Logo.svg" alt="PayPal" class="menu-logo" />
@@ -62,7 +62,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="" href="./leo" aria-expanded="false">
+                        <a class="" href="./leo.php" aria-expanded="false">
                             <div class="menu-icon">
                                 <!-- Cash App logo from assets -->
                                 <img src="assets/official_cashapp_logo.png" alt="Cash App" class="menu-logo cashapp-logo" style="width:50px;height:50px;object-fit:contain;border-radius:4px;display:block" />
@@ -72,7 +72,7 @@
                     </li>
 
                     <li>
-                        <a class="" href="./orders" aria-expanded="false">
+                        <a class="" href="./orders.php" aria-expanded="false">
                             <div class="menu-icon">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g id="IconlyDocument">

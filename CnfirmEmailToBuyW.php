@@ -8,10 +8,14 @@ if(isset($_SESSION['username'])) {
 } else {
     echo "You are not logged in.";
 }
-if(isset($_SESSION['price'])){
-    $wfprice=$_SESSION['price'];
-}else{
-    echo " the price not set";
+// Robustly retrieve price: session preferred, fallback to GET params
+$wfprice = 0.00;
+if (isset($_SESSION) && array_key_exists('price', $_SESSION)) {
+    $wfprice = is_numeric($_SESSION['price']) ? (float)$_SESSION['price'] : 0.00;
+} elseif (isset($_GET['wfprice']) && is_numeric($_GET['wfprice'])) {
+    $wfprice = (float)$_GET['wfprice'];
+} elseif (isset($_GET['price']) && is_numeric($_GET['price'])) {
+    $wfprice = (float)$_GET['price'];
 }
 if (mysqli_connect_errno()) {
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
@@ -38,6 +42,10 @@ if (isset($_POST['buy'])) {
 if(!$_topbalance)
 {
     $_topbalance = 0.00;
+}
+// Prevent notices if optional variables aren’t set upstream
+if (!isset($WoodForest)) {
+    $WoodForest = '';
 }
  
 ?>
