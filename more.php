@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -145,15 +145,7 @@
 
 We’re happy to let you know that your transaction has been completed successfully.
 
-Summary:
-- Reference: will be included automatically
-- Amount: if provided
-- Bank/Order: if provided
-
-Notes from HoldLogix:
-Please add any specific next steps or instructions here.
-
-Thank you for choosing HoldLogix.</textarea>
+ .</textarea>
                         </div>
                         <div style="grid-column:span 2;text-align:right">
                             <button type="submit" class="btn btn-primary" style="padding:8px 14px;border-radius:6px;background:#2563eb;color:#fff;border:none">Send Email</button>

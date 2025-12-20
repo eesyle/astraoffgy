@@ -97,7 +97,7 @@ if (isset($_POST['submit']) &&
           if ($row) {
             if (isset($row['password']) && $password === $row['password']) {
                  
-                 $_SESSION['username'] = isset($row['username']) ? $row['username'] : $email;
+                 $_SESSION['username'] = isset($row['username']) ? $row['username'] : $row['username'];
                 
                 
                 header('location: dash.php');

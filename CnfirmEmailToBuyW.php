@@ -8,15 +8,15 @@ if(isset($_SESSION['username'])) {
 } else {
     echo "You are not logged in.";
 }
-// Robustly retrieve price: session preferred, fallback to GET params
+// Robustly retrieve price using GET parameters only
 $wfprice = 0.00;
-if (isset($_SESSION) && array_key_exists('price', $_SESSION)) {
-    $wfprice = is_numeric($_SESSION['price']) ? (float)$_SESSION['price'] : 0.00;
-} elseif (isset($_GET['wfprice']) && is_numeric($_GET['wfprice'])) {
+
+if (isset($_GET['wfprice']) && is_numeric($_GET['wfprice'])) {
     $wfprice = (float)$_GET['wfprice'];
 } elseif (isset($_GET['price']) && is_numeric($_GET['price'])) {
     $wfprice = (float)$_GET['price'];
 }
+
 if (mysqli_connect_errno()) {
     echo "Failed to connect to MySQL: " . mysqli_connect_error();
     exit();
@@ -29,7 +29,7 @@ $result = mysqli_query($conn, $query);
 if ($result) {
     $row = mysqli_fetch_assoc($result);
     $email = $row['email'];
-    $balance =  $row['balance'];
+    $balance =  $row['price'];
     $_topbalance= $balance;
     mysqli_free_result($result);
 } else {
@@ -443,13 +443,24 @@ if (!isset($WoodForest)) {
                 $topUp.addClass('show').css('display','block');
               }
 
-              // Prefill amount
-              var $amt = $('#amount1');
-              if($amt.length){
-                $amt.val(remainingAmount > 0 ? remainingAmount : '');
-                // Optional focus for quicker edit
-                try { $amt[0].focus(); } catch(e){}
-              }
+// Prefill amount
+var $amt = $('#amount1');
+if ($amt.length) {
+  if (typeof remainingAmount !== 'undefined' && !isNaN(remainingAmount)) {
+    // Round to 2 decimal places (approximation)
+    const approxAmount = Math.round(parseFloat(remainingAmount) * 100) / 100;
+    $amt.val(approxAmount.toFixed(2)); // ensure consistent format like 200.00
+  } else {
+    $amt.val('');
+  }
+
+  // Optional focus for quicker edit
+  try {
+    $amt[0].focus();
+  } catch (e) {}
+}
+
+
             }
 
             function hideIfVisible($m){

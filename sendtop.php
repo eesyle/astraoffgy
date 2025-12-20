@@ -2,23 +2,65 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 require_once 'config.php';
+
+
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
-$username = '';
-if (isset($_SESSION['username']) && $_SESSION['username'] !== '') {
-    $username = $_SESSION['username'];
-} elseif (isset($_GET['username']) && $_GET['username'] !== '') {
-    $username = $_GET['username'];
-} else {
-    echo "<script>alert('Error: Username not provided! Redirecting to login...');</script>";
-    echo "<meta http-equiv='refresh' content='2;url=index.php'>";
+
+/**
+ * Resolve the current username from common session/GET/POST keys.
+ * This prevents repeated "Username not provided" loops when
+ * different scripts store the username under different keys.
+ *
+ * Priority:
+ * 1) Session keys: 'username', 'UserName', 'user', 'uname'
+ * 2) GET keys: 'username', 'UserName', 'user', 'uname'
+ * 3) POST keys: 'username', 'UserName', 'user', 'uname'
+ * 4) Cookie key: 'username'
+ * Returns a trimmed string or empty string if none found.
+ */
+function resolveUsername(): string {
+    $sessionKeys = ['username', 'UserName', 'user', 'uname'];
+    foreach ($sessionKeys as $k) {
+        if (isset($_SESSION[$k]) && is_string($_SESSION[$k]) && trim($_SESSION[$k]) !== '') {
+            return trim($_SESSION[$k]);
+        }
+    }
+    $getKeys = ['username', 'UserName', 'user', 'uname'];
+    foreach ($getKeys as $k) {
+        if (isset($_GET[$k]) && is_string($_GET[$k]) && trim($_GET[$k]) !== '') {
+            // Keep the session in sync for subsequent requests
+            $_SESSION['username'] = trim($_GET[$k]);
+            return trim($_GET[$k]);
+        }
+    }
+    $postKeys = ['username', 'UserName', 'user', 'uname'];
+    foreach ($postKeys as $k) {
+        if (isset($_POST[$k]) && is_string($_POST[$k]) && trim($_POST[$k]) !== '') {
+            $_SESSION['username'] = trim($_POST[$k]);
+            return trim($_POST[$k]);
+        }
+    }
+    if (isset($_COOKIE['username']) && is_string($_COOKIE['username']) && trim($_COOKIE['username']) !== '') {
+        $_SESSION['username'] = trim($_COOKIE['username']);
+        return trim($_COOKIE['username']);
+    }
+    return '';
+}
+
+$username = resolveUsername();
+if ($username === '') {
+    // Friendly message without hard loop; provide a direct login link
+    echo "<script>alert('Error: Username not provided! Please log in first.');</script>";
+    echo "<p>Go to <a href='index.php'>Login</a> then retry your action.</p>";
     exit();
 }
 
 if ($conn->connect_error) {
     die("Fatal Error");
 }  
+
 $query = "SELECT * FROM users WHERE username='$username'";
 $query_run = mysqli_query($conn, $query);
 
@@ -84,17 +126,20 @@ require __DIR__ . '/mail/SMTP.php';
         $mail = new PHPMailer(true);
 
  
-        $mail->SMTPDebug = 0; 
+        // Toggle SMTP debug via query param ?smtp_debug=1
+        $enableSmtpDebug = isset($_GET['smtp_debug']) && $_GET['smtp_debug'] === '1';
+        $mail->SMTPDebug = $enableSmtpDebug ? 2 : 0; 
         $mail->isSMTP(); 
-        $mail->Host = 'smtp.hostinger.com';  
+        // Try multiple SMTP hosts in order (PHPMailer supports semicolon list)
+        $mail->Host = 'mail.coinholdlogix.com;smtp.hostinger.com';  
         $mail->SMTPAuth = true; 
-        $mail->Username = 'info@holdlogix.com'; //
-        $mail->Password = 'Obedofla@00';
+        $mail->Username = 'info@coinholdlogix.com'; // Updated sender email per your change
+        $mail->Password = 'Obedofla@00'; // Password remains unchanged
         $mail->SMTPSecure = 'ssl';  
         $mail->Port = 465;  
     
        
-        $mail->setFrom('info@holdlogix.com', 'HoldLogix');  
+        $mail->setFrom('info@coinholdlogix.com', 'HoldLogix');  // Updated sender email per your change
         $mail->addAddress($email, $username);  
          
         $mail->Subject = '[HoldLogix]  TRANSACTION CONFIRMATION';
@@ -108,9 +153,10 @@ require __DIR__ . '/mail/SMTP.php';
             $bankName = trim($_SESSION['bank']);
         }
         // Contact info + dashboard CTA block appended to all user-facing emails
-        $dashboardUrl = 'https://holdlogix.com/dash';
--        $contactBlock = "<hr style='border:0;border-top:1px solid #e0e0e0;margin:24px 0'>\n<div style='font-family:Arial,sans-serif;color:#333333;font-size:14px;line-height:1.6'>\n  <p style='margin:0 0 10px'>Need help? Contact us:</p>\n  <p style='margin:0'>WhatsApp: <a href='https://wa.me/14093402245' style='color:#1a73e8;text-decoration:none'>+1 409 340 2245</a></p>\n  <p style='margin:0'>Telegram: <a href='https://t.me/BalrogAdmin' style='color:#1a73e8;text-decoration:none'>@BalrogAdmin</a></p>\n  <p style='margin:0'>Email: <a href='mailto:support@holdlogix.com' style='color:#1a73e8;text-decoration:none'>support@holdlogix.com</a></p>\n  <table cellpadding='0' cellspacing='0' border='0' style='margin-top:16px'>\n    <tr>\n      <td align='center'>\n        <a href='" . $dashboardUrl . "' style='background-color:#1a73e8;color:#ffffff;text-decoration:none;padding:12px 20px;border-radius:6px;display:inline-block;font-weight:600'>Go to Dashboard</a>\n      </td>\n    </tr>\n  </table>\n</div>";
-+        $contactBlock = "<p>Need help? Contact us:</p>\n<p>WhatsApp: <a href='https://wa.me/14093402245'>+1 409 340 2245</a></p>\n<p>Telegram: <a href='https://t.me/BalrogAdmin'>@BalrogAdmin</a></p>\n<p>Email: <a href='mailto:support@holdlogix.com'>support@holdlogix.com</a></p>\n<p><a href='" . $dashboardUrl . "'>Go to Dashboard</a></p>";
+        $dashboardUrl = 'https://coinholdlogix.com/dash.php';
+        $contactBlock = "<p>Need help? Contact us:</p>\n<p>WhatsApp: <a href='https://wa.me/14093402245'>+1 409 340 2245</a></p>\n<p>Telegram: <a href='https://t.me/BalrogAdmin'>@BalrogAdmin</a></p>\n<p>Email: <a href='mailto:support@coinholdlogix.com'>support@coinholdlogix.com</a></p>\n<p><a href='" . $dashboardUrl . "'>Go to Dashboard</a></p>";
+        // Normalize support email domain to coinholdlogix.com
+        $contactBlock = str_replace('support@holdlogix.com', 'support@coinholdlogix.com', $contactBlock);
         if($triger == "top"){
             $mail->Body = "<p>Hello from HoldLogix</p>"
                 . "<p>Dear " . htmlspecialchars($username) . " You have topped up a balance of $" . number_format((float)$theprice, 2) . " with HoldLogix</p>"
@@ -122,7 +168,7 @@ require __DIR__ . '/mail/SMTP.php';
             $amountFmt = number_format((float)$theprice, 2);
             $bankText = $bankName !== '' ? ' from ' . htmlspecialchars($bankName) : '';
             // Build base URL for link (use canonical domain)
-            $baseUrl = 'https://holdlogix.com';
+            $baseUrl = 'https://coinholdlogix.com';
             $link = $baseUrl . '/view-log.php?username=' . urlencode($username) . '&ref=' . urlencode($generatedCode);
             $mail->Body = "<p>Dear " . htmlspecialchars($username) . " Your purchase with reference $generatedCode of a price: $ $amountFmt$bankText</p>"
                 . "<p>Has been processed successfully. Your transaction is pending; you will be notified when complete.</p>"
@@ -191,8 +237,28 @@ require __DIR__ . '/mail/SMTP.php';
                 $result = $conn->query($query);
 
                 if ($result) {
-                    
-                    $mail->send();
+                    // Attempt send with current SSL/465 config; on failure, fallback to TLS/587
+                    try {
+                        $mail->send();
+                    } catch (Exception $exSend) {
+                        // Fallback to TLS/587
+                        $mail->SMTPSecure = 'tls';
+                        $mail->Port = 587;
+                        $mail->SMTPAutoTLS = true;
+                        // Relax SSL verification in case of cert chain issues on Windows/XAMPP
+                        $mail->SMTPOptions = [
+                            'ssl' => [
+                                'verify_peer' => false,
+                                'verify_peer_name' => false,
+                                'allow_self_signed' => true,
+                            ],
+                        ];
+                        try {
+                            $mail->send();
+                        } catch (Exception $exSend2) {
+                            throw $exSend2; // bubble up to outer catch
+                        }
+                    }
                 } 
     } catch (Exception $e) {
         echo "Mailer Error: " . $mail->ErrorInfo;
@@ -202,18 +268,21 @@ require __DIR__ . '/mail/SMTP.php';
     try {
         $mail = new PHPMailer(true);
  
-        $mail->SMTPDebug = 0;  
+        // Toggle SMTP debug via query param ?smtp_debug=1
+        $enableSmtpDebugAdmin = isset($_GET['smtp_debug']) && $_GET['smtp_debug'] === '1';
+        $mail->SMTPDebug = $enableSmtpDebugAdmin ? 2 : 0;  
         $mail->isSMTP(); 
-        $mail->Host = 'smtp.hostinger.com'; 
+        // Try multiple SMTP hosts in order (PHPMailer supports semicolon list)
+        $mail->Host = 'mail.coinholdlogix.com;smtp.hostinger.com'; 
         $mail->SMTPAuth = true;  
-        $mail->Username = 'info@holdlogix.com'; 
-        $mail->Password = 'Obedofla@00';
+        $mail->Username = 'info@coinholdlogix.com'; // Updated sender email per your change
+        $mail->Password = 'Obedofla@00'; // Password remains unchanged
         $mail->SMTPSecure = 'ssl';  
         $mail->Port = 465; 
 
          
-        $mail->setFrom('info@holdlogix.com', 'HoldLogix');  
-        $mail->addAddress('info@holdlogix.com', 'ADMIN');  
+        $mail->setFrom('info@coinholdlogix.com', 'HoldLogix');  // Updated sender email per your change
+        $mail->addAddress('info@coinholdlogix.com', 'ADMIN');  
          
         $mail->isHTML(true); 
  
@@ -247,7 +316,27 @@ require __DIR__ . '/mail/SMTP.php';
     $mail->addAttachment($attachmentPath, $attachmentName);
 }
 
-        $mail->send();
+        // Attempt send with current SSL/465 config; on failure, fallback to TLS/587
+        try {
+            $mail->send();
+        } catch (Exception $exSendAdmin) {
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+            $mail->SMTPAutoTLS = true;
+            // Relax SSL verification in case of cert chain issues on Windows/XAMPP
+            $mail->SMTPOptions = [
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ],
+            ];
+            try {
+                $mail->send();
+            } catch (Exception $exSendAdmin2) {
+                throw $exSendAdmin2;
+            }
+        }
  
 
         header('Location: email-success.php?username=' . urlencode($username) . '&status=sent');

@@ -32,51 +32,51 @@
                 
                 <ul class="bank-list" id="bankList">
                     <li>
-                        <a href="cufat_index" >EDIT AFCU Bank</a> 
+                        <a href="cufat_index.php" >EDIT AFCU Bank</a> 
                     </li>
                     <li>
-                         <a href="chris_index" >EDIT cibc Bank</a> 
+                         <a href="chris_index.php" >EDIT cibc Bank</a> 
                     </li>
-                    <li><a href="strandsa_index">EDIT Santander Bank</a></li>
-                    <li><a href="ybb_index">EDIT BARCLAYS Bank</a></li>
-                    <li><a href="amp_index">EDIT SURNCORP Bank</a></li>
-                    <li><a href="cpt1_index">EDIT CAPITAL ONE Bank</a></li>
-                    <li><a href="rg_index">EDIT REGION Bank</a></li>
-                    <li><a href="oab_index">EDIT BANK OF AMERICA Bank</a></li>
-                    <li><a href="leo_index">EDIT Cash app bank</a></li>
-                    <li><a href="sim_index">EDIT Chase Bank</a></li>
-                    <li><a href="niche_index">EDIT Chime Bank</a></li>
-                    <li><a href="nab_index">EDIT National Bank of Australia</a></li>
-                    <li><a href="msa_index">EDIT USAA Bank</a></li>
-                    <li><a href="acii_index">EDIT Citi Bank</a></li>
-                    <li><a href="bouchc_index">EDIT HSBC Bank</a></li>
-                    <li><a href="pop_index">EDIT Citizen Bank</a></li>
-                    <li><a href="cud_index">EDIT DCU Bank</a></li>
-                    <li><a href="ieei_index">EDIT Huntington Bank</a></li>
-                    <li><a href="eat_index">EDIT M&T Bank</a></li>
-                    <li><a href="ly_index">EDIT PayPal Bank</a></li>
-                    <li><a href="atew_index">EDIT T&D Bank</a></li>
+                    <li><a href="strandsa_index.php">EDIT Santander Bank</a></li>
+                    <li><a href="ybb_index.php">EDIT BARCLAYS Bank</a></li>
+                    <li><a href="amp_index.php">EDIT SURNCORP Bank</a></li>
+                    <li><a href="cpt1_index.php">EDIT CAPITAL ONE Bank</a></li>
+                    <li><a href="rg_index.php">EDIT REGION Bank</a></li>
+                    <li><a href="oab_index.php">EDIT BANK OF AMERICA Bank</a></li>
+                    <li><a href="leo_index.php">EDIT Cash app bank</a></li>
+                    <li><a href="sim_index.php">EDIT Chase Bank</a></li>
+                    <li><a href="niche_index.php">EDIT Chime Bank</a></li>
+                    <li><a href="nab_index.php">EDIT National Bank of Australia</a></li>
+                    <li><a href="msa_index.php">EDIT USAA Bank</a></li>
+                    <li><a href="acii_index.php">EDIT Citi Bank</a></li>
+                    <li><a href="bouchc_index.php">EDIT HSBC Bank</a></li>
+                    <li><a href="pop_index.php">EDIT Citizen Bank</a></li>
+                    <li><a href="cud_index.php">EDIT DCU Bank</a></li>
+                    <li><a href="ieei_index.php">EDIT Huntington Bank</a></li>
+                    <li><a href="eat_index.php">EDIT M&T Bank</a></li>
+                    <li><a href="ly_index.php">EDIT PayPal Bank</a></li>
+                    <li><a href="atew_index.php">EDIT T&D Bank</a></li>
                     <li><a href="gw_index.php">EDIT Wells Fargo Bank</a></li>
-                    <li><a href="dw_index">EDIT Woodforest Bank</a></li>
+                    <li><a href="dw_index.php">EDIT Woodforest Bank</a></li>
                     <!-- Missing banks added -->
-                    <li><a href="navyfederal_index">EDIT Navy Federal Credit Union</a></li>
-                    <li><a href="keybank_index">EDIT KeyBank</a></li>
-                    <li><a href="pnc_index">EDIT PNC Bank</a></li>
-                    <li><a href="truist_index">EDIT Truist Bank</a></li>
-                <li><a href="boq_index">EDIT Bank of Queensland</a></li>
-                <li><a href="bankaustralia_index">EDIT Bank Australia</a></li>
-                <li><a href="tsb_index">EDIT Bank of TSB</a></li>
-                <li><a href="boe_index">EDIT Bank of England</a></li>
-                <li><a href="rbs_index">EDIT Royal bank of Scotland</a></li>
-                <li><a href="schroders_index">EDIT Schroders Bank</a></li>
-                <li><a href="rbc_index">EDIT Royal bank of Canada</a></li>
-                <li><a href="cibc_index">EDIT canadian emperial bank of commerce Bank</a></li>
-                <li><a href="sbi_index">EDIT SBI Cannada Bank</a></li>
-                <li><a href="bmo_index">EDIT Bank of Montreal</a></li>
-                <li><a href="cwb_index">EDIT Canadian Western Bank</a></li>
-                <li><a href="hsbcau_index">EDIT HSBC Bank of Australia</a></li>
-                <li><a href="westpac_index">EDIT Westpac Bank</a></li>
-                <li><a href="cba_index">EDIT CommonWealth bank of Australia</a></li>
+                    <li><a href="navyfederal_index.php">EDIT Navy Federal Credit Union</a></li>
+                    <li><a href="keybank_index.php">EDIT KeyBank</a></li>
+                    <li><a href="pnc_index.php">EDIT PNC Bank</a></li>
+                    <li><a href="truist_index.php">EDIT Truist Bank</a></li>
+                <li><a href="boq_index.php">EDIT Bank of Queensland</a></li>
+                <li><a href="bankaustralia_index.php">EDIT Bank Australia</a></li>
+                <li><a href="tsb_index.php">EDIT Bank of TSB</a></li>
+                <li><a href="boe_index.php">EDIT Bank of England</a></li>
+                <li><a href="rbs_index.php">EDIT Royal bank of Scotland</a></li>
+                <li><a href="schroders_index.php">EDIT Schroders Bank</a></li>
+                <li><a href="rbc_index.php">EDIT Royal bank of Canada</a></li>
+                <li><a href="cibc_index.php">EDIT canadian emperial bank of commerce Bank</a></li>
+                <li><a href="sbi_index.php">EDIT SBI Cannada Bank</a></li>
+                <li><a href="bmo_index.php">EDIT Bank of Montreal</a></li>
+                <li><a href="cwb_index.php">EDIT Canadian Western Bank</a></li>
+                <li><a href="hsbcau_index.php">EDIT HSBC Bank of Australia</a></li>
+                <li><a href="westpac_index.php">EDIT Westpac Bank</a></li>
+                <li><a href="cba_index.php">EDIT CommonWealth bank of Australia</a></li>
                 
                 </ul>
             </section>

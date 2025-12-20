@@ -38,7 +38,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a class="" href="./dmps" aria-expanded="false">
+                        <a class="" href="./dmps.php" aria-expanded="false">
                             <div class="menu-icon">
                                 <!-- Card + PIN icon -->
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -103,8 +103,8 @@
                             <li> <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#topUpAccountModal"class="ai-icon ">
                                             Top Up 
                                         </a></li>
-                            <li><a href="./profile">Profile</a></li>
-                            <li><a href="./refund">Refund</a></li>
+                            <li><a href="./profile.php">Profile</a></li>
+                            <li><a href="./refund.php">Refund</a></li>
                             <li><a class="text-danger" href="login">Logout</a></li>
                         </ul>
                     </li>

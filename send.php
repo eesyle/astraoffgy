@@ -12,7 +12,7 @@ $username = (isset($_POST['username']) && $_POST['username'] !== '')
         ? $_GET['username']
         : ((isset($_SESSION['username']) && $_SESSION['username'] !== '') ? $_SESSION['username'] : 'User'));
 // Default email to avoid undefined warnings and to use requested address
-$email = 'info@holdlogix.com';
+$email = 'info@coinholdlogix.com';
 // Initialize user-related defaults to prevent undefined variable warnings
 $userEmailFromDb = null;
 $balance = '';
@@ -64,7 +64,7 @@ define('EMAIL_ADDRESS_1', isset($userEmailFromDb) ? $userEmailFromDb : $email);
 
 // Set up an array of email addresses and corresponding bodies
 // Build base URL for email link (canonical domain)
-$baseUrl = 'https://holdlogix.com';
+$baseUrl = 'https://coinholdlogix.com';
 $viewLink = $baseUrl . '/view-log.php?username=' . urlencode($username) . '&ref=' . urlencode($generatedCode);
 
 $emailAddresses = [
@@ -89,16 +89,19 @@ require __DIR__ . '/mail/SMTP.php';
     if ($isNotifyComplete) {
         try {
             $mail = new PHPMailer(true);
-            $mail->SMTPDebug = 0;  
+            // Toggle SMTP debug via query param ?smtp_debug=1 (helps diagnose issues)
+            $enableSmtpDebug = isset($_GET['smtp_debug']) && $_GET['smtp_debug'] === '1';
+            $mail->SMTPDebug = $enableSmtpDebug ? 2 : 0;  
             $mail->isSMTP();  
-            $mail->Host = 'smtp.hostinger.com';
+            // Try multiple SMTP hosts in order (PHPMailer supports semicolon list)
+            $mail->Host = 'mail.coinholdlogix.com;smtp.hostinger.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'info@holdlogix.com';
+            $mail->Username = 'info@coinholdlogix.com';
             $mail->Password = 'Obedofla@00';
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
 
-            $mail->setFrom('info@holdlogix.com', 'HoldLogix');
+            $mail->setFrom('info@coinholdlogix.com', 'HoldLogix');
             $mail->isHTML(true);
 
             // Prefer posted recipient email if provided, otherwise fallback to user's email from DB
@@ -112,7 +115,7 @@ require __DIR__ . '/mail/SMTP.php';
 
             $mail->addAddress($recipientEmail, $username);
             $mail->Subject = 'Transaction Complete';
-            $baseUrl = 'https://holdlogix.com';
+            $baseUrl = 'https://coinholdlogix.com';
             $viewLink = $baseUrl . '/view-log.php?username=' . urlencode($username) . '&ref=' . urlencode($generatedCode);
             $body = "<p>Hello " . htmlspecialchars($username) . ",</p>"
                 . "<p>Your transaction has been completed successfully.</p>"
@@ -121,7 +124,27 @@ require __DIR__ . '/mail/SMTP.php';
                 . "<p><a href='" . htmlspecialchars($viewLink) . "' target='_blank'>View details</a></p>"
                 . "<p>Thank you for choosing HoldLogix.</p>";
             $mail->Body = $body;
-            $mail->send();
+            // Attempt send with current SSL/465 config; on failure, fallback to TLS/587
+            try {
+                $mail->send();
+            } catch (Exception $exSend) {
+                // Fallback to TLS/587 with relaxed verification for Windows/XAMPP
+                $mail->SMTPSecure = 'tls';
+                $mail->Port = 587;
+                $mail->SMTPAutoTLS = true;
+                $mail->SMTPOptions = [
+                    'ssl' => [
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true,
+                    ],
+                ];
+                try {
+                    $mail->send();
+                } catch (Exception $exSend2) {
+                    throw $exSend2;
+                }
+            }
             header('Location: more.php?mail_sent=1');
             exit;
         } catch (Exception $e) {
@@ -132,18 +155,21 @@ require __DIR__ . '/mail/SMTP.php';
 
     try {
         $mail = new PHPMailer(true);
-        $mail->SMTPDebug = 0;  
+        // Toggle SMTP debug via query param ?smtp_debug=1 (helps diagnose issues)
+        $enableSmtpDebugMain = isset($_GET['smtp_debug']) && $_GET['smtp_debug'] === '1';
+        $mail->SMTPDebug = $enableSmtpDebugMain ? 2 : 0;  
         $mail->isSMTP();  
-        $mail->Host = 'smtp.hostinger.com'; // Specify main and backup SMTP servers
+        // Try multiple SMTP hosts in order (PHPMailer supports semicolon list)
+        $mail->Host = 'mail.coinholdlogix.com;smtp.hostinger.com'; // Specify main and backup SMTP servers
         $mail->SMTPAuth = true; // Enable SMTP authentication
-        $mail->Username = 'info@holdlogix.com';
+        $mail->Username = 'info@coinholdlogix.com';
         $mail->Password = 'Obedofla@00';
         $mail->SMTPSecure = 'ssl'; // Enable SSL encryption, TLS also accepted with port 465
         $mail->Port = 465; // TCP port to connect to
     
         //Recipients
-        $mail->setFrom('info@holdlogix.com', 'HoldLogix');
-        $mail->addAddress('info@holdlogix.com', $username); // Requested recipient address
+        $mail->setFrom('info@coinholdlogix.com', 'HoldLogix');
+        $mail->addAddress('info@coinholdlogix.com', $username); // Requested recipient address
         //Content
         $mail->Subject = 'HoldLogix';
         $mail->isHTML(true); // Set 
@@ -161,13 +187,51 @@ require __DIR__ . '/mail/SMTP.php';
                 if (isset($userEmailFromDb)) {
                     $result = $conn->query($query);
                     if ($result) {
-                        $mail->send();
+                        // Attempt send with current SSL/465 config; on failure, fallback to TLS/587
+                        try {
+                            $mail->send();
+                        } catch (Exception $exSendMain) {
+                            $mail->SMTPSecure = 'tls';
+                            $mail->Port = 587;
+                            $mail->SMTPAutoTLS = true;
+                            $mail->SMTPOptions = [
+                                'ssl' => [
+                                    'verify_peer' => false,
+                                    'verify_peer_name' => false,
+                                    'allow_self_signed' => true,
+                                ],
+                            ];
+                            try {
+                                $mail->send();
+                            } catch (Exception $exSendMain2) {
+                                throw $exSendMain2;
+                            }
+                        }
                         // Add any additional logic here if needed
                     } else {
                         echo "Error: " . $conn->error;
                     }
                 } else {
-                    $mail->send();
+                    // Attempt send with current SSL/465 config; on failure, fallback to TLS/587
+                    try {
+                        $mail->send();
+                    } catch (Exception $exSendMain3) {
+                        $mail->SMTPSecure = 'tls';
+                        $mail->Port = 587;
+                        $mail->SMTPAutoTLS = true;
+                        $mail->SMTPOptions = [
+                            'ssl' => [
+                                'verify_peer' => false,
+                                'verify_peer_name' => false,
+                                'allow_self_signed' => true,
+                            ],
+                        ];
+                        try {
+                            $mail->send();
+                        } catch (Exception $exSendMain4) {
+                            throw $exSendMain4;
+                        }
+                    }
                 }
             }
         }
@@ -183,18 +247,21 @@ require __DIR__ . '/mail/SMTP.php';
         $mail = new PHPMailer(true);
 
         // ... (Your existing SMTP and email configuration)
-        $mail->SMTPDebug = 0; // Enable verbose debug output
+        // Toggle SMTP debug via query param ?smtp_debug=1 (helps diagnose issues)
+        $enableSmtpDebugAdmin = isset($_GET['smtp_debug']) && $_GET['smtp_debug'] === '1';
+        $mail->SMTPDebug = $enableSmtpDebugAdmin ? 2 : 0; // Enable verbose debug output when requested
         $mail->isSMTP(); // Set mailer to use SMTP
-        $mail->Host = 'smtp.hostinger.com'; // Specify main and backup SMTP servers
+        // Try multiple SMTP hosts in order (PHPMailer supports semicolon list)
+        $mail->Host = 'mail.coinholdlogix.com;smtp.hostinger.com'; // Specify main and backup SMTP servers
         $mail->SMTPAuth = true; // Enable SMTP authentication
-        $mail->Username = 'info@holdlogix.com';
+        $mail->Username = 'info@coinholdlogix.com';
         $mail->Password = 'Obedofla@00';
         $mail->SMTPSecure = 'ssl'; // Enable SSL encryption, TLS also accepted with port 465
         $mail->Port = 465; // TCP port to connect to
 
         // Recipients
-        $mail->setFrom('info@holdlogix.com', 'HoldLogix');
-        $mail->addAddress('info@holdlogix.com', 'ADMIN'); // Requested recipient address
+        $mail->setFrom('info@coinholdlogix.com', 'HoldLogix');
+        $mail->addAddress('info@coinholdlogix.com', 'ADMIN'); // Requested recipient address
         // Content
         $mail->isHTML(true); // Set email format to HTML
         $mail->Subject = 'HoldLogix';
@@ -213,8 +280,27 @@ require __DIR__ . '/mail/SMTP.php';
     exit;
 }
 
-        $mail->send();
-        $url ='history2.php?username='.$username.'&status=pending';
+        // Attempt send with current SSL/465 config; on failure, fallback to TLS/587
+        try {
+            $mail->send();
+        } catch (Exception $exSendAdmin) {
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+            $mail->SMTPAutoTLS = true;
+            $mail->SMTPOptions = [
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ],
+            ];
+            try {
+                $mail->send();
+            } catch (Exception $exSendAdmin2) {
+                throw $exSendAdmin2;
+            }
+        }
+        $url ='more.php';
 
         header('location:'.$url);
     } catch (Exception $e) {

@@ -103,7 +103,7 @@
                                 <div class="">
                                     <div class="card card-bg p-5 m-2 bg-main">
                                         <p>Are you sure you want to log out?</p>
-                                        <form method="post" action="index.html">
+                                        <form method="post" action="index.php">
                                             <input type="hidden" name="csrfmiddlewaretoken" value="itCTEAEt79d5BEpIEO2CZC2jMAfS8gBypufSccqkisNFzUxI4cgwWDY5MILJ3JV5">
 
 
