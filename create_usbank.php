@@ -25,11 +25,11 @@ session_start();
                 <div class="card">
                     <div class="card-header">
                         <h4>Add an Account 
-                            <a href="citi_index.php" class="btn btn-danger float-end">BACK</a>
+                            <a href="usbank_index.php" class="btn btn-danger float-end">BACK</a>
                         </h4>
                     </div>
                     <div class="card-body">
-                        <form action="code_citi.php" method="POST">
+                        <form action="code_usbank.php" method="POST">
 
                         <div class="mb-3">
                                 <label> ID</label>

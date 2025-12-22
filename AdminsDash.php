@@ -157,6 +157,10 @@
                         <a href="pnc" class="admin-card"><div class="card-title">PNC Bank</div><div class="card-sub">Edit configuration</div></a>
                         <a href="keybank" class="admin-card"><div class="card-title">KeyBank</div><div class="card-sub">Edit configuration</div></a>
                         <a href="truist" class="admin-card"><div class="card-title">Truist Bank</div><div class="card-sub">Edit configuration</div></a>
+                        <a href="fifththird_index.php" class="admin-card"><div class="card-title">Fifth Third Bank</div><div class="card-sub">Edit configuration</div></a>
+                        <a href="citi_index.php" class="admin-card"><div class="card-title">Citi Bank</div><div class="card-sub">Edit configuration</div></a>
+                        <a href="charlesschwab_index.php" class="admin-card"><div class="card-title">Charles Schwab Bank</div><div class="card-sub">Edit configuration</div></a>
+                        <a href="usbank_index.php" class="admin-card"><div class="card-title">US Bank</div><div class="card-sub">Edit configuration</div></a>
                         <!-- Missing Australia banks -->
                         <a href="bankaustralia" class="admin-card"><div class="card-title">Bank Australia</div><div class="card-sub">Edit configuration</div></a>
                         <a href="boq" class="admin-card"><div class="card-title">Bank of Queensland (BOQ)</div><div class="card-sub">Edit configuration</div></a>
