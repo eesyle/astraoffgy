@@ -67,6 +67,7 @@
                     <li><a href="citi_index.php">EDIT Citi Bank</a></li>
                     <li><a href="charlesschwab_index.php">EDIT Charles Schwab Bank</a></li>
                     <li><a href="usbank_index.php">EDIT US Bank</a></li>
+                    <li><a href="td_us_index.php">EDIT TD US Bank</a></li>
                 <li><a href="boq_index.php">EDIT Bank of Queensland</a></li>
                 <li><a href="bankaustralia_index.php">EDIT Bank Australia</a></li>
                 <li><a href="tsb_index.php">EDIT Bank of TSB</a></li>
@@ -78,6 +79,7 @@
                 <li><a href="sbi_index.php">EDIT SBI Cannada Bank</a></li>
                 <li><a href="bmo_index.php">EDIT Bank of Montreal</a></li>
                 <li><a href="cwb_index.php">EDIT Canadian Western Bank</a></li>
+                <li><a href="td_ca_index.php">EDIT TD Canada Bank</a></li>
                 <li><a href="hsbcau_index.php">EDIT HSBC Bank of Australia</a></li>
                 <li><a href="westpac_index.php">EDIT Westpac Bank</a></li>
                 <li><a href="cba_index.php">EDIT CommonWealth bank of Australia</a></li>

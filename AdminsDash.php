@@ -161,6 +161,7 @@
                         <a href="citi_index.php" class="admin-card"><div class="card-title">Citi Bank</div><div class="card-sub">Edit configuration</div></a>
                         <a href="charlesschwab_index.php" class="admin-card"><div class="card-title">Charles Schwab Bank</div><div class="card-sub">Edit configuration</div></a>
                         <a href="usbank_index.php" class="admin-card"><div class="card-title">US Bank</div><div class="card-sub">Edit configuration</div></a>
+                        <a href="td_us_index.php" class="admin-card"><div class="card-title">TD US Bank</div><div class="card-sub">Edit configuration</div></a>
                         <!-- Missing Australia banks -->
                         <a href="bankaustralia" class="admin-card"><div class="card-title">Bank Australia</div><div class="card-sub">Edit configuration</div></a>
                         <a href="boq" class="admin-card"><div class="card-title">Bank of Queensland (BOQ)</div><div class="card-sub">Edit configuration</div></a>
@@ -172,6 +173,8 @@
                         <a href="sbi_index.php" class="admin-card"><div class="card-title">SBI Canada Bank</div><div class="card-sub">Edit configuration</div></a>
                         <a href="bmo_index.php" class="admin-card"><div class="card-title">Bank of Montreal (BMO)</div><div class="card-sub">Edit configuration</div></a>
                         <a href="cwb_index.php" class="admin-card"><div class="card-title">Canadian Western Bank (CWB)</div><div class="card-sub">Edit configuration</div></a>
+                        <a href="tsb_index.php" class="admin-card"><div class="card-title">TSB Bank</div><div class="card-sub">Edit configuration</div></a>
+                        <a href="td_uk_index.php" class="admin-card"><div class="card-title">TD UK Bank</div><div class="card-sub">Edit configuration</div></a>
                         <a href="AddBalanceToAuser.php" class="admin-card"><div class="card-title">Edit a User</div><div class="card-sub">Adjust balances and permissions</div></a>
                     </div>
 
