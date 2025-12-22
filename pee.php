@@ -1,39 +1,108 @@
 <?php
- session_start();
+// ===== Debugging hooks for Hostinger HTTP 500 =====
+// Enable verbose error output and capture fatals/exceptions
+$__hlx_show_debug = (
+    (isset($_GET['debug']) && $_GET['debug'] === '1') ||
+    (getenv('HLX_DEBUG') === '1')
+);
+define('HLX_SHOW_DEBUG', $__hlx_show_debug);
+
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    echo "<pre style=\"background:#1b2938;color:#ffcc00;padding:10px;\">PHP ERROR [$errno]: $errstr\nFile: $errfile\nLine: $errline</pre>";
+    return false; // allow default handler too
+});
+
+set_exception_handler(function($e) {
+    echo "<pre style=\"background:#1b2938;color:#ff6b6b;padding:10px;\">UNCAUGHT EXCEPTION: "
+        . htmlspecialchars($e->getMessage()) . "\n" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
+});
+
+register_shutdown_function(function() {
+    $err = error_get_last();
+    if ($err && in_array($err['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        echo "<pre style=\"background:#1b2938;color:#f08d49;padding:10px;\">FATAL ERROR: {$err['message']}\nFile: {$err['file']}\nLine: {$err['line']}</pre>";
+    }
+});
+
+function hlx_debug($label, $data) {
+    if (!defined('HLX_SHOW_DEBUG') || !HLX_SHOW_DEBUG) return;
+    if (is_string($data)) {
+        $val = $data;
+    } else {
+        ob_start();
+        print_r($data);
+        $val = ob_get_clean();
+    }
+    echo "<pre style=\"background:#0e1a24;color:#9be7ff;padding:10px;border:1px solid #1e88e5;\">DEBUG $label:\n" . htmlspecialchars($val) . "</pre>";
+}
+
+hlx_debug('Environment', [
+    'php_version' => PHP_VERSION,
+    'server_name' => $_SERVER['SERVER_NAME'] ?? '',
+    'request_method' => $_SERVER['REQUEST_METHOD'] ?? '',
+    'document_root' => $_SERVER['DOCUMENT_ROOT'] ?? '',
+    'script' => __FILE__,
+]);
+
+session_start();
 require_once 'config.php';
-if($conn->connect_error) die("Fatal Error");
+// Check if connection was successful
+if (!isset($conn)) {
+    die("Database connection variable not set in config.php");
+}
+if($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
 if( 
     isset($_POST['submit'])) 
- 
+    
     {   
         $email = get_post($conn, 'email');
         $username = get_post($conn, 'username');
         $password = get_post($conn, 'password');
-        $password1 = get_post($conn, 'password1');
+        // Check if password1 exists in POST, if not, maybe it's named differently or empty
+        $password1_val = isset($_POST['password1']) ? $_POST['password1'] : ''; 
+        $password1_safe = $conn->real_escape_string($password1_val);
         
         
         $check= mysqli_query($conn, "SELECT * FROM users WHERE username = '$username'");
-        if(mysqli_num_rows($check)>0){
+        if (!$check) {
+            echo "Query Error: " . $conn->error;
+        } elseif(mysqli_num_rows($check)>0){
 
        
-        echo "<script> alert('Username or email already');</script>";
+        echo "<script> alert('Username or email already exists');</script>";
         }else{
-            if($password == $password1){
+            if($password == $password1_safe){
                 $_SESSION['username'] = $username;
-                $query = "INSERT INTO users VALUES('','$email','$username','$password',NOW(),'','','','')";
+                // Debug the query
+                // Fixed: Use NULL for auto-increment ID, 0 for integers, and match 9 columns
+                $query = "INSERT INTO users VALUES(NULL,'$email','$username','$password',NOW(),'0','0','0','0')";
                 
-        $result = $conn->query($query);
-        if($result){
-            header('location: dash.php');
-        }
-            else{
-                echo "<script> alert('The passwords don't match');</script>";
+                $result = $conn->query($query);
+                if($result){
+                    header('location: dash.php');
+                    exit(); // Always exit after header redirect
+                }
+                else{
+                    // Show actual database error
+                    echo "<script> alert('Database Error: " . addslashes($conn->error) . "');</script>";
+                    // Also print it for visibility if alert is blocked
+                    echo "<!-- DB Error: " . htmlspecialchars($conn->error) . " -->";
+                }
+            } else {
+                 echo "<script> alert('The passwords do not match');</script>";
             }
-        }
          
             }
         }
         function get_post($conn, $var){
+            if (!isset($_POST[$var])) return '';
             return $conn->real_escape_string($_POST[$var]);
         } 
         ?>	
@@ -71,89 +140,85 @@ if(
 
 </head>
 
-<body class="body h-100" style="min-height: 100%;
-  
-  background-size: cover;
-  box-shadow: inset 0 0 0 2000px rgba(20, 50, 60, 0.7);">
+<body class="body h-100">
 
     <style>
-        .auth-layout { min-height: 100vh; }
-        .glass-card {
-            background: linear-gradient(135deg, rgba(18, 24, 38, 0.65), rgba(14, 20, 30, 0.55));
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(10px);
-            border-radius: 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-        }
-        .auth-image {
-            position: relative;
+        .auth-layout {
+            min-height: 100vh;
             background-image: url('assets/bgpd.jpg');
             background-size: cover;
             background-position: center;
-            min-height: 50vh;
-            border-radius: 0;
+            background-attachment: fixed;
+            position: relative;
         }
-        .auth-image::after {
+        .auth-layout::before {
             content: "";
             position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg, rgba(8,12,18,0.55), rgba(8,12,18,0.2));
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 24, 38, 0.7); /* Dark overlay for readability */
+            z-index: 1;
         }
-        @media (min-width: 992px) {
-            .auth-image { min-height: 100vh; }
+        .glass-card {
+            background: rgba(18, 24, 38, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            position: relative;
+            z-index: 2;
         }
-        .brand-logo { width: 180px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35)); }
+        /* Compact logo */
+        .brand-logo { width: 130px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35)); }
         .btn-primary { box-shadow: 0 6px 16px rgba(62, 123, 255, 0.35); }
         .btn-primary:hover { box-shadow: 0 10px 22px rgba(62, 123, 255, 0.45); transform: translateY(-1px); }
     </style>
 
-    <div class="container-fluid p-0 auth-layout">
-        <div class="row g-0 min-vh-100 align-items-stretch">
-            <!-- Left: Signup Form (mirrors index.php form styles) -->
-            <div class="col-12 col-lg-6 d-flex">
-                <div class="card glass-card border-0 w-100 my-auto">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="mb-4 text-center text-lg-start">
+    <div class="container-fluid p-0 auth-layout d-flex align-items-center justify-content-center">
+        <div class="row justify-content-center w-100">
+            <div class="col-12 col-md-8 col-lg-5 col-xl-4">
+                <div class="card glass-card border-0">
+                    <!-- Compact padding -->
+                    <div class="card-body p-3 p-md-4">
+                        <div class="mb-2 text-center">
                             <img src="assets/logo.png" class="brand-logo" alt="HoldLogix" />
                         </div>
-                        <h5 class="mb-3 text-white">Create an account to get started</h5>
+                        <h5 class="mb-2 text-white text-center">Create an account to get started</h5>
                         <hr class="border-secondary">
 
                         <form action="" method="post">
-                            <div class="mb-3">
-                                <label class="mb-1"><strong>User Name</strong></label>
+                            <div class="mb-2">
+                                <label class="mb-1 text-white"><strong>User Name</strong></label>
                                 <input type="text" name="username" class="form-control" placeholder="Enter display name" required>
                             </div>
-                            <div class="mb-3">
-                                <label class="mb-1"><strong>Email</strong></label>
+                            <div class="mb-2">
+                                <label class="mb-1 text-white"><strong>Email</strong></label>
                                 <input type="email" name="email" class="form-control" placeholder="hello@example.com" required>
                             </div>
-                            <div class="mb-3">
-                                <label class="mb-1"><strong>Password</strong></label>
+                            <div class="mb-2">
+                                <label class="mb-1 text-white"><strong>Password</strong></label>
                                 <input type="password" name="password" class="form-control" placeholder="Password" required>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <a class="text-decoration-underline" href="mailto:support@holdlogix.com">Need help?</a>
-                            </div>
-                            <div class="mb-3">
-                                <label class="mb-1"><strong>Confirm Password</strong></label>
+                             <div class="mb-2">
+                                <label class="mb-1 text-white"><strong>Confirm Password</strong></label>
                                 <input type="password" name="password1" class="form-control" placeholder="Confirm password" required>
                             </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <a class="text-decoration-underline text-white-50" href="mailto:support@holdlogix.live">Need help?</a>
+                            </div>
+                           
                             <div class="d-grid">
                                 <button type="submit" name="submit" class="btn btn-primary btn-lg">Sign Up</button>
                             </div>
                         </form>
                         <hr class="border-secondary">
-                        <div class="mt-2 text-center text-lg-start">
-                            <span>Already have an account? <a href="index.php"><strong><u>Log In</u></strong></a>.</span>
+                        <div class="mt-2 text-center">
+                            <span class="text-white">Already have an account? <a href="index.php" class="text-primary"><strong><u>Log In</u></strong></a>.</span>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Right: Background Image (matches index.php) -->
-            <div class="col-12 col-lg-6">
-                <div class="auth-image w-100 h-100"></div>
             </div>
         </div>
     </div>

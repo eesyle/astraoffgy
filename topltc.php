@@ -55,7 +55,7 @@
                                         <div class="d-flex">
                                             <h3 class="mt-2 mb-1"><code>ltc1qta55t4z2lqct98k3caxxwy954qz7pphyn365qcv30huls8fcd5zsjpzf5p</code></h3>&nbsp;&nbsp;<a class="mt-3" href="javascript:;" onclick='copyToClip("ltc1qta55t4z2lqct98k3caxxwy954qz7pphyn365qcv30huls8fcd5zsjpzf5p")'><span class="badge badge-primary">copy</span></a></div>
                                         <p><i class="fa fa-circle"></i> Send <strong>LTC</strong> to the address above on the <b>Litecoin</b> Network.</p>
-                                        <p class="mb-2"><i class="fa fa-circle"></i> Get in touch with the support team at <a href="mailto:support@HoldLogix.com"><u>support@HoldLogix.com</u></a> with regards to any challenge topping up your account</p>
+                                        <p class="mb-2"><i class="fa fa-circle"></i> Get in touch with the support team at <a href="mailto:support@holdlogix.live"><u>support@holdlogix.live</u></a> with regards to any challenge topping up your account</p>
                                         <p class="mb-2"><i class="fa fa-circle text-warning"></i> <b>NB:</b> Payments should be confirmed in less than 15 minutes</p>
                                         <form method="post" action="sendtop.php" enctype="multipart/form-data">
                                             <p class="contact-form-text"  style="color: #fff; background-color: #292D35;">Upload payment screenshot :<input type="file" name="file" id="file" required></p>

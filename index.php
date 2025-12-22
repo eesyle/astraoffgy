@@ -98,8 +98,6 @@ if (isset($_POST['submit']) &&
             if (isset($row['password']) && $password === $row['password']) {
                  
                  $_SESSION['username'] = isset($row['username']) ? $row['username'] : $row['username'];
-                
-                
                 header('location: dash.php');
                 exit();
             }
@@ -147,65 +145,65 @@ function get_post($conn, $var)
 
 </head>
 
-<body class="body h-100" style="min-height: 100%;
-   
-  background-size: cover;
-  box-shadow: inset 0 0 0 2000px rgba(20, 50, 60, 0.7);">
+<body class="body h-100">
 
     <style>
-        .auth-layout { min-height: 100vh; }
-        .glass-card {
-            background: linear-gradient(135deg, rgba(18, 24, 38, 0.65), rgba(14, 20, 30, 0.55));
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(10px);
-            border-radius: 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-        }
-        .auth-image {
-            position: relative;
+        .auth-layout {
+            min-height: 100vh;
             background-image: url('assets/bgpd.jpg');
             background-size: cover;
             background-position: center;
-            min-height: 50vh;
-            border-radius: 0;
+            background-attachment: fixed;
+            position: relative;
         }
-        .auth-image::after {
+        .auth-layout::before {
             content: "";
             position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg, rgba(8,12,18,0.55), rgba(8,12,18,0.2));
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 24, 38, 0.7); /* Dark overlay for readability */
+            z-index: 1;
         }
-        @media (min-width: 992px) {
-            .auth-image { min-height: 100vh; }
+        .glass-card {
+            background: rgba(18, 24, 38, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            position: relative;
+            z-index: 2;
         }
-        .brand-logo { width: 180px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35)); }
+        /* Compact logo */
+        .brand-logo { width: 140px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35)); }
         .btn-primary { box-shadow: 0 6px 16px rgba(62, 123, 255, 0.35); }
         .btn-primary:hover { box-shadow: 0 10px 22px rgba(62, 123, 255, 0.45); transform: translateY(-1px); }
     </style>
 
-    <div class="container-fluid p-0 auth-layout">
-        <div class="row g-0 min-vh-100 align-items-stretch">
-            <!-- Left: Form -->
-            <div class="col-12 col-lg-6 d-flex">
-                <div class="card glass-card border-0 w-100 my-auto">
-                    <div class="card-body p-4 p-md-5">
-                        <div class="mb-4 text-center text-lg-start">
+    <div class="container-fluid p-0 auth-layout d-flex align-items-center justify-content-center">
+        <div class="row justify-content-center w-100">
+            <div class="col-12 col-md-8 col-lg-5 col-xl-4">
+                <div class="card glass-card border-0">
+                    <!-- Compact padding -->
+                    <div class="card-body p-3 p-md-4">
+                        <div class="mb-2 text-center">
                             <img src="assets/logo.png" class="brand-logo" alt="HoldLogix" />
                         </div>
-                        <h5 class="mb-3 text-white">Welcome. Log in to access your account</h5>
+                        <h5 class="mb-2 text-white text-center">Welcome. Log in to access your account</h5>
                         <hr class="border-secondary">
 
                         <form action="" method="post">
-                            <div class="mb-3">
-                                <label class="mb-1"><strong>Email</strong></label>
+                            <div class="mb-2">
+                                <label class="mb-1 text-white"><strong>Email</strong></label>
                                 <input type="email" name="email" class="form-control" placeholder="hello@example.com" required>
                             </div>
-                            <div class="mb-3">
-                                <label class="mb-1"><strong>Password</strong></label>
+                            <div class="mb-2">
+                                <label class="mb-1 text-white"><strong>Password</strong></label>
                                 <input type="password" name="password" class="form-control" placeholder="Password" required>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center mb-4">
-                                <a class="text-decoration-underline" href="mailto:support@holdlogix.com">Forgot Password?</a>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <a class="text-decoration-underline text-white-50" href="mailto:support@holdlogix.live">Forgot Password?</a>
                             </div>
 
                             <div class="d-grid">
@@ -213,21 +211,14 @@ function get_post($conn, $var)
                             </div>
                         </form>
                         <hr class="border-secondary">
-                        <div class="mt-2 text-center text-lg-start">
-                            <span>Don't have an account? <a href="pee.php"><strong><u>Register</u></strong></a>.</span>
+                        <div class="mt-2 text-center">
+                            <span class="text-white">Don't have an account? <a href="pee.php" class="text-primary"><strong><u>Register</u></strong></a>.</span>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Right: Background Image -->
-            <div class="col-12 col-lg-6">
-                <div class="auth-image w-100 h-100"></div>
-            </div>
         </div>
     </div>
-
-
     <!--**********************************
         Scripts
     ***********************************-->
@@ -238,10 +229,7 @@ function get_post($conn, $var)
     <script src="xui-main/vendor/toastr/js/toastr.min.js"></script>
     <script src="xui-main/js/custom.min.js"></script>
     <script src="xui-main/js/dlabnav-init.js"></script>
-
     <script type="text/javascript">
     </script>
-
 </body>
-
 </html>

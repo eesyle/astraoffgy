@@ -363,7 +363,7 @@
                                         <div class="card">
                                             <div class="card-header border-0 flex-wrap">
                                                 <h4 class="fs-18 font-w600">Welcome to HoldLogix</h4>
-                                                <p>Our store makes use of a robust server and a self-written engine. After every bulk purchase, the logs are reviewed again and updated. Do not hesitate to get in touch with <a href="mailto:support@HoldLogix.com"><u>the support team</u></a>                                                    if you come accross any issues.</p>
+                                                <p>Our store makes use of a robust server and a self-written engine. After every bulk purchase, the logs are reviewed again and updated. Do not hesitate to get in touch with <a href="mailto:support@holdlogix.live"><u>the support team</u></a>                                                    if you come accross any issues.</p>
                                             </div>
 
                                         </div>
@@ -565,7 +565,7 @@
             <div class="modal fade" id="usBankLogsMod">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                        <form method="post" action="mailto:support@HoldLogix.com">
+                        <form method="post" action="mailto:support@holdlogix.live">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel1">USA BANKLOGS</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -584,7 +584,7 @@
             <div class="modal fade" id="ukBankLogsMod">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                        <form method="post" action="mailto:support@HoldLogix.com">
+                        <form method="post" action="mailto:support@holdlogix.live">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel1">UK BANKLOGS</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -605,7 +605,7 @@
             <div class="modal fade" id="caBankLogsMod">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                        <form method="post" action="mailto:support@HoldLogix.com">
+                        <form method="post" action="mailto:support@holdlogix.live">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel1">CANADA Bank Logs</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -625,7 +625,7 @@
              <div class="modal fade" id="auBanksDash">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                        <form method="post" action="mailto:support@HoldLogix.com">
+                        <form method="post" action="mailto:support@holdlogix.live">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel1">AUSTRALIA Bank Logs</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

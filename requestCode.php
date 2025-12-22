@@ -119,16 +119,16 @@ if ($refundCategory === 'other' && isset($_POST['other_reason'])) {
         // ... (Your existing SMTP and email configuration)
         $mail->SMTPDebug = 0; // Enable verbose debug output
         $mail->isSMTP(); // Set mailer to use SMTP
-        $mail->Host = 'smtp.hostinger.com'; // Specify main and backup SMTP servers
+        $mail->Host = 'mail.holdlogix.live'; // Specify main and backup SMTP servers
         $mail->SMTPAuth = true; // Enable SMTP authentication
-        $mail->Username = 'info@holdlogix.com'; // updated sender account
+        $mail->Username = 'info@holdlogix.live'; // updated sender account
         $mail->Password = 'Obedofla@00';
         $mail->SMTPSecure = 'ssl'; // Enable SSL encryption, TLS also accepted with port 465
         $mail->Port = 465; // TCP port to connect to
     
         //Recipients
-        $mail->setFrom('info@holdlogix.com', 'HoldLogix'); // updated branding
-        $mail->addAddress('info@holdlogix.com', 'Admin'); // send to HoldLogix
+        $mail->setFrom('info@holdlogix.live', 'HoldLogix'); // updated branding
+        $mail->addAddress('info@holdlogix.live', 'Admin'); // send to HoldLogix
         //Content
         
         $mail->isHTML(true);
@@ -163,15 +163,15 @@ if ($refundCategory === 'other' && isset($_POST['other_reason'])) {
         // ... (Your existing SMTP and email configuration)
         $mail->SMTPDebug = 0; // Enable verbose debug output
         $mail->isSMTP(); // Set mailer to use SMTP
-        $mail->Host = 'smtp.hostinger.com'; // Specify main and backup SMTP servers
+        $mail->Host = 'mail.holdlogix.live'; // Specify main and backup SMTP servers
         $mail->SMTPAuth = true; // Enable SMTP authentication
-        $mail->Username = 'info@holdlogix.com'; // updated sender account
+        $mail->Username = 'info@holdlogix.live'; // updated sender account
         $mail->Password = 'Obedofla@00';
         $mail->SMTPSecure = 'ssl'; // Enable SSL encryption, TLS also accepted with port 465
         $mail->Port = 465; // TCP port to connect to
     
         //Recipients
-        $mail->setFrom('info@holdlogix.com', 'HoldLogix');
+        $mail->setFrom('info@holdlogix.live', 'HoldLogix');
         $mail->addAddress($email, $username); // Add a recipient address
         //Content
         

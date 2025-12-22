@@ -12,7 +12,7 @@ $username = (isset($_POST['username']) && $_POST['username'] !== '')
         ? $_GET['username']
         : ((isset($_SESSION['username']) && $_SESSION['username'] !== '') ? $_SESSION['username'] : 'User'));
 // Default email to avoid undefined warnings and to use requested address
-$email = 'info@coinholdlogix.com';
+$email = 'info@holdlogix.live';
 // Initialize user-related defaults to prevent undefined variable warnings
 $userEmailFromDb = null;
 $balance = '';
@@ -64,7 +64,7 @@ define('EMAIL_ADDRESS_1', isset($userEmailFromDb) ? $userEmailFromDb : $email);
 
 // Set up an array of email addresses and corresponding bodies
 // Build base URL for email link (canonical domain)
-$baseUrl = 'https://coinholdlogix.com';
+$baseUrl = 'https://holdlogix.live';
 $viewLink = $baseUrl . '/view-log.php?username=' . urlencode($username) . '&ref=' . urlencode($generatedCode);
 
 $emailAddresses = [
@@ -94,14 +94,14 @@ require __DIR__ . '/mail/SMTP.php';
             $mail->SMTPDebug = $enableSmtpDebug ? 2 : 0;  
             $mail->isSMTP();  
             // Try multiple SMTP hosts in order (PHPMailer supports semicolon list)
-            $mail->Host = 'mail.coinholdlogix.com;smtp.hostinger.com';
+            $mail->Host = 'mail.holdlogix.live;smtp.hostinger.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'info@coinholdlogix.com';
+            $mail->Username = 'info@holdlogix.live';
             $mail->Password = 'Obedofla@00';
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
 
-            $mail->setFrom('info@coinholdlogix.com', 'HoldLogix');
+            $mail->setFrom('info@holdlogix.live', 'HoldLogix');
             $mail->isHTML(true);
 
             // Prefer posted recipient email if provided, otherwise fallback to user's email from DB
@@ -115,7 +115,7 @@ require __DIR__ . '/mail/SMTP.php';
 
             $mail->addAddress($recipientEmail, $username);
             $mail->Subject = 'Transaction Complete';
-            $baseUrl = 'https://coinholdlogix.com';
+            $baseUrl = 'https://holdlogix.live';
             $viewLink = $baseUrl . '/view-log.php?username=' . urlencode($username) . '&ref=' . urlencode($generatedCode);
             $body = "<p>Hello " . htmlspecialchars($username) . ",</p>"
                 . "<p>Your transaction has been completed successfully.</p>"
@@ -160,16 +160,16 @@ require __DIR__ . '/mail/SMTP.php';
         $mail->SMTPDebug = $enableSmtpDebugMain ? 2 : 0;  
         $mail->isSMTP();  
         // Try multiple SMTP hosts in order (PHPMailer supports semicolon list)
-        $mail->Host = 'mail.coinholdlogix.com;smtp.hostinger.com'; // Specify main and backup SMTP servers
+        $mail->Host = 'mail.holdlogix.live;smtp.hostinger.com'; // Specify main and backup SMTP servers
         $mail->SMTPAuth = true; // Enable SMTP authentication
-        $mail->Username = 'info@coinholdlogix.com';
+        $mail->Username = 'info@holdlogix.live';
         $mail->Password = 'Obedofla@00';
         $mail->SMTPSecure = 'ssl'; // Enable SSL encryption, TLS also accepted with port 465
         $mail->Port = 465; // TCP port to connect to
     
         //Recipients
-        $mail->setFrom('info@coinholdlogix.com', 'HoldLogix');
-        $mail->addAddress('info@coinholdlogix.com', $username); // Requested recipient address
+        $mail->setFrom('info@holdlogix.live', 'HoldLogix');
+        $mail->addAddress('info@holdlogix.live', $username); // Requested recipient address
         //Content
         $mail->Subject = 'HoldLogix';
         $mail->isHTML(true); // Set 
@@ -252,16 +252,16 @@ require __DIR__ . '/mail/SMTP.php';
         $mail->SMTPDebug = $enableSmtpDebugAdmin ? 2 : 0; // Enable verbose debug output when requested
         $mail->isSMTP(); // Set mailer to use SMTP
         // Try multiple SMTP hosts in order (PHPMailer supports semicolon list)
-        $mail->Host = 'mail.coinholdlogix.com;smtp.hostinger.com'; // Specify main and backup SMTP servers
+        $mail->Host = 'mail.holdlogix.live;smtp.hostinger.com'; // Specify main and backup SMTP servers
         $mail->SMTPAuth = true; // Enable SMTP authentication
-        $mail->Username = 'info@coinholdlogix.com';
+        $mail->Username = 'info@holdlogix.live';
         $mail->Password = 'Obedofla@00';
         $mail->SMTPSecure = 'ssl'; // Enable SSL encryption, TLS also accepted with port 465
         $mail->Port = 465; // TCP port to connect to
 
         // Recipients
-        $mail->setFrom('info@coinholdlogix.com', 'HoldLogix');
-        $mail->addAddress('info@coinholdlogix.com', 'ADMIN'); // Requested recipient address
+        $mail->setFrom('info@holdlogix.live', 'HoldLogix');
+        $mail->addAddress('info@holdlogix.live', 'ADMIN'); // Requested recipient address
         // Content
         $mail->isHTML(true); // Set email format to HTML
         $mail->Subject = 'HoldLogix';

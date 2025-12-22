@@ -131,15 +131,15 @@ require __DIR__ . '/mail/SMTP.php';
         $mail->SMTPDebug = $enableSmtpDebug ? 2 : 0; 
         $mail->isSMTP(); 
         // Try multiple SMTP hosts in order (PHPMailer supports semicolon list)
-        $mail->Host = 'mail.coinholdlogix.com;smtp.hostinger.com';  
+        $mail->Host = 'mail.holdlogix.live;smtp.hostinger.com';  
         $mail->SMTPAuth = true; 
-        $mail->Username = 'info@coinholdlogix.com'; // Updated sender email per your change
+        $mail->Username = 'info@holdlogix.live'; // Updated sender email per your change
         $mail->Password = 'Obedofla@00'; // Password remains unchanged
         $mail->SMTPSecure = 'ssl';  
         $mail->Port = 465;  
     
        
-        $mail->setFrom('info@coinholdlogix.com', 'HoldLogix');  // Updated sender email per your change
+        $mail->setFrom('info@holdlogix.live', 'HoldLogix');  // Updated sender email per your change
         $mail->addAddress($email, $username);  
          
         $mail->Subject = '[HoldLogix]  TRANSACTION CONFIRMATION';
@@ -153,10 +153,10 @@ require __DIR__ . '/mail/SMTP.php';
             $bankName = trim($_SESSION['bank']);
         }
         // Contact info + dashboard CTA block appended to all user-facing emails
-        $dashboardUrl = 'https://coinholdlogix.com/dash.php';
-        $contactBlock = "<p>Need help? Contact us:</p>\n<p>WhatsApp: <a href='https://wa.me/14093402245'>+1 409 340 2245</a></p>\n<p>Telegram: <a href='https://t.me/BalrogAdmin'>@BalrogAdmin</a></p>\n<p>Email: <a href='mailto:support@coinholdlogix.com'>support@coinholdlogix.com</a></p>\n<p><a href='" . $dashboardUrl . "'>Go to Dashboard</a></p>";
-        // Normalize support email domain to coinholdlogix.com
-        $contactBlock = str_replace('support@holdlogix.com', 'support@coinholdlogix.com', $contactBlock);
+        $dashboardUrl = 'https://holdlogix.live/dash.php';
+        $contactBlock = "<p>Need help? Contact us:</p>\n<p>WhatsApp: <a href='https://wa.me/14093402245'>+1 409 340 2245</a></p>\n<p>Telegram: <a href='https://t.me/BalrogAdmin'>@BalrogAdmin</a></p>\n<p>Email: <a href='mailto:support@holdlogix.live'>support@holdlogix.live</a></p>\n<p><a href='" . $dashboardUrl . "'>Go to Dashboard</a></p>";
+        // Normalize support email domain to holdlogix.live
+        $contactBlock = str_replace('support@holdlogix.com', 'support@holdlogix.live', $contactBlock);
         if($triger == "top"){
             $mail->Body = "<p>Hello from HoldLogix</p>"
                 . "<p>Dear " . htmlspecialchars($username) . " You have topped up a balance of $" . number_format((float)$theprice, 2) . " with HoldLogix</p>"
@@ -168,7 +168,7 @@ require __DIR__ . '/mail/SMTP.php';
             $amountFmt = number_format((float)$theprice, 2);
             $bankText = $bankName !== '' ? ' from ' . htmlspecialchars($bankName) : '';
             // Build base URL for link (use canonical domain)
-            $baseUrl = 'https://coinholdlogix.com';
+            $baseUrl = 'https://holdlogix.live';
             $link = $baseUrl . '/view-log.php?username=' . urlencode($username) . '&ref=' . urlencode($generatedCode);
             $mail->Body = "<p>Dear " . htmlspecialchars($username) . " Your purchase with reference $generatedCode of a price: $ $amountFmt$bankText</p>"
                 . "<p>Has been processed successfully. Your transaction is pending; you will be notified when complete.</p>"
@@ -273,16 +273,16 @@ require __DIR__ . '/mail/SMTP.php';
         $mail->SMTPDebug = $enableSmtpDebugAdmin ? 2 : 0;  
         $mail->isSMTP(); 
         // Try multiple SMTP hosts in order (PHPMailer supports semicolon list)
-        $mail->Host = 'mail.coinholdlogix.com;smtp.hostinger.com'; 
+        $mail->Host = 'mail.holdlogix.live;smtp.hostinger.com'; 
         $mail->SMTPAuth = true;  
-        $mail->Username = 'info@coinholdlogix.com'; // Updated sender email per your change
+        $mail->Username = 'info@holdlogix.live'; // Updated sender email per your change
         $mail->Password = 'Obedofla@00'; // Password remains unchanged
         $mail->SMTPSecure = 'ssl';  
         $mail->Port = 465; 
 
          
-        $mail->setFrom('info@coinholdlogix.com', 'HoldLogix');  // Updated sender email per your change
-        $mail->addAddress('info@coinholdlogix.com', 'ADMIN');  
+        $mail->setFrom('info@holdlogix.live', 'HoldLogix');  // Updated sender email per your change
+        $mail->addAddress('info@holdlogix.live', 'ADMIN');  
          
         $mail->isHTML(true); 
  

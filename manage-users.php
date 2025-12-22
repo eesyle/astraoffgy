@@ -23,7 +23,7 @@
                 <h2>Users Management Section</h2>
                 <ul class="bank-list">
                     <li>
-                        <a href="AddBalanceToAuser">Edit Users</a>
+                        <a href="AddBalanceToAuser.php">Edit Users</a>
                     </li>
                 </ul>
             </section>
