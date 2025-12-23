@@ -141,7 +141,7 @@ $_SESSION['dashboardCounts']['ongoing'] = max(8, min(
                 <!--**********************************
             Sidebar start
         ***********************************-->
-        <?php include 'sideBar.php'; ?>
+        <?php include 'sidebar.php'; ?>
         <!--**********************************
             Sidebar end
         ***********************************-->
