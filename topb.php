@@ -48,8 +48,7 @@
                 <nav class="navbar navbar-expand">
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
-                            <div class="dashboard_bar">
-                                Payment Account </div>
+                            <div class="dashboard_bar">Payment Method</div>
                         </div>
                         <?php include 'header.php'; ?>
                     </div>
