@@ -1,43 +1,10 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-require_once "codeForLogs.php";
-
-// Debug: Check connection
-if (!$conn) {
-    die("Debug: Connection failed: " . mysqli_connect_error());
-} else {
-    echo "<!-- Debug: Database connection successful -->";
-}
-
-// Centralized query for banklogs using $is_active
-$banklogs_table = "chase";
-
-// Debug: Check table variable
-echo "<!-- Debug: banklogs_table set to: $banklogs_table -->";
-
-require_once "banklogs_query.php";
-
-// Debug: Check query result
-if (isset($rows)) {
-    echo "<!-- Debug: Rows count: " . count($rows) . " -->";
-} else {
-    echo "<!-- Debug: Rows variable not set -->";
-}
-
-// Debug: Check if sql variable exists (requires banklogs_query.php to expose it or we can inspect logic)
-if (isset($sql)) {
-    echo "<!-- Debug: SQL Query executed: $sql -->";
-}
-
-// Debug: Check user balance and active status
-echo "<!-- Debug: User Balance: " . (isset($balance) ? $balance : 'Not Set') . " -->";
-echo "<!-- Debug: Is Active: " . (isset($is_active) ? $is_active : 'Not Set') . " -->";
-
-require_once "banklogs_logic.php";
-mysqli_close($conn);
+ require_once "codeForLogs.php";
+ // Centralized query for banklogs using $is_active
+ $banklogs_table = "chase";
+ require_once "banklogs_query.php";
+ require_once "banklogs_logic.php";
+ mysqli_close($conn);
 ?>
 
 

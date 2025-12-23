@@ -24,15 +24,22 @@ $select = (isset($banklogs_select) && is_string($banklogs_select) && strlen($ban
     ? $banklogs_select
     : ($isActiveVal > 0 ? $defaultSelectActive : $defaultSelectInactive);
 
-// Build query based on user's is_active status
+// Build query based on user's is_active status and price
 $userBalance = isset($balance) ? (float)$balance : 0.0;
+$userPrice = isset($price) ? (float)$price : 0.0;
 
-if ($isActiveVal > 0) {
-    // Active user: access everything with no restrictions
+if ($isActiveVal == 0) {
+    // Inactive user: Show everything
     $sql = "SELECT {$select} FROM `{$banklogs_table}`";
 } else {
-    // Inactive user: restrict to items where price > user's balance
-    $sql = "SELECT {$select} FROM `{$banklogs_table}` WHERE price > {$userBalance}";
+    // Active user
+    if ($userPrice > 0) {
+        // Active user with price > 0: Restrict based on balance
+        $sql = "SELECT {$select} FROM `{$banklogs_table}` WHERE price > {$userBalance}";
+    } else {
+        // Active user with price <= 0: Show everything
+        $sql = "SELECT {$select} FROM `{$banklogs_table}`";
+    }
 }
 
 $result = $conn->query($sql);
