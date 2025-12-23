@@ -24,7 +24,7 @@ if ($query_run && mysqli_num_rows($query_run) > 0) {
     die("Failed to fetch user data or no data found.");
 }
  
-$query = "SELECT * FROM history";
+$query = "SELECT * FROM history WHERE `user`='{$username}'";
 $query_run = mysqli_query($conn, $query);
 
 function getBalanceFromDatabase($twoDaysLater = null) {

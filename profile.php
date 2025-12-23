@@ -4,7 +4,7 @@
 <?php
 // Prepare history data and counters
 if ($conn && !$conn->connect_error) {
-    $query_history = "SELECT * FROM history";
+    $query_history = "SELECT * FROM history WHERE `user`='{$username}'";
     $history_result = mysqli_query($conn, $query_history);
     $ordersCount = 0;
     if ($history_result) {
