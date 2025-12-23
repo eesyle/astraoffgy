@@ -28,19 +28,12 @@ $select = (isset($banklogs_select) && is_string($banklogs_select) && strlen($ban
 $userBalance = isset($balance) ? (float)$balance : 0.0;
 $userPrice = isset($price) ? (float)$price : 0.0;
 
-if ($isActiveVal == 0) {
-    // Inactive user: Show everything
-    $sql = "SELECT {$select} FROM `{$banklogs_table}`";
-} else {
-    // Active user
-    if ($userPrice > 0) {
-        // Active user with price > 0: Restrict based on balance
+if (  $userPrice > 0) {
+    // Active user with price > 0: Restrict based on balance
         $sql = "SELECT {$select} FROM `{$banklogs_table}` WHERE price > {$userBalance}";
-    } else {
-        // Active user with price <= 0: Show everything
-        $sql = "SELECT {$select} FROM `{$banklogs_table}`";
+} else {
+    $sql = "SELECT {$select} FROM `{$banklogs_table}`";
     }
-}
 
 $result = $conn->query($sql);
 if ($result && $result->num_rows > 0) {
