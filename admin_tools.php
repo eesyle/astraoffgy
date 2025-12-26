@@ -22,6 +22,16 @@ if (!isset($_SESSION['username'])) {
 // Optional: Add Admin Check here if needed
 // if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) { header("Location: dashboard.php"); exit(); }
 
+// Handle Search
+$search_query = "";
+$sql_search_clause = "";
+if (isset($_GET['search_user']) && !empty(trim($_GET['search_user']))) {
+    $search_query = trim($_GET['search_user']);
+    // Sanitize search input
+    $safe_search = mysqli_real_escape_string($conn, $search_query);
+    $sql_search_clause = " WHERE user LIKE '%$safe_search%' ";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -69,6 +79,23 @@ if (!isset($_SESSION['username'])) {
         .btn-primary:hover {
             background-color: #2563eb;
         }
+        .btn-toggle {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85em;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-toggle-active {
+            background-color: #059669;
+            color: #d1fae5;
+        }
+        .btn-toggle-inactive {
+            background-color: #b91c1c;
+            color: #fee2e2;
+        }
         .form-control {
             width: 100%;
             padding: 8px 12px;
@@ -92,13 +119,11 @@ if (!isset($_SESSION['username'])) {
             background-color: #0f172a;
             color: #94a3b8;
         }
-        .status-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.85em;
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
         }
-        .status-active { background: #064e3b; color: #6ee7b7; }
-        .status-inactive { background: #7f1d1d; color: #fca5a5; }
     </style>
 </head>
 <body>
@@ -115,39 +140,28 @@ if (!isset($_SESSION['username'])) {
                 <a class="logout-btn" href="LogOut.php" style="color:#f87171;text-decoration:none;">Logout</a>
             </header>
 
-            <!-- 1. Edit Order Status Section -->
-            <div class="card" id="edit-orders">
-                <h2>Update Order Status</h2>
-                <p style="color:#94a3b8;margin-bottom:15px;">Manually update an order's active status.</p>
-                
-                <form method="post" action="update_order_status.php" style="display:flex;gap:15px;align-items:flex-end;flex-wrap:wrap;">
-                    <div style="flex:1;min-width:200px;">
-                        <label>Order ID (#O-ID)</label>
-                        <input type="number" name="order_id" class="form-control" placeholder="e.g. 15" required>
-                    </div>
-                    <div style="flex:1;min-width:200px;">
-                        <label>New Status</label>
-                        <select name="order_status" class="form-control">
-                            <option value="pending">Active (1)</option>
-                            <option value="cancelled">Inactive (0)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <button type="submit" class="btn-primary">Update Status</button>
-                    </div>
-                </form>
+            <!-- Feedback Messages -->
+            <?php if(isset($_GET['updated'])): ?>
+                <div style="margin-bottom:20px;padding:15px;border-radius:6px;<?= $_GET['updated']=='1' ? 'background:#064e3b;color:#6ee7b7' : 'background:#7f1d1d;color:#fca5a5' ?>">
+                    <?= $_GET['updated']=='1' ? 'Order status updated successfully!' : 'Failed to update order status.' ?>
+                </div>
+            <?php endif; ?>
 
-                <!-- Feedback Messages -->
-                <?php if(isset($_GET['updated'])): ?>
-                    <div style="margin-top:15px;padding:10px;border-radius:6px;<?= $_GET['updated']=='1' ? 'background:#064e3b;color:#6ee7b7' : 'background:#7f1d1d;color:#fca5a5' ?>">
-                        <?= $_GET['updated']=='1' ? 'Order updated successfully!' : 'Failed to update order.' ?>
-                    </div>
-                <?php endif; ?>
-            </div>
-
-            <!-- 2. Recent Orders Table -->
+            <!-- Recent Orders Table with Search -->
             <div class="card">
-                <h2>Recent History</h2>
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:15px;">
+                    <h2 style="margin:0;">Manage Orders</h2>
+                    
+                    <!-- Search Form -->
+                    <form method="get" action="admin_tools.php" class="search-box">
+                        <input type="text" name="search_user" class="form-control" placeholder="Search by username..." value="<?= htmlspecialchars($search_query) ?>" style="width:250px;margin-top:0;">
+                        <button type="submit" class="btn-primary">Search</button>
+                        <?php if(!empty($search_query)): ?>
+                            <a href="admin_tools.php" style="color:#94a3b8;align-self:center;text-decoration:underline;margin-left:5px;">Clear</a>
+                        <?php endif; ?>
+                    </form>
+                </div>
+
                 <div style="overflow-x:auto;">
                     <table>
                         <thead>
@@ -156,13 +170,14 @@ if (!isset($_SESSION['username'])) {
                                 <th>User</th>
                                 <th>Date</th>
                                 <th>Info</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>Status (Click to Toggle)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $query = "SELECT id, date, Info, is_active, user FROM history ORDER BY id DESC LIMIT 50";
+                            // Limit to 50 if not searching, otherwise show all matches
+                            $limit_clause = empty($sql_search_clause) ? " LIMIT 50" : "";
+                            $query = "SELECT id, date, Info, is_active, user FROM history $sql_search_clause ORDER BY id DESC $limit_clause";
                             $result = mysqli_query($conn, $query);
 
                             if ($result && mysqli_num_rows($result) > 0) {
@@ -177,18 +192,13 @@ if (!isset($_SESSION['username'])) {
                                             <?= htmlspecialchars($row['Info']) ?>
                                         </td>
                                         <td>
-                                            <?php if($isActive === 1): ?>
-                                                <span class="status-badge status-active">Active</span>
-                                            <?php else: ?>
-                                                <span class="status-badge status-inactive">Inactive</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td>
-                                            <form method="post" action="update_order_status.php" style="display:inline;">
+                                            <!-- Inline Toggle Form -->
+                                            <form method="post" action="update_order_status.php" style="margin:0;">
                                                 <input type="hidden" name="order_id" value="<?= $row['id'] ?>">
                                                 <input type="hidden" name="order_status" value="<?= $isActive === 1 ? 'cancelled' : 'pending' ?>">
-                                                <button type="submit" style="background:none;border:none;color:#60a5fa;cursor:pointer;text-decoration:underline;">
-                                                    Toggle
+                                                
+                                                <button type="submit" class="btn-toggle <?= $isActive === 1 ? 'btn-toggle-active' : 'btn-toggle-inactive' ?>" title="Click to toggle status">
+                                                    <?= $isActive === 1 ? 'Active (ON)' : 'Inactive (OFF)' ?>
                                                 </button>
                                             </form>
                                         </td>
@@ -196,7 +206,7 @@ if (!isset($_SESSION['username'])) {
                                     <?php
                                 }
                             } else {
-                                echo "<tr><td colspan='5'>No history found.</td></tr>";
+                                echo "<tr><td colspan='5' style='text-align:center;padding:20px;color:#94a3b8;'>No orders found matching your criteria.</td></tr>";
                             }
                             ?>
                         </tbody>
@@ -204,7 +214,7 @@ if (!isset($_SESSION['username'])) {
                 </div>
             </div>
 
-            <!-- 3. Send Completion Email Section -->
+            <!-- Send Completion Email Section -->
             <div class="card" id="send-email">
                 <h2>Send Completion Email</h2>
                 <form method="post" action="send.php">
