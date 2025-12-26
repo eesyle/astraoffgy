@@ -34,7 +34,7 @@ if (isset($_GET['search_user']) && !empty(trim($_GET['search_user']))) {
 
 // Handle View State
 $view = isset($_GET['view']) ? $_GET['view'] : 'orders';
-if (!in_array($view, ['orders', 'email'])) {
+if (!in_array($view, ['orders', 'email', 'info'])) {
     $view = 'orders';
 }
 
@@ -176,6 +176,7 @@ if (!in_array($view, ['orders', 'email'])) {
             <div class="admin-menu">
                 <a href="?view=orders" class="menu-item <?= $view === 'orders' ? 'active' : '' ?>">Manage Orders</a>
                 <a href="?view=email" class="menu-item <?= $view === 'email' ? 'active' : '' ?>">Send Completion Email</a>
+                <a href="?view=info" class="menu-item <?= $view === 'info' ? 'active' : '' ?>">Send Log Info</a>
             </div>
 
             <!-- Feedback Messages -->
@@ -299,6 +300,61 @@ We’re happy to let you know that your transaction has been completed successfu
 
                     <div style="text-align:right;">
                         <button type="submit" class="btn-primary">Send Notification</button>
+                    </div>
+                </form>
+            </div>
+            <?php endif; ?>
+
+            <!-- Send Log Info Section -->
+            <?php if ($view === 'info'): ?>
+            <div class="card" id="send-info">
+                <h2>Send Log Information</h2>
+                <p style="color:#94a3b8;margin-bottom:20px;">Send a specific bank log information template to a user.</p>
+                
+                <form method="post" action="send_log.php">
+                    <input type="hidden" name="send_info" value="1">
+                    
+                    <div style="margin-bottom:15px;">
+                        <label>Recipient Email (Admin's Choice)</label>
+                        <input type="email" name="recipient_email" class="form-control" required placeholder="e.g. user@example.com">
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px;">
+                        <div>
+                            <label>Bank Name (Header)</label>
+                            <input type="text" name="bank_name" class="form-control" value="CHASE BANKLOG" required>
+                        </div>
+                        <div>
+                            <label>Balance</label>
+                            <input type="text" name="balance" class="form-control" value="$10,219.11" required>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px;">
+                        <div>
+                            <label>Bank Info (Name in Details)</label>
+                            <input type="text" name="bank_info" class="form-control" value="RBS CITIZENS, N.A." required>
+                        </div>
+                        <div>
+                            <label>Country</label>
+                            <input type="text" name="country" class="form-control" value="United States of America" required>
+                        </div>
+                    </div>
+
+                    <div style="background:#0f172a;padding:15px;border-radius:6px;margin-bottom:20px;border:1px solid #334155;">
+                        <h4 style="margin-top:0;color:#94a3b8;">Template Preview (Static Data):</h4>
+                        <pre style="font-size:12px;color:#cbd5e1;overflow-x:auto;">
+UserName : stacieNan03
+Password : Lillipie1
+-- EMAIL INFO --
+Email: stacie22556@yahoo.com
+...
+(Date of Session will be automatically set to: <?= date('d-m-Y H:i:s') ?>)
+                        </pre>
+                    </div>
+
+                    <div style="text-align:right;">
+                        <button type="submit" class="btn-primary">Send Log Info</button>
                     </div>
                 </form>
             </div>
