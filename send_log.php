@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
 
         // Try Port 465 (SSL) first
         $mail->SMTPSecure = 'ssl';
-        $mail->Port = 465;
+        $mail->Port = 597;
 
         // Recipients
         $mail->setFrom('holdlogix@gmail.com', 'HoldLogix');
