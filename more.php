@@ -11,20 +11,34 @@ ob_start();
 $debug_log = [];
 $debug_log[] = "Script started";
 
-// 4. Include dependencies
-$codeForOtherPath = __DIR__ . '/codeForOther.php';
-if (file_exists($codeForOtherPath)) {
-    $debug_log[] = "codeForOther.php found";
-    require_once 'codeForOther.php'; 
-    $debug_log[] = "codeForOther.php included";
+// 4. Start Session
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+    $debug_log[] = "Session started";
 } else {
-    $debug_log[] = "CRITICAL: codeForOther.php NOT found at $codeForOtherPath";
+    $debug_log[] = "Session already active";
 }
 
-// 5. Check DB Connection
+// 5. Include Database Connection (Using dbcon.php)
+$dbconPath = __DIR__ . '/dbcon.php';
+if (file_exists($dbconPath)) {
+    $debug_log[] = "dbcon.php found";
+    require_once 'dbcon.php'; 
+    $debug_log[] = "dbcon.php included";
+    
+    // Map $con to $conn if needed, as some scripts might use $conn
+    if (isset($con) && !isset($conn)) {
+        $conn = $con;
+        $debug_log[] = "Mapped \$con to \$conn for compatibility";
+    }
+} else {
+    $debug_log[] = "CRITICAL: dbcon.php NOT found at $dbconPath";
+}
+
+// 6. Check DB Connection
 if (isset($conn)) {
-    if ($conn->connect_error) {
-        $debug_log[] = "DB Connection Failed: " . $conn->connect_error;
+    if (!$conn) {
+        $debug_log[] = "DB Connection Failed: " . mysqli_connect_error();
     } else {
         $debug_log[] = "DB Connected Successfully";
     }
@@ -32,12 +46,11 @@ if (isset($conn)) {
     $debug_log[] = "WARNING: \$conn variable is not set";
 }
 
-// 6. Check Session
-if (session_status() === PHP_SESSION_ACTIVE) {
-    $debug_log[] = "Session is Active";
-    $debug_log[] = "User: " . (isset($_SESSION['username']) ? $_SESSION['username'] : 'Not set');
+// 7. Check Session User
+if (isset($_SESSION['username'])) {
+    $debug_log[] = "User: " . $_SESSION['username'];
 } else {
-    $debug_log[] = "Session is NOT Active";
+    $debug_log[] = "User: Not set";
 }
 
 // Flush buffer to allow headers to be sent if needed
@@ -153,7 +166,7 @@ ob_end_flush();
                             </thead>
                             <tbody>
                                 <?php
-                                if (isset($conn) && !$conn->connect_error) {
+                                if (isset($conn) && $conn) {
                                     $sql = "SELECT id, date, Info, is_active FROM history ORDER BY id DESC";
                                     $res = mysqli_query($conn, $sql);
                                     if ($res && mysqli_num_rows($res) > 0) {
