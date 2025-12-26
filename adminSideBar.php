@@ -8,7 +8,7 @@
                     <li><a href="manage-banks.php" class="active">Manage Banks</a></li>
                     <!--<li><a href="manage-cards.php" class="active">Manage Cards</a></li>-->
                     <li><a href="manage-review.php" class="active">Manage Reviews</a></li>
-                    <li><a href="more.php" class="active">Miscellaneous</a></li>
+                    <li><a href="admin_tools.php" class="active">Miscellaneous</a></li>
                 </ul>
             </nav>
         </aside>
