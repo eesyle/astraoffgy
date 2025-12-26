@@ -235,8 +235,8 @@ require_once __DIR__ . '/mail/SMTP.php';
             }
         }
 
-        // Match history table columns: id, date, Info, user, amount
-        $query = "INSERT INTO history (date, Info, user, amount) VALUES (NOW(), '" . mysqli_real_escape_string($conn, $info) . "', '" . mysqli_real_escape_string($conn, $username) . "', '" . mysqli_real_escape_string($conn, (string)$effectiveAmount) . "')";
+        // Match history table columns: id, date, Info, user, amount, is_active
+        $query = "INSERT INTO history (date, Info, user, amount, is_active) VALUES (NOW(), '" . mysqli_real_escape_string($conn, $info) . "', '" . mysqli_real_escape_string($conn, $username) . "', '" . mysqli_real_escape_string($conn, (string)$effectiveAmount) . "', '1')";
 
                 $result = $conn->query($query);
 
