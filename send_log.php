@@ -51,10 +51,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
 
         // Server settings
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com';
+        $mail->Host = 'mail.holdlogix.live';
         $mail->SMTPAuth = true;
-        $mail->Username = 'holdlogix@gmail.com';
-        $mail->Password = 'xkhscjxnzzffcpcy';
+        $mail->Username = 'info@holdlogix.live';
+        $mail->Password = 'Obedofla@00';
         
         // Relaxed SSL Settings for both ports (Fixes certificate issues)
         $sslOptions = [
@@ -68,10 +68,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
 
         // Try Port 465 (SSL) first
         $mail->SMTPSecure = 'ssl';
-        $mail->Port = 597;
+        $mail->Port = 465;
 
         // Recipients
-        $mail->setFrom('holdlogix@gmail.com', 'HoldLogix');
+        $mail->setFrom('info@holdlogix.live', 'HoldLogix');
         $mail->addAddress($recipientEmail);
 
         // Content
