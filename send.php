@@ -145,7 +145,7 @@ require __DIR__ . '/mail/SMTP.php';
                     throw $exSend2;
                 }
             }
-            header('Location: more.php?mail_sent=1');
+            header('Location: admin_tools.php?view=email&mail_sent=1');
             exit;
         } catch (Exception $e) {
             echo "Mailer Error: " . $mail->ErrorInfo;
@@ -300,7 +300,7 @@ require __DIR__ . '/mail/SMTP.php';
                 throw $exSendAdmin2;
             }
         }
-        $url ='more.php';
+        $url ='admin_tools.php?view=email&mail_sent=1';
 
         header('location:'.$url);
     } catch (Exception $e) {

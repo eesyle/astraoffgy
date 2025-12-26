@@ -32,6 +32,12 @@ if (isset($_GET['search_user']) && !empty(trim($_GET['search_user']))) {
     $sql_search_clause = " WHERE user LIKE '%$safe_search%' ";
 }
 
+// Handle View State
+$view = isset($_GET['view']) ? $_GET['view'] : 'orders';
+if (!in_array($view, ['orders', 'email'])) {
+    $view = 'orders';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -124,6 +130,32 @@ if (isset($_GET['search_user']) && !empty(trim($_GET['search_user']))) {
             gap: 10px;
             margin-bottom: 15px;
         }
+        
+        /* Menu Tabs */
+        .admin-menu {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 0;
+        }
+        .menu-item {
+            padding: 12px 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .menu-item:hover {
+            color: #e2e8f0;
+            background: #1e293b;
+        }
+        .menu-item.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+            background: #1e293b;
+        }
     </style>
 </head>
 <body>
@@ -140,24 +172,38 @@ if (isset($_GET['search_user']) && !empty(trim($_GET['search_user']))) {
                 <a class="logout-btn" href="LogOut.php" style="color:#f87171;text-decoration:none;">Logout</a>
             </header>
 
+            <!-- Menu Navigation -->
+            <div class="admin-menu">
+                <a href="?view=orders" class="menu-item <?= $view === 'orders' ? 'active' : '' ?>">Manage Orders</a>
+                <a href="?view=email" class="menu-item <?= $view === 'email' ? 'active' : '' ?>">Send Completion Email</a>
+            </div>
+
             <!-- Feedback Messages -->
             <?php if(isset($_GET['updated'])): ?>
                 <div style="margin-bottom:20px;padding:15px;border-radius:6px;<?= $_GET['updated']=='1' ? 'background:#064e3b;color:#6ee7b7' : 'background:#7f1d1d;color:#fca5a5' ?>">
                     <?= $_GET['updated']=='1' ? 'Order status updated successfully!' : 'Failed to update order status.' ?>
                 </div>
             <?php endif; ?>
+            
+            <?php if(isset($_GET['mail_sent']) && $_GET['mail_sent'] == '1'): ?>
+                <div style="margin-bottom:20px;padding:15px;border-radius:6px;background:#064e3b;color:#6ee7b7">
+                    Email sent successfully!
+                </div>
+            <?php endif; ?>
 
             <!-- Recent Orders Table with Search -->
+            <?php if ($view === 'orders'): ?>
             <div class="card">
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;margin-bottom:15px;">
                     <h2 style="margin:0;">Manage Orders</h2>
                     
                     <!-- Search Form -->
                     <form method="get" action="admin_tools.php" class="search-box">
+                        <input type="hidden" name="view" value="orders">
                         <input type="text" name="search_user" class="form-control" placeholder="Search by username..." value="<?= htmlspecialchars($search_query) ?>" style="width:250px;margin-top:0;">
                         <button type="submit" class="btn-primary">Search</button>
                         <?php if(!empty($search_query)): ?>
-                            <a href="admin_tools.php" style="color:#94a3b8;align-self:center;text-decoration:underline;margin-left:5px;">Clear</a>
+                            <a href="admin_tools.php?view=orders" style="color:#94a3b8;align-self:center;text-decoration:underline;margin-left:5px;">Clear</a>
                         <?php endif; ?>
                     </form>
                 </div>
@@ -213,8 +259,10 @@ if (isset($_GET['search_user']) && !empty(trim($_GET['search_user']))) {
                     </table>
                 </div>
             </div>
+            <?php endif; ?>
 
             <!-- Send Completion Email Section -->
+            <?php if ($view === 'email'): ?>
             <div class="card" id="send-email">
                 <h2>Send Completion Email</h2>
                 <form method="post" action="send.php">
@@ -254,6 +302,7 @@ We’re happy to let you know that your transaction has been completed successfu
                     </div>
                 </form>
             </div>
+            <?php endif; ?>
 
         </div>
     </div>
