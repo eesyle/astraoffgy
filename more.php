@@ -1,21 +1,47 @@
 <?php
+// 1. Initialize Debugging Immediately
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Debug Marker 1
-echo '<div style="background:red;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 1: Start</div>';
+// 2. Buffer output to prevent "headers already sent" issues if redirects happen
+ob_start();
 
-// Include codeForOther
-require_once 'codeForOther.php';
-echo '<div style="background:red;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 2: codeForOther included</div>';
+// 3. Define a debug log array
+$debug_log = [];
+$debug_log[] = "Script started";
 
-// Check DB
-if (isset($conn) && !$conn->connect_error) {
-    echo '<div style="background:green;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 3: DB Connected</div>';
+// 4. Include dependencies
+$codeForOtherPath = __DIR__ . '/codeForOther.php';
+if (file_exists($codeForOtherPath)) {
+    $debug_log[] = "codeForOther.php found";
+    require_once 'codeForOther.php'; 
+    $debug_log[] = "codeForOther.php included";
 } else {
-    echo '<div style="background:red;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 3: DB Fail</div>';
+    $debug_log[] = "CRITICAL: codeForOther.php NOT found at $codeForOtherPath";
 }
+
+// 5. Check DB Connection
+if (isset($conn)) {
+    if ($conn->connect_error) {
+        $debug_log[] = "DB Connection Failed: " . $conn->connect_error;
+    } else {
+        $debug_log[] = "DB Connected Successfully";
+    }
+} else {
+    $debug_log[] = "WARNING: \$conn variable is not set";
+}
+
+// 6. Check Session
+if (session_status() === PHP_SESSION_ACTIVE) {
+    $debug_log[] = "Session is Active";
+    $debug_log[] = "User: " . (isset($_SESSION['username']) ? $_SESSION['username'] : 'Not set');
+} else {
+    $debug_log[] = "Session is NOT Active";
+}
+
+// Flush buffer to allow headers to be sent if needed
+ob_end_flush();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,16 +50,51 @@ if (isset($conn) && !$conn->connect_error) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Management</title>
     <link rel="stylesheet" href="styleee.css">
+    <style>
+        /* Force debug visibility */
+        #debug-panel {
+            background: #fff; 
+            color: #000; 
+            padding: 20px; 
+            border: 5px solid red; 
+            margin: 20px; 
+            z-index: 10000; 
+            position: relative;
+            font-family: monospace;
+        }
+        .admin-container {
+            display: flex; /* Ensure flex layout works */
+        }
+        .main-content {
+            flex: 1; /* Ensure content takes space */
+            padding: 20px;
+        }
+        .content-section {
+            display: block !important; /* Force visibility */
+        }
+    </style>
 </head>
 <body>
-    <?php echo '<div style="background:blue;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 4: Body Start</div>'; ?>
-    
+    <div id="debug-panel">
+        <h3>Diagnostics (Debug Mode)</h3>
+        <ul>
+            <?php foreach ($debug_log as $log): ?>
+                <li><?= htmlspecialchars($log) ?></li>
+            <?php endforeach; ?>
+        </ul>
+        <p>If you see this box, PHP is running.</p>
+    </div>
+
     <div class="admin-container">
         <!-- Sidebar -->
-        <?php include 'adminSideBar.php'; ?>
+        <?php 
+            if (file_exists('adminSideBar.php')) {
+                include 'adminSideBar.php'; 
+            } else {
+                echo "<p style='color:red'>adminSideBar.php missing</p>";
+            }
+        ?>
         
-        <?php echo '<div style="background:blue;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 5: After Sidebar</div>'; ?>
-
         <!-- Main Content -->
         <div class="main-content">
             <header class="admin-header">
@@ -41,12 +102,8 @@ if (isset($conn) && !$conn->connect_error) {
                 <a class="logout-btn" href="LogOut.php">Logout</a>
             </header>
 
-            <?php echo '<div style="background:blue;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 6: After Header</div>'; ?>
-
             <!-- Management Menu -->
-            <section class="content-section" style="border: 2px solid yellow; min-height: 200px; display: block !important;">
-                <?php echo '<div style="background:blue;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 7: Inside Section</div>'; ?>
-                
+            <section class="content-section">
                 <h2>Management Menu</h2>
                 <ul class="bank-list" style="display:flex;gap:12px;list-style:none;padding:0;margin:0 0 16px 0">
                     <li><a href="#edit-orders" style="display:inline-block;padding:8px 12px;border-radius:6px;background:#162032;color:#e5e7eb;text-decoration:none">Edit Orders</a></li>
