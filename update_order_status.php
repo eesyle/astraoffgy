@@ -2,10 +2,17 @@
 // Admin handler to update an order's status via history.is_active
 // POST: order_id (int), order_status ('pending'|'cancelled')
 
-include 'codeForOther.php';
+// 1. Session & Configuration
+session_start();
+require_once "dbcon.php";
+
+// Map $con to $conn for consistency
+if (isset($con) && !isset($conn)) {
+    $conn = $con;
+}
 
 if (!isset($conn) || $conn->connect_error) {
-    header('Location: more.php?updated=0');
+    header('Location: admin_tools.php?updated=0');
     exit;
 }
 
@@ -27,11 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param('ii', $isActive, $orderId);
             $ok = $stmt->execute();
             $stmt->close();
-            header('Location: more.php?updated=' . ($ok ? '1' : '0'));
+            header('Location: admin_tools.php?updated=' . ($ok ? '1' : '0'));
             exit;
         }
     }
 }
 
-header('Location: more.php?updated=0');
+header('Location: admin_tools.php?updated=0');
 exit;
