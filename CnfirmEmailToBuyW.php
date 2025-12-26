@@ -327,7 +327,7 @@ if (!isset($WoodForest)) {
             <?php if ($remainingBalanceFooter > 0): ?>
                 <button type="button" class="btn btn-primary" id="openTopUpFromBalance">Load Balance</button>
             <?php else: ?>
-                <a href="paymentMethod.php?username=<?= urlencode($username) ?>" class="btn btn-primary btn-md rounded-pill">
+                <a href="paymentMethod.php?username=<?= urlencode($username) ?>&wfprice=<?= $wfprice ?>" class="btn btn-primary btn-md rounded-pill">
                     <i class="fas fa-shopping-cart mr-1"></i> Buy
                 </a>
             <?php endif; ?>

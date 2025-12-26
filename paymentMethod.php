@@ -1,5 +1,11 @@
 <?php
  include 'codeForOther.php';
+ $wfpriceQuery = '';
+ if (isset($_GET['wfprice']) && is_numeric($_GET['wfprice'])) {
+     $wfpriceQuery = '?wfprice=' . $_GET['wfprice'];
+ } elseif (isset($_GET['price']) && is_numeric($_GET['price'])) {
+     $wfpriceQuery = '?wfprice=' . $_GET['price'];
+ }
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -111,7 +117,7 @@
                                                 </div>
                                                 <code class="d-block">bc1qza3spg8nza84vdex6l8ray748dphxkawzwt677hqk4hxr7qjgyrss9l69a</code>
                                                 <div class="mt-2">
-                                                    <a class="btn btn-sm btn-primary" href="topb.php">Continue</a>
+                                                    <a class="btn btn-sm btn-primary" href="topb.php<?= $wfpriceQuery ?>">Continue</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -129,7 +135,7 @@
                                                 </div>
                                                 <code class="d-block">TCGLrtDw4ZqFxmmRqwwQoHFDBTPi4YLdjV</code>
                                                 <div class="mt-2">
-                                                    <a class="btn btn-sm btn-primary" href="tops.php">Continue</a>
+                                                    <a class="btn btn-sm btn-primary" href="tops.php<?= $wfpriceQuery ?>">Continue</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -147,7 +153,7 @@
                                                 </div>
                                                 <code class="d-block">0x92ac0123e292555d197201a8a72bb32f958a0f36</code>
                                                 <div class="mt-2">
-                                                    <a class="btn btn-sm btn-primary" href="topeth.php">Continue</a>
+                                                    <a class="btn btn-sm btn-primary" href="topeth.php<?= $wfpriceQuery ?>">Continue</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -165,7 +171,7 @@
                                                 </div>
                                                 <code class="d-block">ltc1qta55t4z2lqct98k3caxxwy954qz7pphyn365qcv30huls8fcd5zsjpzf5p</code>
                                                 <div class="mt-2">
-                                                    <a class="btn btn-sm btn-primary" href="topltc.php">Continue</a>
+                                                    <a class="btn btn-sm btn-primary" href="topltc.php<?= $wfpriceQuery ?>">Continue</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -183,7 +189,7 @@
                                                 </div>
                                                 <code class="d-block">UQDoL6JfSZgjqw769msWd1Y4iPZib6Aj90kipwEZe_D4VdfC</code>
                                                 <div class="mt-2">
-                                                    <a class="btn btn-sm btn-primary" href="topton.php">Continue</a>
+                                                    <a class="btn btn-sm btn-primary" href="topton.php<?= $wfpriceQuery ?>">Continue</a>
                                                 </div>
                                             </div>
                                         </div>
