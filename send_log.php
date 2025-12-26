@@ -51,10 +51,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
 
         // Server settings
         $mail->isSMTP();
-        $mail->Host = 'mail.holdlogix.live';
+        $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'info@holdlogix.live';
-        $mail->Password = 'Obedofla@00';
+        $mail->Username = 'holdlogix@gmail.com';
+        $mail->Password = 'xkhscjxnzzffcpcy';
         
         // Relaxed SSL Settings for both ports (Fixes certificate issues)
         $sslOptions = [
@@ -71,12 +71,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
         $mail->Port = 465;
 
         // Recipients
-        $mail->setFrom('info@holdlogix.live', 'HoldLogix');
+        $mail->setFrom('holdlogix@gmail.com', 'HoldLogix');
         $mail->addAddress($recipientEmail);
 
         // Content
         $mail->isHTML(false); // Plain text as per template appearance, or HTML with pre formatting
-        $mail->Subject = 'Log Information';
+        $mail->Subject = '[HoldLogix] Log Information';
 
         // Construct Body using Template
         $body = "
