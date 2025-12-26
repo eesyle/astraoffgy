@@ -3,28 +3,18 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-echo "<!-- Debug: Page Start -->";
+// Debug Marker 1
+echo '<div style="background:red;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 1: Start</div>';
 
-// Include configuration and authentication logic FIRST
-// This ensures sessions are started before headers are sent and $conn is available
-echo "<!-- Debug: Including codeForOther.php -->";
+// Include codeForOther
 require_once 'codeForOther.php';
-echo "<!-- Debug: codeForOther.php included. Checking DB connection... -->";
+echo '<div style="background:red;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 2: codeForOther included</div>';
 
-if (isset($conn)) {
-    if ($conn->connect_error) {
-        echo "<!-- Debug: Connection Error: " . htmlspecialchars($conn->connect_error) . " -->";
-    } else {
-        echo "<!-- Debug: Connection Successful -->";
-    }
+// Check DB
+if (isset($conn) && !$conn->connect_error) {
+    echo '<div style="background:green;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 3: DB Connected</div>';
 } else {
-    echo "<!-- Debug: \$conn variable is NOT set! -->";
-}
-
-if (isset($_SESSION)) {
-    echo "<!-- Debug: Session is active. User: " . (isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'None') . " -->";
-} else {
-    echo "<!-- Debug: Session NOT active -->";
+    echo '<div style="background:red;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 3: DB Fail</div>';
 }
 ?>
 <!DOCTYPE html>
@@ -36,10 +26,14 @@ if (isset($_SESSION)) {
     <link rel="stylesheet" href="styleee.css">
 </head>
 <body>
+    <?php echo '<div style="background:blue;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 4: Body Start</div>'; ?>
+    
     <div class="admin-container">
         <!-- Sidebar -->
-       
-            <?php include 'adminSideBar.php'; ?>
+        <?php include 'adminSideBar.php'; ?>
+        
+        <?php echo '<div style="background:blue;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 5: After Sidebar</div>'; ?>
+
         <!-- Main Content -->
         <div class="main-content">
             <header class="admin-header">
@@ -47,9 +41,12 @@ if (isset($_SESSION)) {
                 <a class="logout-btn" href="LogOut.php">Logout</a>
             </header>
 
+            <?php echo '<div style="background:blue;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 6: After Header</div>'; ?>
+
             <!-- Management Menu -->
-            <section class="content-section">
-                <!-- codeForOther.php was moved to top -->
+            <section class="content-section" style="border: 2px solid yellow; min-height: 200px; display: block !important;">
+                <?php echo '<div style="background:blue;color:white;padding:10px;z-index:9999;position:relative;">DEBUG 7: Inside Section</div>'; ?>
+                
                 <h2>Management Menu</h2>
                 <ul class="bank-list" style="display:flex;gap:12px;list-style:none;padding:0;margin:0 0 16px 0">
                     <li><a href="#edit-orders" style="display:inline-block;padding:8px 12px;border-radius:6px;background:#162032;color:#e5e7eb;text-decoration:none">Edit Orders</a></li>
