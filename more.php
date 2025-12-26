@@ -1,4 +1,33 @@
- <!DOCTYPE html>
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+echo "<!-- Debug: Page Start -->";
+
+// Include configuration and authentication logic FIRST
+// This ensures sessions are started before headers are sent and $conn is available
+echo "<!-- Debug: Including codeForOther.php -->";
+require_once 'codeForOther.php';
+echo "<!-- Debug: codeForOther.php included. Checking DB connection... -->";
+
+if (isset($conn)) {
+    if ($conn->connect_error) {
+        echo "<!-- Debug: Connection Error: " . htmlspecialchars($conn->connect_error) . " -->";
+    } else {
+        echo "<!-- Debug: Connection Successful -->";
+    }
+} else {
+    echo "<!-- Debug: \$conn variable is NOT set! -->";
+}
+
+if (isset($_SESSION)) {
+    echo "<!-- Debug: Session is active. User: " . (isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'None') . " -->";
+} else {
+    echo "<!-- Debug: Session NOT active -->";
+}
+?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,7 +49,7 @@
 
             <!-- Management Menu -->
             <section class="content-section">
-                <?php include 'codeForOther.php'; ?>
+                <!-- codeForOther.php was moved to top -->
                 <h2>Management Menu</h2>
                 <ul class="bank-list" style="display:flex;gap:12px;list-style:none;padding:0;margin:0 0 16px 0">
                     <li><a href="#edit-orders" style="display:inline-block;padding:8px 12px;border-radius:6px;background:#162032;color:#e5e7eb;text-decoration:none">Edit Orders</a></li>
