@@ -212,9 +212,11 @@ $_SESSION['dashboardCounts']['ongoing'] = max(8, min(
                                         <thead>
                                             <tr>
                                                 <th scope="col">#O-ID</th>
+                                                <?php if (isset($isAdmin) && $isAdmin) { ?><th scope="col">User</th><?php } ?>
                                                 <th scope="col">Type</th>
                                                 <th scope="col">Date</th>
                                                 <th scope="col">Info</th>
+                                                <th scope="col">Admin Reply</th>
                                                 <th scope="col">Status</th>
                                             </tr>
                                         </thead>
@@ -266,7 +268,8 @@ $_SESSION['dashboardCounts']['ongoing'] = max(8, min(
                                                     <?php
                                                 }
                                             } else {
-                                                echo "<tr><td colspan='5'><h5>No Record Found</h5></td></tr>";
+                                                $colspan = isset($isAdmin) && $isAdmin ? 7 : 6;
+                                                echo "<tr><td colspan='{$colspan}'><h5>No Record Found</h5></td></tr>";
                                             }
                                             ?>
                                         </tbody>
