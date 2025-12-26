@@ -8,12 +8,15 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 // 2. Authentication Check (Ensure only admin can use this)
 if (!isset($_SESSION['username'])) {
-    header("Location: index.php");
+    // Return JSON error if session expired
+    header('Content-Type: application/json');
+    echo json_encode(['status' => 'error', 'message' => 'Session expired. Please log in again.']);
     exit();
 }
 
 // 3. Process Form Submission
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
+    header('Content-Type: application/json');
     
     // Collect Inputs
     $recipientEmail = isset($_POST['recipient_email']) ? trim($_POST['recipient_email']) : '';
@@ -25,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
 
     // Validate Email
     if (!filter_var($recipientEmail, FILTER_VALIDATE_EMAIL)) {
-        header("Location: admin_tools.php?view=info&error=invalid_email");
+        echo json_encode(['status' => 'error', 'message' => 'Invalid email address provided.']);
         exit();
     }
 
@@ -39,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
         
         // Server settings
         $mail->isSMTP();
-        $mail->Host = 'mail.holdlogix.live;smtp.hostinger.com';
+        $mail->Host = 'mail.holdlogix.live';
         $mail->SMTPAuth = true;
         $mail->Username = 'info@holdlogix.live';
         $mail->Password = 'Obedofla@00';
@@ -126,11 +129,15 @@ USER AGENT : Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/
             }
         }
 
-        header('Location: admin_tools.php?view=info&mail_sent=1');
+        echo json_encode(['status' => 'success']);
         exit;
 
     } catch (Exception $e) {
-        header("Location: admin_tools.php?view=info&error=" . urlencode($mail->ErrorInfo));
+        echo json_encode([
+            'status' => 'error', 
+            'message' => 'Failed to send email. Mailer Error.',
+            'debug' => $mail->ErrorInfo
+        ]);
         exit;
     }
 
