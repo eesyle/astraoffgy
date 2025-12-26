@@ -115,41 +115,59 @@ if ($refundCategory === 'other' && isset($_POST['other_reason'])) {
 
     try {
         //Server settings
-        $mail = new PHPMailer(true);
-        // ... (Your existing SMTP and email configuration)
-        $mail->SMTPDebug = 0; // Enable verbose debug output
-        $mail->isSMTP(); // Set mailer to use SMTP
-        $mail->Host = 'mail.holdlogix.live'; // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true; // Enable SMTP authentication
-        $mail->Username = 'info@holdlogix.live'; // updated sender account
+        $mail->isSMTP(); 
+        $mail->Host = 'mail.holdlogix.live'; 
+        $mail->SMTPAuth = true; 
+        $mail->Username = 'info@holdlogix.live'; 
         $mail->Password = 'Obedofla@00';
-        $mail->SMTPSecure = 'ssl'; // Enable SSL encryption, TLS also accepted with port 465
-        $mail->Port = 465; // TCP port to connect to
+        
+        // Relaxed SSL Settings
+        $mail->SMTPOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true,
+            ]
+        ];
+        
+        $mail->SMTPSecure = 'ssl'; 
+        $mail->Port = 465; 
     
         //Recipients
-        $mail->setFrom('info@holdlogix.live', 'HoldLogix'); // updated branding
-        $mail->addAddress('info@holdlogix.live', 'Admin'); // send to HoldLogix
-        //Content
+        $mail->setFrom('info@holdlogix.live', 'HoldLogix'); 
+        $mail->addAddress('info@holdlogix.live', 'Admin'); 
         
+        //Content
         $mail->isHTML(true);
         $mail->Subject = 'HoldLogix';
-   // Assuming $photoPath is the path to the uploaded image on your server
- $mail->Body = "Full Name: $username<br>Email: $email<br>BTC or USDT Address: $btcId<br>Refund Reason: $refundReasonText<br>Refund Category: $refundCategory";
         
- 
-           if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
-    $attachmentPath = $_FILES['file']['tmp_name'];
-    $attachmentName = $_FILES['file']['name'];
-    $mail->addAttachment($attachmentPath, $attachmentName);
-} else {
-    echo 'Error: File upload failed';
-    exit;
-}
-            
- 
+        $bodyContent = "Full Name: $username<br>Email: $email<br>BTC or USDT Address: $btcId<br>Refund Reason: $refundReasonText<br>Refund Category: $refundCategory";
+        $mail->Body = $bodyContent;
+        $mail->AltBody = strip_tags(str_replace('<br>', "\n", $bodyContent)); // Plain text version
 
+        if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
+            $attachmentPath = $_FILES['file']['tmp_name'];
+            $attachmentName = $_FILES['file']['name'];
+            $mail->addAttachment($attachmentPath, $attachmentName);
+        } else {
+            echo 'Error: File upload failed';
+            exit;
+        }
 
-        $mail->send();
+        try {
+            $mail->send();
+        } catch (Exception $exSend) {
+            // Fallback to TLS/587
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+            $mail->SMTPAutoTLS = true;
+            try {
+                $mail->send();
+            } catch (Exception $exSend2) {
+                throw $exSend2;
+            }
+        }
+        
         // Admin notification sent successfully; proceed to send user confirmation
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
@@ -160,36 +178,59 @@ if ($refundCategory === 'other' && isset($_POST['other_reason'])) {
     try {
         //Server settings
         $mail = new PHPMailer(true);
-        // ... (Your existing SMTP and email configuration)
-        $mail->SMTPDebug = 0; // Enable verbose debug output
-        $mail->isSMTP(); // Set mailer to use SMTP
-        $mail->Host = 'mail.holdlogix.live'; // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true; // Enable SMTP authentication
-        $mail->Username = 'info@holdlogix.live'; // updated sender account
+        $mail->isSMTP(); 
+        $mail->Host = 'mail.holdlogix.live'; 
+        $mail->SMTPAuth = true; 
+        $mail->Username = 'info@holdlogix.live'; 
         $mail->Password = 'Obedofla@00';
-        $mail->SMTPSecure = 'ssl'; // Enable SSL encryption, TLS also accepted with port 465
-        $mail->Port = 465; // TCP port to connect to
+        
+        // Relaxed SSL Settings
+        $mail->SMTPOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true,
+            ]
+        ];
+        
+        $mail->SMTPSecure = 'ssl'; 
+        $mail->Port = 465; 
     
         //Recipients
         $mail->setFrom('info@holdlogix.live', 'HoldLogix');
-        $mail->addAddress($email, $username); // Add a recipient address
-        //Content
+        $mail->addAddress($email, $username); 
         
+        //Content
         $mail->isHTML(true);
         $mail->Subject = 'HoldLogix';
-        $mail->Body = "<p>Hello from HoldLogix</p>
+        
+        $userBody = "<p>Hello from HoldLogix</p>
         <p>Dear $username, your refund request has been received successfully.</p>
         <p>Your request will be processed within three days.</p>
         <p>Thank you for choosing HoldLogix.</p>";
+        
+        $mail->Body = $userBody;
+        $mail->AltBody = "Hello from HoldLogix\n\nDear $username, your refund request has been received successfully.\nYour request will be processed within three days.\nThank you for choosing HoldLogix.";
 
-        $mail->send();
+        try {
+            $mail->send();
+        } catch (Exception $exSend) {
+            // Fallback to TLS/587
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+            $mail->SMTPAutoTLS = true;
+            try {
+                $mail->send();
+            } catch (Exception $exSend2) {
+                throw $exSend2;
+            }
+        }
+
         // Redirect to a styled confirmation page similar to sendtop
         header('Location: email-success.php?username=' . urlencode($username) . '&status=sent&type=refund');
         exit;
     } catch (Exception $e) {
-       
-               echo "<script> alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}');</script>";
- 
+       echo "<script> alert('Message could not be sent. Mailer Error: {$mail->ErrorInfo}');</script>";
     }
 
 

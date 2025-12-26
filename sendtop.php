@@ -152,29 +152,26 @@ require __DIR__ . '/mail/SMTP.php';
         } elseif (isset($_SESSION['bank'])) {
             $bankName = trim($_SESSION['bank']);
         }
-        // Contact info + dashboard CTA block appended to all user-facing emails
-        $dashboardUrl = 'https://holdlogix.live/dash.php';
-        $contactBlock = "<p>Need help? Contact us:</p>\n<p>WhatsApp: <a href='https://wa.me/14093402245'>+1 409 340 2245</a></p>\n<p>Telegram: <a href='https://t.me/BalrogAdmin'>@BalrogAdmin</a></p>\n<p>Email: <a href='mailto:support@holdlogix.live'>support@holdlogix.live</a></p>\n<p><a href='" . $dashboardUrl . "'>Go to Dashboard</a></p>";
-        // Normalize support email domain to holdlogix.live
-        $contactBlock = str_replace('support@holdlogix.com', 'support@holdlogix.live', $contactBlock);
+        // Contact info block (plain text for better deliverability)
+        $contactBlock = "<p>Need help? Contact us:</p>\n<p>WhatsApp: +1 409 340 2245</p>\n<p>Telegram: @BalrogAdmin</p>\n<p>Email: support@holdlogix.live</p>";
+        
         if($triger == "top"){
             $mail->Body = "<p>Hello from HoldLogix</p>"
                 . "<p>Dear " . htmlspecialchars($username) . " You have topped up a balance of $" . number_format((float)$theprice, 2) . " with HoldLogix</p>"
                 . "<p>Your transaction is pending; you will be informed via this email when complete</p>"
                 . "<p>Thank you for using HoldLogix</p>"
                 . $contactBlock;
+            $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
         }
         if($triger == "purchase"){
             $amountFmt = number_format((float)$theprice, 2);
             $bankText = $bankName !== '' ? ' from ' . htmlspecialchars($bankName) : '';
-            // Build base URL for link (use canonical domain)
-            $baseUrl = 'https://holdlogix.live';
-            $link = $baseUrl . '/view-log.php?username=' . urlencode($username) . '&ref=' . urlencode($generatedCode);
+            
             $mail->Body = "<p>Dear " . htmlspecialchars($username) . " Your purchase with reference $generatedCode of a price: $ $amountFmt$bankText</p>"
                 . "<p>Has been processed successfully. Your transaction is pending; you will be notified when complete.</p>"
-                . "<p><a href='" . htmlspecialchars($link) . "' target='_blank'>Click here to view your log options (RATS/SOCKS)</a></p>"
                 . "<p>Thank you for using HoldLogix</p>"
                 . $contactBlock;
+            $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
         }
         if($triger == "rats"){
             $amountFmt = number_format((float)$theprice, 2);
@@ -182,6 +179,7 @@ require __DIR__ . '/mail/SMTP.php';
                 . "<p>Price: $ $amountFmt. Your transaction is pending; you will be notified when complete.</p>"
                 . "<p>Thank you for using HoldLogix</p>"
                 . $contactBlock;
+            $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
         }
         if($triger == "socks"){
             $amountFmt = number_format((float)$theprice, 2);
@@ -189,12 +187,14 @@ require __DIR__ . '/mail/SMTP.php';
                 . "<p>Price: $ $amountFmt. Your transaction is pending; you will be notified when complete.</p>"
                 . "<p>Thank you for using HoldLogix</p>"
                 . $contactBlock;
+            $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
         }
         if($triger == "card"){
             $mail->Body = "  <p>Dear $username  You have just purchased a card of a price: $ $theprice
         Has been processed succefully. your transaction is pending you will be notified when complete
         </p>
         <p>Thank you for using HoldLogix</p>" . $contactBlock;
+            $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
         }
         $mail->isHTML(true);
         // Determine effective amount (fallback to session price for purchases)
@@ -293,12 +293,14 @@ require __DIR__ . '/mail/SMTP.php';
                         . "<p>User " . htmlspecialchars($username) . " has just topped up a balance of $" . number_format((float)$theprice, 2) . "</p>"
                         . "<p>" . htmlspecialchars($username) . "'s transaction is pending until modified</p>"
                         . "<p>The attachment below is their purchase proof:</p>";
+                    $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
                 }
                 if($triger == "purchase"){
                     $mail->Body = "<p>Hello from HoldLogix</p>
         <p>User $username has just made a purchase of $$theprice</p>
         <p>$username's transaction is pending until modified</p>
         <p>The attachment below is their purchase proof:</p>";
+                    $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
                 }
 
                 if($triger == "card"){
@@ -306,6 +308,7 @@ require __DIR__ . '/mail/SMTP.php';
         <p>User $username has just bought a card of $$theprice</p>
         <p>$username's transaction is pending until modified</p>
         <p>The attachment below is their purchase proof:</p>";
+                    $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
                 }
 
        

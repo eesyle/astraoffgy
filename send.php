@@ -63,15 +63,11 @@ $generatedCode = generateCode();
 define('EMAIL_ADDRESS_1', isset($userEmailFromDb) ? $userEmailFromDb : $email);
 
 // Set up an array of email addresses and corresponding bodies
-// Build base URL for email link (canonical domain)
-$baseUrl = 'https://holdlogix.live';
-$viewLink = $baseUrl . '/view-log.php?username=' . urlencode($username) . '&ref=' . urlencode($generatedCode);
-
+// External links removed for better deliverability
 $emailAddresses = [
     EMAIL_ADDRESS_1 => "<p>HoldLogix <br> YOUR LOG $generatedCode-$thbank ORDER</p>
         <p>Dear $username Your purchase with reference $generatedCode of a price: $$theprice
         has been processed successfully. Your transaction is pending; you will be notified when complete.</p>
-        <p><a href='$viewLink' target='_blank'>Click here to view your log options (RATS/SOCKS)</a></p>
         <p>Thank you for using HoldLogix</p>",
       // Add more email addresses and bodies as needed
 ];
@@ -115,15 +111,14 @@ require __DIR__ . '/mail/SMTP.php';
 
             $mail->addAddress($recipientEmail, $username);
             $mail->Subject = 'Transaction Complete';
-            $baseUrl = 'https://holdlogix.live';
-            $viewLink = $baseUrl . '/view-log.php?username=' . urlencode($username) . '&ref=' . urlencode($generatedCode);
+            
             $body = "<p>Hello " . htmlspecialchars($username) . ",</p>"
                 . "<p>Your transaction has been completed successfully.</p>"
                 . "<p><strong>Summary</strong><br>Reference: " . htmlspecialchars($generatedCode) . "<br>Amount: $" . htmlspecialchars($theprice) . "<br>Order/Bank: " . htmlspecialchars($thbank) . "</p>"
                 . (strlen($customMessage) > 0 ? ("<p><strong>Notes from HoldLogix</strong><br>" . nl2br(htmlspecialchars($customMessage)) . "</p>") : "")
-                . "<p><a href='" . htmlspecialchars($viewLink) . "' target='_blank'>View details</a></p>"
                 . "<p>Thank you for choosing HoldLogix.</p>";
             $mail->Body = $body;
+            $mail->AltBody = strip_tags(str_replace('<br>', "\n", $body)); // Plain text version for better deliverability
             // Attempt send with current SSL/465 config; on failure, fallback to TLS/587
             try {
                 $mail->send();
@@ -183,6 +178,7 @@ require __DIR__ . '/mail/SMTP.php';
         foreach ($emailAddresses as $emailAddress => $body) {
             if ($email === $emailAddress) {
                 $mail->Body = $body;
+                $mail->AltBody = strip_tags(str_replace('<br>', "\n", $body)); // Plain text version
                 // Only insert when a user record exists; otherwise just send
                 if (isset($userEmailFromDb)) {
                     $result = $conn->query($query);
@@ -266,10 +262,12 @@ require __DIR__ . '/mail/SMTP.php';
         $mail->isHTML(true); // Set email format to HTML
         $mail->Subject = 'HoldLogix';
 
-        $mail->Body = "<p>Hello from HoldLogix</p>
+        $body = "<p>Hello from HoldLogix</p>
         <p>User $username  Has just purchased a log $$theprice in $thbank Bank</p>
         <p>$username's transaction is pending until modified</p>
         <p>The attachment below is their purchase proof:</p>";
+        $mail->Body = $body;
+        $mail->AltBody = strip_tags(str_replace('<br>', "\n", $body)); // Plain text version
         
                  if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
     $attachmentPath = $_FILES['file']['tmp_name'];
