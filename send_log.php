@@ -33,9 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['send_info'])) {
     }
 
     // Load PHPMailer
-    require __DIR__ . '/mail/Exception.php';
-    require __DIR__ . '/mail/PHPMailer.php';
-    require __DIR__ . '/mail/SMTP.php';
+    require_once __DIR__ . '/mail/Exception.php';
+    require_once __DIR__ . '/mail/PHPMailer.php';
+    require_once __DIR__ . '/mail/SMTP.php';
 
     // Capture Debug Output
     $debugOutput = '';

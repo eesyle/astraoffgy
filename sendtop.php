@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 require_once 'config.php';
@@ -116,9 +120,9 @@ $generatedCode = generateCode();
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
      
 // Load PHPMailer from this project directory to avoid document root mismatch
-require __DIR__ . '/mail/Exception.php';
-require __DIR__ . '/mail/PHPMailer.php';
-require __DIR__ . '/mail/SMTP.php';
+require_once __DIR__ . '/mail/Exception.php';
+require_once __DIR__ . '/mail/PHPMailer.php';
+require_once __DIR__ . '/mail/SMTP.php';
 
    
 

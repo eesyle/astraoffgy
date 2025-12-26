@@ -76,9 +76,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $isNotifyComplete = isset($_POST['notify_complete']) && $_POST['notify_complete'] == '1';
      
 // Load PHPMailer from this project directory to avoid document root mismatch
-require __DIR__ . '/mail/Exception.php';
-require __DIR__ . '/mail/PHPMailer.php';
-require __DIR__ . '/mail/SMTP.php';
+require_once __DIR__ . '/mail/Exception.php';
+require_once __DIR__ . '/mail/PHPMailer.php';
+require_once __DIR__ . '/mail/SMTP.php';
 
    
     // If admin is notifying completion, send to user directly and exit
