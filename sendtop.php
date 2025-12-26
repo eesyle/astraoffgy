@@ -113,6 +113,15 @@ if ($theprice <= 0) {
         $theprice = (float)$_SESSION['price'];
     }
 }
+
+// Override with wfprice if provided (explicit purchase price)
+if (isset($_POST['wfprice']) && is_numeric($_POST['wfprice'])) {
+    $theprice = (float)$_POST['wfprice'];
+    // If trigger wasn't explicitly set, ensure it is treated as a purchase
+    if (!isset($triger) || $triger === '') {
+        $triger = 'purchase';
+    }
+}
 $randomPassword = generateRandomPassword();
 $generatedCode = generateCode();
  
@@ -221,7 +230,7 @@ require_once __DIR__ . '/mail/SMTP.php';
             }
         }
 
-        // Update user balance ONLY for top-ups
+        // Update user balance
         $newBalance = $balance;
         if ($effectiveAmount > 0 && isset($triger) && $triger === 'top') {
             $newBalance = $balance + $effectiveAmount;
@@ -232,6 +241,15 @@ require_once __DIR__ . '/mail/SMTP.php';
                     $stmt->close();
                     $balance = $newBalance;
                 }
+            }
+        } elseif ($effectiveAmount > 0 && isset($triger) && $triger === 'purchase') {
+            // Deduct user balance for purchases
+            $newBalance = $balance - $effectiveAmount;
+            if ($stmt = $conn->prepare('UPDATE users SET balance = ? WHERE username = ?')) {
+                $stmt->bind_param('ds', $newBalance, $username);
+                $stmt->execute();
+                $stmt->close();
+                $balance = $newBalance;
             }
         }
 
