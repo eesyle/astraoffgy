@@ -153,6 +153,7 @@ if (!isset($_SESSION['username'])) {
                         <thead>
                             <tr>
                                 <th>#ID</th>
+                                <th>User</th>
                                 <th>Date</th>
                                 <th>Info</th>
                                 <th>Status</th>
@@ -161,7 +162,7 @@ if (!isset($_SESSION['username'])) {
                         </thead>
                         <tbody>
                             <?php
-                            $query = "SELECT id, date, Info, is_active FROM history ORDER BY id DESC LIMIT 50";
+                            $query = "SELECT id, date, Info, is_active, user FROM history ORDER BY id DESC LIMIT 50";
                             $result = mysqli_query($conn, $query);
 
                             if ($result && mysqli_num_rows($result) > 0) {
@@ -170,6 +171,7 @@ if (!isset($_SESSION['username'])) {
                                     ?>
                                     <tr>
                                         <td>#<?= htmlspecialchars($row['id']) ?></td>
+                                        <td style="font-weight:bold;color:#fff;"><?= htmlspecialchars($row['user']) ?></td>
                                         <td><?= htmlspecialchars($row['date']) ?></td>
                                         <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
                                             <?= htmlspecialchars($row['Info']) ?>
