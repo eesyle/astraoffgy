@@ -293,12 +293,7 @@ if (!in_array($view, ['orders', 'email', 'info', 'info_preview'])) {
                         <input type="email" name="to_email" class="form-control">
                     </div>
 
-                    <div style="margin-bottom:15px;">
-                        <label>Custom Message</label>
-                        <textarea name="custom_message" rows="4" class="form-control">Hello,
-
-We’re happy to let you know that your transaction has been completed successfully.</textarea>
-                    </div>
+                    
 
                     <div style="text-align:right;">
                         <button type="submit" class="btn-primary">Send Notification</button>

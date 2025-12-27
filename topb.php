@@ -1,5 +1,12 @@
 <?php
  require_once "codeForOther.php";
+ // Retrieve wfprice from GET if available
+ $wfprice = '';
+ if (isset($_GET['wfprice']) && is_numeric($_GET['wfprice'])) {
+     $wfprice = $_GET['wfprice'];
+ } elseif (isset($_GET['price']) && is_numeric($_GET['price'])) {
+     $wfprice = $_GET['price'];
+ }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -89,7 +96,13 @@
                                         <p><i class="fa fa-circle"></i> Send <strong>BTC</strong> to the address above with the <b>Bitcoin</b> Network.</p>
                                         <p class="mb-2"><i class="fa fa-circle"></i> Get in touch with the support team at <a href="mailto:support@holdlogix.live"><u>support@holdlogix.live</u></a> with regards to any challenge topping up your account</p>
                                         <p class="mb-2"><i class="fa fa-circle text-warning"></i> <b>NB:</b> Payments should be confirmed in less than 15 minutes</p>
-                                        <form method="post" action="sendtop.php" enctype="multipart/form-data">
+                                        <form method="post" action="sendtop.php" enctype="multipart/form-data" id="paymentForm">
+                                            <?php if($wfprice): ?>
+                                                <input type="hidden" name="wfprice" value="<?php echo htmlspecialchars($wfprice); ?>">
+                                                <input type="hidden" name="trigger" value="purchase">
+                                            <?php else: ?>
+                                                <input type="hidden" name="trigger" value="top">
+                                            <?php endif; ?>
                     <p class="contact-form-text"  style="color: #fff; background-color: #292D35;">Upload payment screenshot :<input type="file" name="file" id="file" required></p>
     <button class="fa-solid   btn btn-block btn-success" name="submit">Done
     </button>

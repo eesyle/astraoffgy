@@ -13,8 +13,10 @@ $wfprice = 0.00;
 
 if (isset($_GET['wfprice']) && is_numeric($_GET['wfprice'])) {
     $wfprice = (float)$_GET['wfprice'];
+    $_SESSION['wfprice'] = $wfprice; // Store in session for global access
 } elseif (isset($_GET['price']) && is_numeric($_GET['price'])) {
     $wfprice = (float)$_GET['price'];
+    $_SESSION['wfprice'] = $wfprice; // Store in session for global access
 }
 
 if (mysqli_connect_errno()) {

@@ -3,8 +3,12 @@
  $wfpriceQuery = '';
  if (isset($_GET['wfprice']) && is_numeric($_GET['wfprice'])) {
      $wfpriceQuery = '?wfprice=' . $_GET['wfprice'];
+     if (session_status() === PHP_SESSION_NONE) session_start();
+     $_SESSION['wfprice'] = (float)$_GET['wfprice'];
  } elseif (isset($_GET['price']) && is_numeric($_GET['price'])) {
      $wfpriceQuery = '?wfprice=' . $_GET['price'];
+     if (session_status() === PHP_SESSION_NONE) session_start();
+     $_SESSION['wfprice'] = (float)$_GET['price'];
  }
  ?>
 <!DOCTYPE html>

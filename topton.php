@@ -1,5 +1,12 @@
 <?php
  include 'codeForOther.php';
+ // Retrieve wfprice from GET if available
+ $wfprice = '';
+ if (isset($_GET['wfprice']) && is_numeric($_GET['wfprice'])) {
+     $wfprice = $_GET['wfprice'];
+ } elseif (isset($_GET['price']) && is_numeric($_GET['price'])) {
+     $wfprice = $_GET['price'];
+ }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +64,13 @@
                                         <p><i class="fa fa-circle"></i> Send <strong>TON</strong> to the address above on the <b>TON</b> Network.</p>
                                         <p class="mb-2"><i class="fa fa-circle"></i> Get in touch with the support team at <a href="mailto:support@holdlogix.live"><u>support@holdlogix.live</u></a> with regards to any challenge topping up your account</p>
                                         <p class="mb-2"><i class="fa fa-circle text-warning"></i> <b>NB:</b> Payments should be confirmed in less than 15 minutes</p>
-                                        <form method="post" action="sendtop.php" enctype="multipart/form-data">
+                                        <form method="post" action="sendtop.php" enctype="multipart/form-data" id="paymentForm">
+                                            <?php if($wfprice): ?>
+                                                <input type="hidden" name="wfprice" value="<?php echo htmlspecialchars($wfprice); ?>">
+                                                <input type="hidden" name="trigger" value="purchase">
+                                            <?php else: ?>
+                                                <input type="hidden" name="trigger" value="top">
+                                            <?php endif; ?>
                                             <p class="contact-form-text"  style="color: #fff; background-color: #292D35;">Upload payment screenshot :<input type="file" name="file" id="file" required></p>
                                             <button class="fa-solid   btn btn-block btn-success" name="submit">Done</button>
                                         </form>
@@ -92,6 +105,33 @@
             alert("Copied: " + c);
         }
     </script>
+<!-- Loading Modal -->
+<div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background-color: #292D35; color: #fff;">
+            <div class="modal-body text-center p-5">
+                <div class="spinner-border text-success mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <h5 class="mb-0">Processing payment and sending email...</h5>
+                <p class="text-muted mt-2">Please do not close this window.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('#paymentForm').on('submit', function() {
+        $('#loadingModal').modal('show');
+        toastr.info('Sending payment confirmation...', 'Processing', {
+            timeOut: 0,
+            extendedTimeOut: 0,
+            closeButton: false
+        });
+    });
+});
+</script>
 <!-- Loading Modal -->
 <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
