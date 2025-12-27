@@ -1,22 +1,30 @@
 <?php
+ob_start();
 // ==========================================
-// DEBUGGING ENABLED
+// DEBUGGING CONFIGURATION
 // ==========================================
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+$debug = false; // Set to true to enable debugging
+
+if ($debug) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+    echo "<h3>DEBUG MODE: ON</h3>";
+    echo "<pre>";
+    echo "POST Data: " . print_r($_POST, true) . "\n";
+    echo "GET Data: " . print_r($_GET, true) . "\n";
+    echo "SESSION Data: " . print_r($_SESSION, true) . "\n";
+    echo "</pre>";
+} else {
+    ini_set('display_errors', 0);
+    ini_set('display_startup_errors', 0);
+    error_reporting(0);
+}
 
 // Start Session if not already started
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
-
-echo "<h3>DEBUG MODE: ON</h3>";
-echo "<pre>";
-echo "POST Data: " . print_r($_POST, true) . "\n";
-echo "GET Data: " . print_r($_GET, true) . "\n";
-echo "SESSION Data: " . print_r($_SESSION, true) . "\n";
-echo "</pre>";
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -54,9 +62,10 @@ function resolveUsername(): string {
 }
 
 $username = resolveUsername();
-echo "Resolved Username: " . htmlspecialchars($username) . "<br>";
+if ($debug) echo "Resolved Username: " . htmlspecialchars($username) . "<br>";
 
 if ($username === '') {
+    // This is a user-facing error, keep it visible or handle gracefully
     echo "<script>alert('Error: Username not provided! Please log in first.');</script>";
     echo "<p>Go to <a href='index.php'>Login</a> then retry your action.</p>";
     exit();
@@ -79,7 +88,7 @@ if (mysqli_num_rows($query_run) > 0) {
         $balance = $userRow['price'] ?? $userRow['Balance'] ?? $userRow['balance'] ?? 0; // Standardize
     }
 }
-echo "Current User Balance: " . $balance . "<br>";
+if ($debug) echo "Current User Balance: " . $balance . "<br>";
 
 // Determine Trigger
 $triger = '';
@@ -92,7 +101,7 @@ if (isset($_POST['trigger']) && $_POST['trigger'] !== '') {
 } elseif (isset($_SESSION['trigger'])) {
     $triger = $_SESSION['trigger'];
 }
-echo "Resolved Trigger: " . htmlspecialchars($triger) . "<br>";
+if ($debug) echo "Resolved Trigger: " . htmlspecialchars($triger) . "<br>";
 
 // Resolve Price
 $theprice = 0.0;
@@ -100,12 +109,12 @@ $theprice = 0.0;
 // 1. Check for wfprice in Session (Highest Priority for Purchase Flow)
 if ($triger !== 'top' && isset($_SESSION['wfprice']) && is_numeric($_SESSION['wfprice'])) {
     $theprice = (float)$_SESSION['wfprice'];
-    echo "Price resolved from SESSION['wfprice']: $theprice<br>";
+    if ($debug) echo "Price resolved from SESSION['wfprice']: $theprice<br>";
 }
 // 2. Check for wfprice in POST (Override if specific form submitted)
 if ($triger !== 'top' && isset($_POST['wfprice']) && is_numeric($_POST['wfprice'])) {
     $theprice = (float)$_POST['wfprice'];
-    echo "Price resolved from POST['wfprice']: $theprice<br>";
+    if ($debug) echo "Price resolved from POST['wfprice']: $theprice<br>";
 }
 // 3. Fallback to 'amount' or 'price'
 if ($theprice <= 0) {
@@ -118,7 +127,7 @@ if ($theprice <= 0) {
         } elseif (isset($_GET['amount']) && is_numeric($_GET['amount'])) {
             $theprice = (float)$_GET['amount'];
         }
-        echo "Price resolved for TOP-UP: $theprice<br>";
+        if ($debug) echo "Price resolved for TOP-UP: $theprice<br>";
     } else {
         if (isset($_GET['amount']) && is_numeric($_GET['amount'])) {
             $theprice = (float)$_GET['amount'];
@@ -129,7 +138,7 @@ if ($theprice <= 0) {
         } elseif (isset($_SESSION['price']) && is_numeric($_SESSION['price'])) {
             $theprice = (float)$_SESSION['price'];
         }
-        echo "Price resolved from fallback methods: $theprice<br>";
+        if ($debug) echo "Price resolved from fallback methods: $theprice<br>";
     }
 }
 
@@ -138,7 +147,7 @@ if ($theprice > 0 && ($triger === '' || !isset($triger))) {
     // Basic heuristic: if it came from wfprice, it's likely a purchase
     if (isset($_SESSION['wfprice']) || isset($_POST['wfprice'])) {
         $triger = 'purchase';
-        echo "Trigger auto-set to 'purchase' based on wfprice presence.<br>";
+        if ($debug) echo "Trigger auto-set to 'purchase' based on wfprice presence.<br>";
     }
 }
 
@@ -146,7 +155,7 @@ $randomPassword = generateRandomPassword();
 $generatedCode = generateCode();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
-    echo "Processing Form Submission...<br>";
+    if ($debug) echo "Processing Form Submission...<br>";
 
     require_once __DIR__ . '/mail/Exception.php';
     require_once __DIR__ . '/mail/PHPMailer.php';
@@ -229,7 +238,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         $mail->isHTML(true);
         $effectiveAmount = (float)$theprice;
         
-        echo "Effective Amount for Transaction: $effectiveAmount<br>";
+        if ($debug) echo "Effective Amount for Transaction: $effectiveAmount<br>";
 
         // Info for history
         $info = 'Transaction';
@@ -244,7 +253,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         // ============================================================
         // USER BALANCE UPDATE SECTION
         // ============================================================
-        echo "Updating User Balance...<br>";
+        if ($debug) echo "Updating User Balance...<br>";
         $newBalance = $balance;
         
         if ($effectiveAmount > 0 && isset($triger) && $triger === 'top') {
@@ -256,9 +265,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
                     $stmt->execute();
                     $stmt->close();
                     $balance = $newBalance;
-                    echo "Balance Updated (Top-up): New Balance is $newBalance<br>";
+                    if ($debug) echo "Balance Updated (Top-up): New Balance is $newBalance<br>";
                 } else {
-                    echo "Error Preparing Update Statement (Top-up): " . $conn->error . "<br>";
+                    if ($debug) echo "Error Preparing Update Statement (Top-up): " . $conn->error . "<br>";
                 }
             }
         } elseif ($effectiveAmount > 0 && isset($triger) && $triger === 'purchase') {
@@ -273,12 +282,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
                 $stmt->execute();
                 $stmt->close();
                 $balance = $newBalance;
-                echo "Balance Updated (Purchase): Deducted $effectiveAmount. New Balance is $newBalance<br>";
+                if ($debug) echo "Balance Updated (Purchase): Deducted $effectiveAmount. New Balance is $newBalance<br>";
             } else {
-                echo "Error Preparing Update Statement (Purchase): " . $conn->error . "<br>";
+                if ($debug) echo "Error Preparing Update Statement (Purchase): " . $conn->error . "<br>";
             }
         } else {
-            echo "No Balance Update Triggered. Trigger: '$triger', Amount: $effectiveAmount<br>";
+            if ($debug) echo "No Balance Update Triggered. Trigger: '$triger', Amount: $effectiveAmount<br>";
         }
         // ============================================================
 
@@ -286,14 +295,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         $query = "INSERT INTO history (date, Info, user, amount, is_active) VALUES (NOW(), '" . mysqli_real_escape_string($conn, $info) . "', '" . mysqli_real_escape_string($conn, $username) . "', '" . mysqli_real_escape_string($conn, (string)$effectiveAmount) . "', '1')";
         $result = $conn->query($query);
         if ($result) {
-            echo "History Record Inserted.<br>";
+            if ($debug) echo "History Record Inserted.<br>";
             
             // Send User Email
             try {
                 $mail->send();
-                echo "User Email Sent Successfully.<br>";
+                if ($debug) echo "User Email Sent Successfully.<br>";
             } catch (Exception $exSend) {
-                echo "User Email Failed (SSL), trying TLS...<br>";
+                if ($debug) echo "User Email Failed (SSL), trying TLS...<br>";
                 // Fallback logic ...
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
@@ -307,17 +316,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
                 ];
                 try {
                     $mail->send();
-                    echo "User Email Sent Successfully (TLS).<br>";
+                    if ($debug) echo "User Email Sent Successfully (TLS).<br>";
                 } catch (Exception $exSend2) {
-                     echo "User Email Failed completely: " . $mail->ErrorInfo . "<br>";
+                     if ($debug) echo "User Email Failed completely: " . $mail->ErrorInfo . "<br>";
                 }
             }
         } else {
-             echo "Error Inserting History: " . $conn->error . "<br>";
+             if ($debug) echo "Error Inserting History: " . $conn->error . "<br>";
         }
 
     } catch (Exception $e) {
-        echo "Mailer Error: " . $mail->ErrorInfo . "<br>";
+        if ($debug) echo "Mailer Error: " . $mail->ErrorInfo . "<br>";
     }
 
 
@@ -365,7 +374,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 
         try {
             $mail->send();
-            echo "Admin Email Sent Successfully.<br>";
+            if ($debug) echo "Admin Email Sent Successfully.<br>";
         } catch (Exception $exSendAdmin) {
              // Fallback
              $mail->SMTPSecure = 'tls';
@@ -380,19 +389,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             ];
             try {
                 $mail->send();
-                echo "Admin Email Sent Successfully (TLS).<br>";
+                if ($debug) echo "Admin Email Sent Successfully (TLS).<br>";
             } catch (Exception $exSendAdmin2) {
-                 echo "Admin Email Failed: " . $mail->ErrorInfo . "<br>";
+                 if ($debug) echo "Admin Email Failed: " . $mail->ErrorInfo . "<br>";
             }
         }
         
-        echo "Redirecting to success page...<br>";
-        // Comment out header for debug purposes if needed, or leave it to finish flow
+        if ($debug) echo "Redirecting to success page...<br>";
+        
+        // Ensure no output has been sent before header
+        ob_end_clean(); 
+        
         header('Location: email-success.php?username=' . urlencode($username) . '&status=sent');
         exit();
 
     } catch (Exception $e) {
-        echo "Admin Mailer Error: " . $mail->ErrorInfo;
+        if ($debug) echo "Admin Mailer Error: " . $mail->ErrorInfo;
     }
 
 }
