@@ -77,7 +77,7 @@
 
       
  
-        <?php include './sideBar.php'; ?>
+        <?php include './sidebar.php'; ?>
  
         <div class="content-body">
             <!-- row -->
