@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once 'auth_guard.php';
 require_once 'codeForOther.php';
 
@@ -16,18 +20,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $strategy = $_POST['strategy'] ?? 'random'; // random, correlated, target
     $targetPrice = floatval($_POST['target_price'] ?? 0);
 
+    // Prevent Division by Zero
+    if ($maxBal == $minBal) {
+        $maxBal += 1; 
+    }
+
     if (empty($tables)) {
         $message = "Please select at least one card table.";
     } else {
         if ($action === 'preview') {
             // Generate preview data (in memory)
             for ($i = 0; $i < 10; $i++) {
-                $simBal = rand($minBal, $maxBal);
+                $simBal = rand((int)$minBal, (int)$maxBal);
                 $simPrice = 0;
                 
                 if ($strategy === 'correlated') {
                     // Linear interpolation + noise
-                    $ratio = ($simBal - $minBal) / ($maxBal - $minBal);
+                    $divisor = $maxBal - $minBal;
+                    if ($divisor == 0) $divisor = 1; // Safety check
+                    
+                    $ratio = ($simBal - $minBal) / $divisor;
                     $basePrice = $minPrice + ($ratio * ($maxPrice - $minPrice));
                     $noise = rand(-5, 5); // +/- $5
                     $simPrice = max($minPrice, min($maxPrice, $basePrice + $noise));
@@ -37,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                      $simPrice = max($minPrice, min($maxPrice, $targetPrice + $noise));
                 } else {
                     // Pure random
-                    $simPrice = rand($minPrice, $maxPrice);
+                    $simPrice = rand((int)$minPrice, (int)$maxPrice);
                 }
                 
                 $previewData[] = [
@@ -52,40 +64,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Since SQL RAND() is executed per row, we can use it.
                 
                 if ($strategy === 'correlated') {
-                    // Complex logic is hard in single SQL query without stored procedures or messy math.
-                    // Easier: Fetch IDs, generate values in PHP, update in batches.
-                    // Or use SQL math: 
-                    // Price = MinP + ((Bal - MinB) / (MaxB - MinB)) * (MaxP - MinP)
+                    // Update Balance first
+                    $sqlBalance = "UPDATE $table SET Balance = FLOOR($minBal + (RAND() * ($maxBal - $minBal)))";
+                    if (!$conn->query($sqlBalance)) {
+                        $message .= "Error updating balance for $table: " . $conn->error . "<br>";
+                        continue;
+                    }
+
+                    // Update Price based on new Balance
+                    // Use NULLIF to avoid division by zero in SQL
+                    // If range is 0, NULLIF returns NULL, result is NULL. Coalesce to minPrice.
+                    $sqlPrice = "UPDATE $table SET price = GREATEST($minPrice, LEAST($maxPrice, FLOOR(
+                                        $minPrice + 
+                                        COALESCE(
+                                            ((Balance - $minBal) / NULLIF($maxBal - $minBal, 0)) * ($maxPrice - $minPrice),
+                                            0
+                                        ) + 
+                                        (RAND() * 10 - 5)
+                                    )))";
                     
-                    $sql = "UPDATE $table SET 
-                            Balance = FLOOR($minBal + (RAND() * ($maxBal - $minBal))),
-                            price = CASE 
-                                WHEN ($maxBal - $minBal) = 0 THEN $minPrice
-                                ELSE 
-                                    FLOOR(
-                                        $minPrice + 
-                                        ((Balance - $minBal) / ($maxBal - $minBal)) * ($maxPrice - $minPrice) + 
-                                        (RAND() * 10 - 5)
-                                    )
-                                END";
-                     // Clamp price logic in SQL is verbose, let's trust the math or add LEAST/GREATEST
-                     $sql = "UPDATE $table SET 
-                            Balance = FLOOR($minBal + (RAND() * ($maxBal - $minBal))),
-                            price = GREATEST($minPrice, LEAST($maxPrice, FLOOR(
-                                $minPrice + 
-                                ((($minBal + (RAND() * ($maxBal - $minBal))) - $minBal) / NULLIF($maxBal - $minBal, 0)) * ($maxPrice - $minPrice) + 
-                                (RAND() * 10 - 5)
-                            )))";
-                     // Actually, we can refer to the new Balance value? No, MySQL uses the OLD value in the same UPDATE clause usually, 
-                     // OR we can't guarantee order. 
-                     // SAFEST: Update Balance first, then Price.
-                     
-                     $conn->query("UPDATE $table SET Balance = FLOOR($minBal + (RAND() * ($maxBal - $minBal)))");
-                     $conn->query("UPDATE $table SET price = GREATEST($minPrice, LEAST($maxPrice, FLOOR(
-                                        $minPrice + 
-                                        ((Balance - $minBal) / NULLIF($maxBal - $minBal, 1)) * ($maxPrice - $minPrice) + 
-                                        (RAND() * 10 - 5)
-                                    )))");
+                    if (!$conn->query($sqlPrice)) {
+                        $message .= "Error updating price for $table: " . $conn->error . "<br>";
+                    }
 
                 } elseif ($strategy === 'target') {
                     $conn->query("UPDATE $table SET 
