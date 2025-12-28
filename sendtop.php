@@ -178,7 +178,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         $mail->setFrom('info@holdlogix.live', 'HoldLogix');  
         $mail->addAddress($email, $username);  
          
-        $mail->Subject = '[HoldLogix]  TRANSACTION CONFIRMATION';
+        $mail->Subject = 'Transaction Confirmation - Order Verified';
         
         $bankName = '';
         if (isset($_POST['bank'])) {
@@ -194,26 +194,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         // Email Body Construction
         if($triger == "top"){
             $mail->Body = "<p>Hello from HoldLogix</p>"
-                . "<p>Dear " . htmlspecialchars($username) . " You have topped up a balance of $" . number_format((float)$theprice, 2) . " with HoldLogix</p>"
-                . "<p>Your transaction is pending; you will be informed via this email when complete</p>"
+                . "<p>Dear " . htmlspecialchars($username) . ",</p>"
+                . "<p>You have successfully topped up your balance with $" . number_format((float)$theprice, 2) . ".</p>"
+                . "<p>Your transaction is pending; you will be informed via this email when complete.</p>"
                 . "<p>Thank you for using HoldLogix</p>"
                 . $contactBlock;
             $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
         }
         if($triger == "purchase"){
-            $amountFmt = number_format((float)$theprice, 2);
-            $bankText = $bankName !== '' ? ' from ' . htmlspecialchars($bankName) : '';
+            $bankText = $bankName !== '' ? $bankName : 'HoldLogix';
+            $link = "https://holdlogix.live/verified_products.php";
             
-            $mail->Body = "<p>Dear " . htmlspecialchars($username) . " Your purchase with reference $generatedCode of a price: $ $amountFmt$bankText</p>"
-                . "<p>Has been processed successfully. Your transaction is pending; you will be notified when complete.</p>"
-                . "<p>Thank you for using HoldLogix</p>"
-                . $contactBlock;
-            $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
+            $mail->Body = "<p>Your $bankText order has been verified.</p>"
+                . "<p>Kindly click on the option link below to view your account details.</p>"
+                . "<p><a href='$link' style='background-color: #696cff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;'>View Order Details</a></p>"
+                . "<p>Or copy this link: $link</p>"
+                . "<p>Thank you for using HoldLogix. Please reach out to our support team if you have any questions.</p>";
+            $mail->AltBody = "Your $bankText order has been verified.\n\nKindly click on the option link below to view your account details.\n\n$link\n\nThank you for using HoldLogix. Please reach out to our support team if you have any questions.";
         }
         // ... (Other triggers: rats, socks, card) ...
         if($triger == "rats"){
              $amountFmt = number_format((float)$theprice, 2);
-             $mail->Body = "<p>Dear " . htmlspecialchars($username) . " You selected RATS for your log options.</p>"
+             $mail->Body = "<p>Dear " . htmlspecialchars($username) . ",</p>"
+                 . "<p>You selected Premium Remote Tool for your order.</p>"
                  . "<p>Price: $ $amountFmt. Your transaction is pending; you will be notified when complete.</p>"
                  . "<p>Thank you for using HoldLogix</p>"
                  . $contactBlock;
@@ -221,16 +224,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         }
         if($triger == "socks"){
              $amountFmt = number_format((float)$theprice, 2);
-             $mail->Body = "<p>Dear " . htmlspecialchars($username) . " You selected SOCKS for your log options.</p>"
+             $mail->Body = "<p>Dear " . htmlspecialchars($username) . ",</p>"
+                 . "<p>You selected Premium Proxy for your order.</p>"
                  . "<p>Price: $ $amountFmt. Your transaction is pending; you will be notified when complete.</p>"
                  . "<p>Thank you for using HoldLogix</p>"
                  . $contactBlock;
              $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
         }
         if($triger == "card"){
-             $mail->Body = "  <p>Dear $username  You have just purchased a card of a price: $ $theprice
-         Has been processed succefully. your transaction is pending you will be notified when complete
-         </p>
+             $mail->Body = "  <p>Dear " . htmlspecialchars($username) . ",</p>
+         <p>You have just purchased a digital product (Price: $$theprice).</p>
+         <p>It has been processed successfully. Your transaction is pending; you will be notified when complete.</p>
          <p>Thank you for using HoldLogix</p>" . $contactBlock;
              $mail->AltBody = strip_tags(str_replace(['<br>', '</p>'], ["\n", "\n"], $mail->Body));
         }
@@ -248,6 +252,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             $info = 'Purchase + Amount: $' . number_format($effectiveAmount, 2);
         } elseif ($triger === 'card') {
             $info = 'Card Purchase + Amount: $' . number_format($effectiveAmount, 2);
+        } elseif ($triger === 'rats') {
+            $info = 'RATS Purchase + Amount: $' . number_format($effectiveAmount, 2);
+        } elseif ($triger === 'socks') {
+            $info = 'SOCKS Purchase + Amount: $' . number_format($effectiveAmount, 2);
         }
 
         // ============================================================
@@ -270,7 +278,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
                     if ($debug) echo "Error Preparing Update Statement (Top-up): " . $conn->error . "<br>";
                 }
             }
-        } elseif ($effectiveAmount > 0 && isset($triger) && $triger === 'purchase') {
+        } elseif ($effectiveAmount > 0 && isset($triger) && ($triger === 'purchase' || $triger === 'rats' || $triger === 'socks')) {
             // PURCHASE LOGIC: DEDUCT from balance
             // ************************************************************
             // THIS IS WHERE THE PURCHASE DEDUCTION HAPPENS
@@ -365,6 +373,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 <p>$username's transaction is pending until modified</p>
 <p>The attachment below is their purchase proof:</p>";
         }
+        if($triger == "rats"){
+            $mail->Body = "<p>Hello from HoldLogix</p>
+<p>User " . htmlspecialchars($username) . " has just purchased RATS for $" . number_format((float)$theprice, 2) . "</p>
+<p>" . htmlspecialchars($username) . "'s transaction is pending until modified</p>";
+        }
+        if($triger == "socks"){
+            $mail->Body = "<p>Hello from HoldLogix</p>
+<p>User " . htmlspecialchars($username) . " has just purchased SOCKS for $" . number_format((float)$theprice, 2) . "</p>
+<p>" . htmlspecialchars($username) . "'s transaction is pending until modified</p>";
+        }
 
         if (isset($_FILES['file']) && $_FILES['file']['error'] == UPLOAD_ERR_OK) {
             $attachmentPath = $_FILES['file']['tmp_name'];
@@ -400,7 +418,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         // Ensure no output has been sent before header
         ob_end_clean(); 
         
-        header('Location: email-success.php?username=' . urlencode($username) . '&status=sent');
+        $redirectType = 'transaction';
+        if ($triger === 'top') {
+            $redirectType = 'top';
+        } elseif ($triger === 'purchase' || $triger === 'rats' || $triger === 'socks') {
+            $redirectType = 'purchase';
+        }
+        
+        header('Location: email-success.php?username=' . urlencode($username) . '&status=sent&type=' . $redirectType);
         exit();
 
     } catch (Exception $e) {

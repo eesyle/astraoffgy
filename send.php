@@ -65,10 +65,16 @@ define('EMAIL_ADDRESS_1', isset($userEmailFromDb) ? $userEmailFromDb : $email);
 // Set up an array of email addresses and corresponding bodies
 // External links removed for better deliverability
 $emailAddresses = [
-    EMAIL_ADDRESS_1 => "<p>HoldLogix <br> YOUR LOG $generatedCode-$thbank ORDER</p>
-        <p>Dear $username Your purchase with reference $generatedCode of a price: $$theprice
-        has been processed successfully. Your transaction is pending; you will be notified when complete.</p>
-        <p>Thank you for using HoldLogix</p>",
+    EMAIL_ADDRESS_1 => "<p>Dear $username,</p>
+        <p>Thank you for your order. We have received your request for <strong>$thbank</strong> (Ref: $generatedCode).</p>
+        <p><strong>Order Summary:</strong></p>
+        <ul>
+        <li>Reference: $generatedCode</li>
+        <li>Amount: $$theprice</li>
+        <li>Status: Pending</li>
+        </ul>
+        <p>You will receive a follow-up notification once your order is fully processed.</p>
+        <p>Best regards,<br>The HoldLogix Team</p>",
       // Add more email addresses and bodies as needed
 ];
 
@@ -94,6 +100,17 @@ require_once __DIR__ . '/mail/SMTP.php';
             $mail->SMTPAuth = true;
             $mail->Username = 'info@holdlogix.live';
             $mail->Password = 'Obedofla@00';
+            
+            // Relaxed SSL Settings for both ports (Fixes certificate issues)
+            $sslOptions = [
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ]
+            ];
+            $mail->SMTPOptions = $sslOptions;
+
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
 
@@ -110,13 +127,20 @@ require_once __DIR__ . '/mail/SMTP.php';
             }
 
             $mail->addAddress($recipientEmail, $username);
-            $mail->Subject = 'Transaction Complete';
+            $mail->Subject = 'Transaction Update: #' . $generatedCode;
             
-            $body = "<p>Hello " . htmlspecialchars($username) . ",</p>"
-                . "<p>Your transaction has been completed successfully.</p>"
-                . "<p><strong>Summary</strong><br>Reference: " . htmlspecialchars($generatedCode) . "<br>Amount: $" . htmlspecialchars($theprice) . "<br>Order/Bank: " . htmlspecialchars($thbank) . "</p>"
-                . (strlen($customMessage) > 0 ? ("<p><strong>Notes from HoldLogix</strong><br>" . nl2br(htmlspecialchars($customMessage)) . "</p>") : "")
-                . "<p>Thank you for choosing HoldLogix.</p>";
+            $body = "<p>Dear " . htmlspecialchars($username) . ",</p>"
+                . "<p>We are writing to inform you that your recent transaction has been successfully completed.</p>"
+                . "<p><strong>Transaction Details:</strong></p>"
+                . "<ul>"
+                . "<li>Reference: " . htmlspecialchars($generatedCode) . "</li>"
+                . "<li>Amount: $" . htmlspecialchars($theprice) . "</li>"
+                . "<li>Item: " . htmlspecialchars($thbank) . "</li>"
+                . "<li>Status: Completed</li>"
+                . "</ul>"
+                . (strlen($customMessage) > 0 ? ("<p><strong>Additional Notes:</strong><br>" . nl2br(htmlspecialchars($customMessage)) . "</p>") : "")
+                . "<p>Thank you for your business.</p>"
+                . "<p>Best regards,<br>The HoldLogix Team</p>";
             $mail->Body = $body;
             $mail->AltBody = strip_tags(str_replace('<br>', "\n", $body)); // Plain text version for better deliverability
             // Attempt send with current SSL/465 config; on failure, fallback to TLS/587
@@ -140,10 +164,22 @@ require_once __DIR__ . '/mail/SMTP.php';
                     throw $exSend2;
                 }
             }
-            header('Location: admin_tools.php?view=email&mail_sent=1');
+            
+            // Return JSON success response
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'The completion email has been sent successfully.'
+            ]);
             exit;
         } catch (Exception $e) {
-            echo "Mailer Error: " . $mail->ErrorInfo;
+            // Return JSON error response with debug info
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Failed to send email.',
+                'debug' => $mail->ErrorInfo
+            ]);
             exit;
         }
     }
@@ -159,6 +195,16 @@ require_once __DIR__ . '/mail/SMTP.php';
         $mail->SMTPAuth = true; // Enable SMTP authentication
         $mail->Username = 'info@holdlogix.live';
         $mail->Password = 'Obedofla@00';
+        
+        $sslOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true,
+            ]
+        ];
+        $mail->SMTPOptions = $sslOptions;
+
         $mail->SMTPSecure = 'ssl'; // Enable SSL encryption, TLS also accepted with port 465
         $mail->Port = 465; // TCP port to connect to
     
@@ -252,6 +298,16 @@ require_once __DIR__ . '/mail/SMTP.php';
         $mail->SMTPAuth = true; // Enable SMTP authentication
         $mail->Username = 'info@holdlogix.live';
         $mail->Password = 'Obedofla@00';
+        
+        $sslOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true,
+            ]
+        ];
+        $mail->SMTPOptions = $sslOptions;
+
         $mail->SMTPSecure = 'ssl'; // Enable SSL encryption, TLS also accepted with port 465
         $mail->Port = 465; // TCP port to connect to
 

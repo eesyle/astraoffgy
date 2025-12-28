@@ -112,7 +112,7 @@ if(isset($_POST['submit'])) {
                                "you will receive the logins info at this email,<br>" .
                                "the relevant information for cashing out on purchase<br>" .
                                "will also be sent to this email address you supplied along with the log details.<br>" .
-                               "text us on telegram for or reach out on support@holdlogix.live for the walkthrough";
+                               "text us on telegram (@jayw2w) or reach out on support@holdlogix.live for the walkthrough";
                 
                 $mail->Body = $bodyContent;
                 $mail->AltBody = strip_tags(str_replace("<br>", "\n", $bodyContent));

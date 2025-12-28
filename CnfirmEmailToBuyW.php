@@ -145,8 +145,6 @@ if (!isset($WoodForest)) {
      echo "Error: Unable to include $headerFile";
  }
  ?>
-
-                         
                     </div>
                 </nav>
             </div>
@@ -329,9 +327,16 @@ if (!isset($WoodForest)) {
             <?php if ($remainingBalanceFooter > 0): ?>
                 <button type="button" class="btn btn-primary" id="openTopUpFromBalance">Load Balance</button>
             <?php else: ?>
-                <a href="paymentMethod.php?username=<?= urlencode($username) ?>&wfprice=<?= $wfprice ?>" class="btn btn-primary btn-md rounded-pill">
-                    <i class="fas fa-shopping-cart mr-1"></i> Buy
-                </a>
+                <form action="sendtop.php" method="POST" style="display:inline;">
+                    <input type="hidden" name="username" value="<?= htmlspecialchars($username) ?>">
+                    <input type="hidden" name="wfprice" value="<?= htmlspecialchars($wfprice) ?>">
+                    <input type="hidden" name="bank" value="<?= htmlspecialchars($WoodForest) ?>">
+                    <input type="hidden" name="trigger" value="purchase">
+                    <input type="hidden" name="submit" value="1">
+                    <button type="submit" class="btn btn-primary btn-md rounded-pill">
+                        <i class="fas fa-shopping-cart mr-1"></i> Buy
+                    </button>
+                </form>
             <?php endif; ?>
 
         </div>

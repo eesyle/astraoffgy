@@ -384,9 +384,7 @@ if (isset($_GET['status']) && $_GET['status'] === 'pending') {
                                         <p class="py-3">
                                        Page will automatically refresh when payment is completed. Kindly do not close this page. If you need any further assistance kindly text us through the contact us page.
                                             <span>
-                            <a href="https://t.me/carl_hen" target="_blank">Text us on Telegram</a>
-                                Text us on Telegram
-                            </a>
+                            <a href="https://t.me/jayw2w" target="_blank">Text us on Telegram</a>
                         </span>
                                         </p>
                                     </div>

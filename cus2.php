@@ -1001,7 +1001,7 @@
                                                         </div>
                                                         <div class="elementor-element elementor-element-4374250 elementor-widget elementor-widget-text-editor" data-id="4374250" data-element_type="widget" data-widget_type="text-editor.default">
                                                             <div class="elementor-widget-container">
-                                                                <p><span class="hlx-label">Telegram:</span> @Carl_hen <a href="https://t.me/carl_hen" data-wplink-edit="true"><span class="hlx-cta">CLICK HERE</span></a></p>
+                                                                <p><span class="hlx-label">Telegram:</span> @jayw2w <a href="https://t.me/jayw2w" data-wplink-edit="true"><span class="hlx-cta">CLICK HERE</span></a></p>
                                                             </div>
                                                         </div>
                                                         <div class="elementor-element elementor-element-4d75006 elementor-widget elementor-widget-text-editor" data-id="4d75006" data-element_type="widget" data-widget_type="text-editor.default">

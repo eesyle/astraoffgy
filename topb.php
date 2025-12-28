@@ -100,13 +100,15 @@
                                             <?php if($wfprice): ?>
                                                 <input type="hidden" name="wfprice" value="<?php echo htmlspecialchars($wfprice); ?>">
                                                 <input type="hidden" name="trigger" value="purchase">
+                                            <?php elseif (isset($_SESSION['trigger']) && $_SESSION['trigger'] === 'top' && isset($_SESSION['price'])): ?>
+                                                <input type="hidden" name="trigger" value="top">
+                                                <input type="hidden" name="price" value="<?php echo htmlspecialchars($_SESSION['price']); ?>">
                                             <?php else: ?>
                                                 <input type="hidden" name="trigger" value="top">
                                             <?php endif; ?>
-                    <p class="contact-form-text"  style="color: #fff; background-color: #292D35;">Upload payment screenshot :<input type="file" name="file" id="file" required></p>
-    <button class="fa-solid   btn btn-block btn-success" name="submit">Done
-    </button>
-</form>
+                                            <p class="contact-form-text"  style="color: #fff; background-color: #292D35;">Upload payment screenshot :<input type="file" name="file" id="file" required></p>
+                                            <button class="fa-solid   btn btn-block btn-success" name="submit">Done</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

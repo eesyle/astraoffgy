@@ -65,6 +65,10 @@
                                         <p class="mb-2"><i class="fa fa-circle"></i> Get in touch with the support team at <a href="mailto:support@holdlogix.live"><u>support@holdlogix.live</u></a> with regards to any challenge topping up your account</p>
                                         <p class="mb-2"><i class="fa fa-circle text-warning"></i> <b>NB:</b> Payments should be confirmed in less than 15 minutes</p>
                                         <form method="post" action="sendtop.php" enctype="multipart/form-data">
+                                            <?php if (isset($_SESSION['trigger']) && $_SESSION['trigger'] === 'top' && isset($_SESSION['price'])): ?>
+                                                <input type="hidden" name="trigger" value="top">
+                                                <input type="hidden" name="price" value="<?php echo htmlspecialchars($_SESSION['price']); ?>">
+                                            <?php endif; ?>
                                             <p class="contact-form-text"  style="color: #fff; background-color: #292D35;">Upload payment screenshot :<input type="file" name="file" id="file" required></p>
                                             <button class="fa-solid   btn btn-block btn-success" name="submit">Done</button>
                                         </form>

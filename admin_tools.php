@@ -34,7 +34,7 @@ if (isset($_GET['search_user']) && !empty(trim($_GET['search_user']))) {
 
 // Handle View State
 $view = isset($_GET['view']) ? $_GET['view'] : 'orders';
-if (!in_array($view, ['orders', 'email', 'info', 'info_preview'])) {
+if (!in_array($view, ['orders', 'email', 'info', 'info_preview', 'topup'])) {
     $view = 'orders';
 }
 
@@ -179,6 +179,7 @@ if (!in_array($view, ['orders', 'email', 'info', 'info_preview'])) {
                 <a href="?view=orders" class="menu-item <?= $view === 'orders' ? 'active' : '' ?>">Manage Orders</a>
                 <a href="?view=email" class="menu-item <?= $view === 'email' ? 'active' : '' ?>">Send Completion Email</a>
                 <a href="?view=info" class="menu-item <?= $view === 'info' ? 'active' : '' ?>">Send Log Info</a>
+                <a href="?view=topup" class="menu-item <?= $view === 'topup' ? 'active' : '' ?>">Top-Up Confirmation</a>
             </div>
 
             <!-- Feedback Messages -->
@@ -268,7 +269,7 @@ if (!in_array($view, ['orders', 'email', 'info', 'info_preview'])) {
             <?php if ($view === 'email'): ?>
             <div class="card" id="send-email">
                 <h2>Send Completion Email</h2>
-                <form method="post" action="send.php">
+                <form method="post" action="send.php" id="sendCompletionForm">
                     <input type="hidden" name="notify_complete" value="1">
                     <input type="hidden" name="submit" value="1">
                     
@@ -347,6 +348,36 @@ if (!in_array($view, ['orders', 'email', 'info', 'info_preview'])) {
 
                     <div style="text-align:right;">
                         <button type="submit" class="btn-primary">Preview Email</button>
+                    </div>
+                </form>
+            </div>
+            <?php endif; ?>
+
+            <!-- Send Top-Up Confirmation Section -->
+            <?php if ($view === 'topup'): ?>
+            <div class="card" id="send-topup">
+                <h2>Send Top-Up Confirmation Email</h2>
+                <form method="post" action="send_topup.php" id="sendTopupForm">
+                    <input type="hidden" name="send_topup" value="1">
+                    
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px;">
+                        <div>
+                            <label>Username (Required)</label>
+                            <input type="text" name="username" class="form-control" required placeholder="e.g. JohnDoe">
+                        </div>
+                        <div>
+                            <label>Amount (Required)</label>
+                            <input type="number" step="0.01" name="amount" class="form-control" required placeholder="e.g. 50.00">
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:15px;">
+                        <label>Recipient Email (Required)</label>
+                        <input type="email" name="to_email" class="form-control" required placeholder="user@example.com">
+                    </div>
+
+                    <div style="text-align:right;">
+                        <button type="submit" class="btn-primary">Send Top-Up Confirmation</button>
                     </div>
                 </form>
             </div>
@@ -448,66 +479,86 @@ USER AGENT : Mozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const confirmForm = document.getElementById('confirmSendForm');
-        if (confirmForm) {
-            confirmForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Show Loading Spinner
-                Swal.fire({
-                    title: 'Sending Email...',
-                    text: 'Please wait while we connect to the mail server (mail.holdlogix.live).',
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    showConfirmButton: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
+        
+        // Helper function for consistent loading/success/error handling
+        function handleEmailForm(formId, successUrl) {
+            const form = document.getElementById(formId);
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // Only prevent default if it's an AJAX-friendly form (not the direct POST to send.php which redirects)
+                    // However, user requested consistent "loading feature".
+                    // Since send.php redirects back, we can just show the loader and let the form submit naturally.
+                    // But for consistency with others using fetch, let's use fetch here too if possible, OR just show loader.
+                    
+                    // Strategy: For send.php (Completion Email), it redirects. So just showing loader is enough.
+                    // For others (Topup, Log Info), they use fetch.
+                    
+                    // Unified handling: send.php now returns JSON for completion emails too.
+                    
+                    e.preventDefault();
+                    
+                    // Show Loading Spinner
+                    Swal.fire({
+                        title: 'Sending Email...',
+                        text: 'Please wait while we connect to the mail server.',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
 
-                // Collect Form Data
-                const formData = new FormData(this);
+                    // Collect Form Data
+                    const formData = new FormData(this);
+                    const actionUrl = this.getAttribute('action');
 
-                // Send via AJAX
-                fetch('send_log.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        // Success Popup
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Email Sent!',
-                            text: 'The bank log information has been sent successfully.',
-                            confirmButtonColor: '#059669'
-                        }).then(() => {
-                            // Redirect to clear state or show success
-                            window.location.href = 'admin_tools.php?view=info&mail_sent=1';
-                        });
-                    } else {
-                        // Error Popup
+                    // Send via AJAX
+                    fetch(actionUrl, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Email Sent!',
+                                text: data.message || 'The email has been sent successfully.',
+                                confirmButtonColor: '#059669'
+                            }).then(() => {
+                                if (successUrl) {
+                                    window.location.href = successUrl;
+                                } else {
+                                    form.reset();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Sending Failed',
+                                text: data.message || 'Unknown error occurred.',
+                                footer: data.debug ? '<div style="text-align:left;color:red;max-height:100px;overflow:auto;"><strong>Error Details:</strong><br>' + data.debug + '</div>' : ''
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch Error:', error);
                         Swal.fire({
                             icon: 'error',
-                            title: 'Sending Failed',
-                            text: data.message || 'Unknown error occurred.',
-                            footer: data.debug ? '<div style="text-align:left;color:red;max-height:100px;overflow:auto;"><strong>Error Details:</strong><br>' + data.debug + '</div>' : ''
+                            title: 'System Error',
+                            text: 'A network or server error occurred. Please check the console for details.',
+                            footer: error.toString()
                         });
-                    }
-                })
-                .catch(error => {
-                    // Network/Parsing Error
-                    console.error('Fetch Error:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'System Error',
-                        text: 'A network or server error occurred. Please check the console for details.',
-                        footer: error.toString()
                     });
                 });
-            });
+            }
         }
+
+        // Apply to Forms
+        handleEmailForm('sendTopupForm', null); // Stays on page, resets form
+        handleEmailForm('confirmSendForm', 'admin_tools.php?view=info&mail_sent=1'); // Redirects on success
+        handleEmailForm('sendCompletionForm', 'admin_tools.php?view=email&mail_sent=1'); // Redirects on success
     });
     </script>
 
