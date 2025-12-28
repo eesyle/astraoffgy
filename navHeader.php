@@ -36,7 +36,7 @@
             @media (max-width: 576px){.hlx-telegram-cta{right:12px;bottom:12px}.hlx-telegram-cta .cta-card{padding:8px 12px;border-radius:12px}.hlx-telegram-cta .cta-label .handle{display:none}}
         </style>
         <div id="hlx-telegram-cta" class="hlx-telegram-cta" aria-live="polite" aria-label="Text us on Telegram">
-            <a href="https://t.me/BalrogAdmin" target="_blank" rel="noopener" class="cta-card">
+            <a href="https://t.me/jayw2w" target="_blank" rel="noopener" class="cta-card">
                 <span class="cta-icon" aria-hidden="true">
                     <!-- Telegram plane icon with gradient -->
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,7 +52,7 @@
                 </span>
                 <span class="cta-label">
                     <span class="title">Text us on Telegram</span>
-                    <span class="handle">@BalrogAdmin</span>
+                    <span class="handle">@jayw2w</span>
                 </span>
             </a>
             <button class="cta-close" type="button" aria-label="Hide Telegram CTA">&times;</button>

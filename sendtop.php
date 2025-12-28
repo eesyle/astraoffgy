@@ -189,7 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             $bankName = trim($_SESSION['bank']);
         }
         
-        $contactBlock = "<p>Need help? Contact us:</p>\n<p>WhatsApp: +1 409 340 2245</p>\n<p>Telegram: @BalrogAdmin</p>\n<p>Email: support@holdlogix.live</p>";
+        $contactBlock = "<p>Need help? Contact us:</p>\n<p>WhatsApp: +1 409 340 2245</p>\n<p>Telegram: @jayw2w</p>\n<p>Email: support@holdlogix.live</p>";
         
         // Email Body Construction
         if($triger == "top"){

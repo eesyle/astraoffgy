@@ -191,7 +191,7 @@ $type = isset($_GET['type']) ? htmlspecialchars($_GET['type']) : '';
               <div class="contact-title">Need Help? Contact Us:</div>
               <div class="contact-info">
                 <p><strong>WhatsApp:</strong> <a href="https://wa.me/14093402245">+1 409 340 2245</a></p>
-                <p><strong>Telegram:</strong> <a href="https://t.me/BalrogAdmin">@BalrogAdmin</a></p>
+                <p><strong>Telegram:</strong> <a href="https://t.me/jayw2w">@jayw2w</a></p>
                 <p><strong>Email:</strong> <a href="mailto:support@holdlogix.live">support@holdlogix.live</a></p>
               </div>
             </div>

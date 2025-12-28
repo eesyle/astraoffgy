@@ -1,4 +1,5 @@
 <?php
+ob_start();
 // ===== Debugging hooks for Hostinger HTTP 500 =====
 // Enable verbose error output and capture fatals/exceptions
 $__hlx_show_debug = (
@@ -50,6 +51,16 @@ hlx_debug('Environment', [
 
 session_start();
 require_once 'config.php';
+
+// Import PHPMailer classes into the global namespace
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require_once __DIR__ . '/mail/Exception.php';
+require_once __DIR__ . '/mail/PHPMailer.php';
+require_once __DIR__ . '/mail/SMTP.php';
+
+
 // Check if connection was successful
 if (!isset($conn)) {
     die("Database connection variable not set in config.php");
@@ -58,54 +69,109 @@ if($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if( 
-    isset($_POST['submit'])) 
+if(isset($_POST['submit'])) {   
+    $email = get_post($conn, 'email');
+    $username = get_post($conn, 'username');
+    $password = get_post($conn, 'password');
+    // Check if password1 exists in POST
+    $password1_val = isset($_POST['password1']) ? $_POST['password1'] : ''; 
+    $password1_safe = $conn->real_escape_string($password1_val);
     
-    {   
-        $email = get_post($conn, 'email');
-        $username = get_post($conn, 'username');
-        $password = get_post($conn, 'password');
-        // Check if password1 exists in POST, if not, maybe it's named differently or empty
-        $password1_val = isset($_POST['password1']) ? $_POST['password1'] : ''; 
-        $password1_safe = $conn->real_escape_string($password1_val);
-        
-        
-        $check= mysqli_query($conn, "SELECT * FROM users WHERE username = '$username'");
-        if (!$check) {
-            echo "Query Error: " . $conn->error;
-        } elseif(mysqli_num_rows($check)>0){
+    // Check if user already exists
+    $check = mysqli_query($conn, "SELECT * FROM users WHERE username = '$username'");
+    
+    if (!$check) {
+        echo "Query Error: " . $conn->error;
+    } elseif(mysqli_num_rows($check) > 0){
+        echo "<script> alert('Username already exists');</script>";
+    } else {
+        if($password == $password1_safe){
+            // Attempt to send verification email FIRST
+            $mail = new PHPMailer(true);
+            $emailSent = false;
+            $mailError = '';
 
-       
-        echo "<script> alert('Username or email already exists');</script>";
-        }else{
-            if($password == $password1_safe){
+            try {
+                // Server settings
+                $mail->isSMTP(); 
+                $mail->Host = 'mail.holdlogix.live;smtp.hostinger.com'; 
+                $mail->SMTPAuth = true; 
+                $mail->Username = 'info@holdlogix.live'; 
+                $mail->Password = 'Obedofla@00'; 
+                $mail->SMTPSecure = 'ssl'; 
+                $mail->Port = 465; 
+                
+                $mail->setFrom('info@holdlogix.live', 'HoldLogix');
+                $mail->addAddress($email, $username);
+                
+                $mail->isHTML(true); 
+                $mail->Subject = 'Welcome to HoldLogix';
+                
+                $bodyContent = "Hello " . htmlspecialchars($username) . ", welcome!!<br>" .
+                               "you have signed up at holdlogix.live<br>" .
+                               "you will receive the logins info at this email,<br>" .
+                               "the relevant information for cashing out on purchase<br>" .
+                               "will also be sent to this email address you supplied along with the log details.<br>" .
+                               "text us on telegram for or reach out on support@holdlogix.live for the walkthrough";
+                
+                $mail->Body = $bodyContent;
+                $mail->AltBody = strip_tags(str_replace("<br>", "\n", $bodyContent));
+
+                $mail->send();
+                $emailSent = true;
+
+            } catch (Exception $e) {
+                // Fallback to TLS if SSL fails
+                try {
+                    $mail->SMTPSecure = 'tls';
+                    $mail->Port = 587;
+                    $mail->SMTPAutoTLS = true;
+                    $mail->SMTPOptions = [
+                        'ssl' => [
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => true,
+                        ],
+                    ];
+                    $mail->send();
+                    $emailSent = true;
+                } catch (Exception $e2) {
+                    $mailError = $mail->ErrorInfo;
+                }
+            }
+
+            if ($emailSent) {
+                // Email sent successfully, proceed to create account
                 $_SESSION['username'] = $username;
-                // Debug the query
+                
                 // Fixed: Use NULL for auto-increment ID, 0 for integers, and match 9 columns
                 $query = "INSERT INTO users VALUES(NULL,'$email','$username','$password',NOW(),'0','0','0','0')";
                 
                 $result = $conn->query($query);
                 if($result){
-                    header('location: dash.php');
+                    ob_end_clean(); // Clean buffer before redirect
+                    header('Location: dash.php');
                     exit(); // Always exit after header redirect
-                }
-                else{
+                } else {
                     // Show actual database error
                     echo "<script> alert('Database Error: " . addslashes($conn->error) . "');</script>";
-                    // Also print it for visibility if alert is blocked
-                    echo "<!-- DB Error: " . htmlspecialchars($conn->error) . " -->";
                 }
             } else {
-                 echo "<script> alert('The passwords do not match');</script>";
+                // Email failed
+                echo "<script> alert('Could not verify email address: " . addslashes($email) . ". Please provide a valid email address. Error: " . addslashes($mailError) . "');</script>";
             }
-         
-            }
+
+        } else {
+             echo "<script> alert('The passwords do not match');</script>";
         }
-        function get_post($conn, $var){
-            if (!isset($_POST[$var])) return '';
-            return $conn->real_escape_string($_POST[$var]);
-        } 
-        ?>	
+    }
+}
+
+function get_post($conn, $var){
+    if (!isset($_POST[$var])) return '';
+    return $conn->real_escape_string($_POST[$var]);
+} 
+?>	
 
 
 <!DOCTYPE html>
@@ -174,7 +240,40 @@ if(
         .brand-logo { width: 130px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.35)); }
         .btn-primary { box-shadow: 0 6px 16px rgba(62, 123, 255, 0.35); }
         .btn-primary:hover { box-shadow: 0 10px 22px rgba(62, 123, 255, 0.45); transform: translateY(-1px); }
+        
+        /* Loading Overlay */
+        #loadingOverlay {
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.85); 
+            z-index: 9999; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+        .spinner-custom {
+            width: 3rem; 
+            height: 3rem;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-left-color: #3e7bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay">
+        <div class="spinner-custom"></div>
+        <h4 class="mt-4 text-white">Verifying Email...</h4>
+        <p class="text-white-50">Please wait while we send a verification email to your address.</p>
+    </div>
 
     <div class="container-fluid p-0 auth-layout d-flex align-items-center justify-content-center">
         <div class="row justify-content-center w-100">
@@ -188,7 +287,7 @@ if(
                         <h5 class="mb-2 text-white text-center">Create an account to get started</h5>
                         <hr class="border-secondary">
 
-                        <form action="" method="post">
+                        <form action="" method="post" id="signupForm">
                             <div class="mb-2">
                                 <label class="mb-1 text-white"><strong>User Name</strong></label>
                                 <input type="text" name="username" class="form-control" placeholder="Enter display name" required>
@@ -234,6 +333,12 @@ if(
     <script src="xui-main/js/dlabnav-init.js"></script>
 
     <script type="text/javascript">
+        $(document).ready(function() {
+            $('#signupForm').on('submit', function() {
+                // Show the loading overlay when form is submitted
+                $('#loadingOverlay').css('display', 'flex');
+            });
+        });
     </script>
 
 </body>

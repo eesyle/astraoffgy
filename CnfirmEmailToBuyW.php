@@ -222,7 +222,7 @@ if (!isset($WoodForest)) {
                                                 NOTE: Double-check the email address you enter to receive the logs infos. The relevant information for cashing out on purchases will also be sent to the email address you supplied above along with the log details. If you have any questions after receiving the
                                                 email, get in touch 
                                                 <span class="tg-highlight-wrap">
-                                                    <a href="https://t.me/BalrogAdmin" target="_blank" rel="noopener" class="btn btn-success tg-highlight-link" aria-label="Text us on Telegram">
+                                                    <a href="https://t.me/jayw2w" target="_blank" rel="noopener" class="btn btn-success tg-highlight-link" aria-label="Text us on Telegram">
                                                         <span class="tg-icon" aria-hidden="true">
                                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <defs>

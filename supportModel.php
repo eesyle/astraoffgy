@@ -10,7 +10,7 @@
                         <span style="font-size: large;">Get in touch with our support team at <a href="mailto:support@holdlogix.live"><u>support@holdlogix.live</u></a> for any queries or inquiries.</span>
                         <div class="mt-3" style="font-size: large;">
                             <div>WhatsApp: <a href="https://wa.me/14093402245" target="_blank"><u>+14093402245</u></a></div>
-                            <div>Telegram: <a href="https://t.me/BalrogAdmin" target="_blank"><u>@BalrogAdmin</u></a></div>
+                            <div>Telegram: <a href="https://t.me/jayw2w" target="_blank"><u>@jayw2w</u></a></div>
                         </div>
                         <p class="mb-2"><i class="fa fa-circle"></i> Get in touch with the support team at <a href="mailto:support@holdlogix.live"><u>support@holdlogix.live</u></a> with regards to any challenge topping up your account</p>
                     </div>
