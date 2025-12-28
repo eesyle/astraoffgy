@@ -54,6 +54,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update-review'])) {
 
 // Fetch reviews from customer_reviews
 $result = $conn->query("SELECT * FROM customer_reviews ORDER BY id DESC");
+$reviews = [];
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $reviews[] = $row;
+    }
+}
 
 $conn->close();
 ?>
@@ -67,6 +73,15 @@ $conn->close();
     <!-- Include Bootstrap CSS first, then our overrides -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styleee.css">
+    <style>
+        /* Fix for modal z-index issues if they occur */
+        .modal-backdrop {
+            z-index: 1040 !important;
+        }
+        .modal-content {
+            z-index: 1100 !important;
+        }
+    </style>
 </head>
 <body>
     <div class="admin-container">
@@ -80,111 +95,118 @@ $conn->close();
             <section class="content-section">
                 <h2>Reviews Management Section</h2>
                 <div class="table-responsive">
-        <table class="table table-striped table-dark">
-            <thead>
-                <tr>
-                    <th>Author</th>
-                    <th>Image</th>
-                    <th>Text</th>
-                    <th>Photo</th>
-                    <th>Rating</th>
-                    <th>Created At</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $result->fetch_assoc()) { ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($row['author']); ?></td>
-                        <td>
-                            <?php $img = !empty($row['image']) ? $row['image'] : 'uploads/default-user.png'; ?>
-                            <img src="<?php echo $img; ?>" alt="Image" style="width:50px;height:50px;border-radius:6px;object-fit:cover;">
-                        </td>
-                        <td><?php echo nl2br(htmlspecialchars($row['text'])); ?></td>
-                        <td>
-                            <?php if (!empty($row['photo'])) { ?>
-                                <img src="<?php echo $row['photo']; ?>" alt="Photo" style="width:70px;height:50px;border-radius:6px;object-fit:cover;">
-                            <?php } else { echo '<span class="text-muted">None</span>'; } ?>
-                        </td>
-                        <td><?php echo (int)$row['rating']; ?></td>
-                        <td><?php echo htmlspecialchars($row['created_at']); ?></td>
-                        <td><?php echo $row['isActive'] ? '<span class="text-success">Active</span>' : '<span class="text-danger">Inactive</span>'; ?></td>
-                        <td>
-                            <!-- Edit Button triggers modal -->
-                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editReviewModal<?php echo $row['id']; ?>">Edit</button>
-                            <form method="POST" style="display:inline;">
-                                <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-                                <button type="submit" class="btn btn-danger btn-sm" name="delete-review">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-
-                    <!-- Edit Review Modal -->
-                    <div class="modal fade" id="editReviewModal<?php echo $row['id']; ?>" tabindex="-1" role="dialog">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <form method="POST" action="" enctype="multipart/form-data">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Edit Review</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <input type="hidden" name="review_id" value="<?php echo $row['id']; ?>">
-                                        <div class="form-group">
-                                            <label for="author">Author</label>
-                                            <input type="text" class="form-control" name="author" value="<?php echo htmlspecialchars($row['author']); ?>" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="text">Text</label>
-                                            <textarea class="form-control" name="text" rows="3" required><?php echo htmlspecialchars($row['text']); ?></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="image">Image</label>
-                                            <input type="file" class="form-control" name="image" accept="image/*">
-                                            <input type="hidden" name="existing_image" value="<?php echo htmlspecialchars($row['image']); ?>">
-                                            <?php if (!empty($row['image'])) { ?>
-                                                <img src="<?php echo htmlspecialchars($row['image']); ?>" alt="Current Image" class="media-thumb">
-                                            <?php } ?>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="photo">Photo</label>
-                                            <input type="file" class="form-control" name="photo" accept="image/*">
-                                            <input type="hidden" name="existing_photo" value="<?php echo htmlspecialchars($row['photo']); ?>">
-                                            <?php if (!empty($row['photo'])) { ?>
-                                                <img src="<?php echo htmlspecialchars($row['photo']); ?>" alt="Current Photo" class="media-thumb">
-                                            <?php } ?>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="rating">Rating</label>
-                                            <input type="number" class="form-control" name="rating" min="0" max="5" value="<?php echo (int)$row['rating']; ?>" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="created_at">Created At</label>
-                                            <input type="datetime-local" class="form-control" name="created_at" value="<?php echo date('Y-m-d\TH:i', strtotime($row['created_at'])); ?>" required>
-                                        </div>
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="isActive" <?php echo $row['isActive'] ? 'checked' : ''; ?>>
-                                            <label class="form-check-label" for="isActive">Active</label>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary" name="update-review">Save changes</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                <?php } ?>
-            </tbody>
-        </table>
+                    <table class="table table-striped table-dark">
+                        <thead>
+                            <tr>
+                                <th>Author</th>
+                                <th>Image</th>
+                                <th>Text</th>
+                                <th>Photo</th>
+                                <th>Rating</th>
+                                <th>Created At</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($reviews as $row) { ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($row['author']); ?></td>
+                                    <td>
+                                        <?php $img = !empty($row['image']) ? $row['image'] : 'uploads/default-user.png'; ?>
+                                        <img src="<?php echo $img; ?>" alt="Image" style="width:50px;height:50px;border-radius:6px;object-fit:cover;">
+                                    </td>
+                                    <td><?php echo nl2br(htmlspecialchars($row['text'])); ?></td>
+                                    <td>
+                                        <?php if (!empty($row['photo'])) { ?>
+                                            <img src="<?php echo $row['photo']; ?>" alt="Photo" style="width:70px;height:50px;border-radius:6px;object-fit:cover;">
+                                        <?php } else { echo '<span class="text-muted">None</span>'; } ?>
+                                    </td>
+                                    <td><?php echo (int)$row['rating']; ?></td>
+                                    <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                                    <td><?php echo $row['isActive'] ? '<span class="text-success">Active</span>' : '<span class="text-danger">Inactive</span>'; ?></td>
+                                    <td>
+                                        <!-- Edit Button triggers modal -->
+                                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editReviewModal<?php echo $row['id']; ?>">Edit</button>
+                                        <form method="POST" style="display:inline;">
+                                            <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
+                                            <button type="submit" class="btn btn-danger btn-sm" name="delete-review">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
                 </div>
             </section>
         </div>
     </div>
+
+    <!-- Modals outside the table structure -->
+    <?php foreach ($reviews as $row) { ?>
+        <!-- Edit Review Modal -->
+        <div class="modal fade" id="editReviewModal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form method="POST" action="" enctype="multipart/form-data">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Review</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body text-dark">
+                            <input type="hidden" name="review_id" value="<?php echo $row['id']; ?>">
+                            <div class="form-group">
+                                <label for="author">Author</label>
+                                <input type="text" class="form-control" name="author" value="<?php echo htmlspecialchars($row['author']); ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="text">Text</label>
+                                <textarea class="form-control" name="text" rows="3" required><?php echo htmlspecialchars($row['text']); ?></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="image">Image</label>
+                                <input type="file" class="form-control" name="image" accept="image/*">
+                                <input type="hidden" name="existing_image" value="<?php echo htmlspecialchars($row['image']); ?>">
+                                <?php if (!empty($row['image'])) { ?>
+                                    <div class="mt-2">
+                                        <img src="<?php echo htmlspecialchars($row['image']); ?>" alt="Current Image" class="media-thumb" style="max-width: 100px;">
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="photo">Photo</label>
+                                <input type="file" class="form-control" name="photo" accept="image/*">
+                                <input type="hidden" name="existing_photo" value="<?php echo htmlspecialchars($row['photo']); ?>">
+                                <?php if (!empty($row['photo'])) { ?>
+                                    <div class="mt-2">
+                                        <img src="<?php echo htmlspecialchars($row['photo']); ?>" alt="Current Photo" class="media-thumb" style="max-width: 100px;">
+                                    </div>
+                                <?php } ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="rating">Rating</label>
+                                <input type="number" class="form-control" name="rating" min="0" max="5" value="<?php echo (int)$row['rating']; ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="created_at">Created At</label>
+                                <input type="datetime-local" class="form-control" name="created_at" value="<?php echo date('Y-m-d\TH:i', strtotime($row['created_at'])); ?>" required>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="isActive" id="isActive<?php echo $row['id']; ?>" <?php echo $row['isActive'] ? 'checked' : ''; ?>>
+                                <label class="form-check-label" for="isActive<?php echo $row['id']; ?>">Active</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" name="update-review">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
 
     <!-- Include jQuery and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

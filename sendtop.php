@@ -203,7 +203,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         }
         if($triger == "purchase"){
             $bankText = $bankName !== '' ? $bankName : 'HoldLogix';
-            $link = "https://holdlogix.live/verified_products.php";
+            // Append username to the link to ensure auto-login/context
+            $link = "https://holdlogix.live/verified_products.php?username=" . urlencode($username);
             
             $mail->Body = "<p>Your $bankText order has been verified.</p>"
                 . "<p>Kindly click on the option link below to view your account details.</p>"

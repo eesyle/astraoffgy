@@ -5,8 +5,13 @@ require_once "codeForLogs.php";
 
 if(isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
+} elseif (isset($_GET['username']) && !empty($_GET['username'])) {
+    // Allow login via URL parameter (mostly for email links)
+    $username = trim($_GET['username']);
+    $_SESSION['username'] = $username;
 } else {
-    echo "You are not logged in.";
+    // Redirect to login instead of just showing a message
+    header("Location: index.php");
     exit();
 }
 
