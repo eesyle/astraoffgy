@@ -87,6 +87,39 @@ $ratsPrice = 50.00;
             background-color: rgba(0, 210, 91, 0.1) !important;
             color: #00d25b !important;
         }
+        .form-check-input {
+            width: 1.6rem;
+            height: 1.6rem;
+            cursor: pointer;
+            appearance: none;
+            border: 2px solid #a1acb8;
+            border-radius: 6px;
+            background: transparent;
+            position: relative;
+            transition: all .2s ease;
+        }
+        .form-check-input:checked {
+            background-color: #00d25b;
+            border-color: #00d25b;
+            transform: scale(1.05);
+        }
+        .form-check-input:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 210, 91, 0.25);
+        }
+        .form-check-input::after {
+            content: "✓";
+            color: #fff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -52%) scale(0);
+            font-size: 1.1rem;
+            font-weight: 800;
+            transition: transform .15s ease-out;
+        }
+        .form-check-input:checked::after {
+            transform: translate(-50%, -52%) scale(1);
+        }
     </style>
 </head>
 
@@ -137,96 +170,115 @@ $ratsPrice = 50.00;
                         </div>
 
                         <div class="row justify-content-center">
-                            
-                            <!-- SOCKS Product -->
-                            <div class="col-md-5 mb-4">
-                                <div class="card product-card h-100">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between align-items-center mb-4">
-                                            <div class="icon-box rounded-circle p-3">
-                                                <i class="fas fa-network-wired fa-2x text-primary"></i>
-                                            </div>
-                                            <span class="badge bg-label-success px-3 py-2">Available</span>
-                                        </div>
-                                        <h3 class="card-title text-white">Premium SOCKS Proxy</h3>
-                                        <div class="price-tag mb-3">$<?= number_format($socksPrice, 2) ?></div>
-                                        <p class="card-text text-muted mb-4">
-                                            High-performance SOCKS5 proxies offering superior anonymity and speed. Ideal for secure browsing and bypassing geo-restrictions.
+                            <div class="col-12">
+                                <div class="card bg-dark text-white border-0">
+                                    <div class="card-body">
+                                        <p class="mb-4">
+                                            Tools U need to successful cashout<br>
+                                            Please buy these tools to access the banklogins infos (Details)
                                         </p>
-                                        <ul class="list-unstyled feature-list">
-                                            <li><i class="fas fa-check-circle"></i> 99.9% Uptime Guarantee</li>
-                                            <li><i class="fas fa-check-circle"></i> Unlimited Bandwidth</li>
-                                            <li><i class="fas fa-check-circle"></i> Residential IPs Available</li>
-                                            <li><i class="fas fa-check-circle"></i> Instant Activation</li>
+                                        <ul class="mb-4">
+                                            <li>Remote Access Trojans(RATs): Malware that will provide you With remote access to the victim’s computer allowing you to monitor Moreover, control the account.</li>
+                                            <li>Socks proxy: will help you to change your IP address and hide your location While cashing out the funds from the account.</li>
                                         </ul>
-                                        
-                                        <?php if ($balance >= $socksPrice): ?>
-                                            <form action="sendtop.php" method="POST">
-                                                <input type="hidden" name="username" value="<?= htmlspecialchars($username) ?>">
-                                                <input type="hidden" name="wfprice" value="<?= $socksPrice ?>">
-                                                <input type="hidden" name="trigger" value="socks">
-                                                <input type="hidden" name="submit" value="1">
-                                                <button type="submit" class="btn btn-primary w-100 mt-3 btn-lg" onclick="return confirm('Are you sure you want to purchase SOCKS Proxy for $<?= number_format($socksPrice, 2) ?>?');">
-                                                    Buy Now
-                                                </button>
-                                            </form>
-                                        <?php else: ?>
-                                            <button class="btn btn-secondary w-100 mt-3 btn-lg" disabled>
-                                                Insufficient Balance (Need $<?= number_format($socksPrice, 2) ?>)
-                                            </button>
-                                            <div class="text-center mt-2">
-                                                <a href="#" class="text-primary small" data-bs-toggle="modal" data-bs-target="#topUpAccountModal">Top up your wallet</a>
+
+                                        <form action="checkout_tools.php" method="POST" id="purchaseForm">
+                                            <input type="hidden" name="username" value="<?= htmlspecialchars($username) ?>">
+                                            
+                                            <div class="mb-4">
+                                                <label for="rdp_email" class="form-label">Confirm email to receive RDP access</label>
+                                                <input type="email" class="form-control" id="rdp_email" name="rdp_email" required placeholder="@email" style="max-width: 400px;">
+                                                <div class="form-text text-light">Please verify the above email is correct your RPD ID and Password will be sent to this email.</div>
                                             </div>
-                                        <?php endif; ?>
+
+                                            <div class="table-responsive">
+                                                <table class="table table-dark table-bordered text-white">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Tools</th>
+                                                            <th>Description</th>
+                                                            <th>Price</th>
+                                                            <th>Checkboxes</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- RATs -->
+                                                        <tr>
+                                                            <td>RATs</td>
+                                                            <td>Malware that will provide you With remote access to the victim’s computer allowing you to monitor Moreover, control the account.</td>
+                                                            <td>$65</td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input tool-checkbox" type="checkbox" name="tools[rats]" value="65" data-name="RATs - Remote Access Trojan">
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- Socks Proxy -->
+                                                        <tr>
+                                                            <td rowspan="3">Socks Proxy</td>
+                                                            <td rowspan="3">will help you to change your IP address and hide your location While cashing out the funds from the account.</td>
+                                                            <td>$20/month</td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input tool-checkbox" type="checkbox" name="tools[socks_1m]" value="20" data-name="Socks Proxy (1 Month)">
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>$45/3month</td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input tool-checkbox" type="checkbox" name="tools[socks_3m]" value="45" data-name="Socks Proxy (3 Months)">
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>$100/6month</td>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input tool-checkbox" type="checkbox" name="tools[socks_6m]" value="100" data-name="Socks Proxy (6 Months)">
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                                            <td><strong>$<span id="totalPrice">0.00</span></strong></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+
+                                            <div class="text-end mt-4">
+                                                <button type="submit" class="btn btn-primary btn-lg">Next <i class="fas fa-arrow-right ms-2"></i></button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- RATS Product -->
-                            <div class="col-md-5 mb-4">
-                                <div class="card product-card h-100">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between align-items-center mb-4">
-                                            <div class="icon-box rounded-circle p-3">
-                                                <i class="fas fa-bug fa-2x text-danger"></i>
-                                            </div>
-                                            <span class="badge bg-label-success px-3 py-2">Available</span>
-                                        </div>
-                                        <h3 class="card-title text-white">Premium Remote Tool (RATS)</h3>
-                                        <div class="price-tag mb-3">$<?= number_format($ratsPrice, 2) ?></div>
-                                        <p class="card-text text-muted mb-4">
-                                            Advanced remote administration tool for professional network management and security testing.
-                                        </p>
-                                        <ul class="list-unstyled feature-list">
-                                            <li><i class="fas fa-check-circle"></i> Full Remote Access</li>
-                                            <li><i class="fas fa-check-circle"></i> Encrypted Connection</li>
-                                            <li><i class="fas fa-check-circle"></i> File System Control</li>
-                                            <li><i class="fas fa-check-circle"></i> 24/7 Premium Support</li>
-                                        </ul>
-
-                                        <?php if ($balance >= $ratsPrice): ?>
-                                            <form action="sendtop.php" method="POST">
-                                                <input type="hidden" name="username" value="<?= htmlspecialchars($username) ?>">
-                                                <input type="hidden" name="wfprice" value="<?= $ratsPrice ?>">
-                                                <input type="hidden" name="trigger" value="rats">
-                                                <input type="hidden" name="submit" value="1">
-                                                <button type="submit" class="btn btn-primary w-100 mt-3 btn-lg" onclick="return confirm('Are you sure you want to purchase Premium Remote Tool for $<?= number_format($ratsPrice, 2) ?>?');">
-                                                    Buy Now
-                                                </button>
-                                            </form>
-                                        <?php else: ?>
-                                            <button class="btn btn-secondary w-100 mt-3 btn-lg" disabled>
-                                                Insufficient Balance (Need $<?= number_format($ratsPrice, 2) ?>)
-                                            </button>
-                                            <div class="text-center mt-2">
-                                                <a href="#" class="text-primary small" data-bs-toggle="modal" data-bs-target="#topUpAccountModal">Top up your wallet</a>
-                                            </div>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const checkboxes = document.querySelectorAll('.tool-checkbox');
+                                const totalDisplay = document.getElementById('totalPrice');
+
+                                function calculateTotal() {
+                                    let total = 0;
+                                    checkboxes.forEach(box => {
+                                        if (box.checked) {
+                                            total += parseFloat(box.value);
+                                        }
+                                    });
+                                    totalDisplay.textContent = total.toFixed(2);
+                                }
+
+                                checkboxes.forEach(box => {
+                                    box.addEventListener('change', calculateTotal);
+                                });
+                            });
+                        </script>
                     </div>
                     
                 </div>
