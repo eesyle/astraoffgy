@@ -1,6 +1,19 @@
 <?php
+    // Debugging: Enable error reporting
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+
     session_start();
     require 'dbcon.php';
+
+    // Debugging: Check database connection
+    if (!isset($con)) {
+        die("Error: Database connection variable \$con is not set. Check dbcon.php.");
+    }
+    if (!$con) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
 ?>
 <!doctype html>
 <html lang="en">
@@ -67,7 +80,10 @@
                                     $query = "SELECT * FROM users";
                                     $query_run = mysqli_query($con, $query);
 
-                                    if(mysqli_num_rows($query_run) > 0)
+                                    if (!$query_run) {
+                                        echo "<tr><td colspan='10' class='text-danger'>Query Failed: " . mysqli_error($con) . "</td></tr>";
+                                    }
+                                    elseif(mysqli_num_rows($query_run) > 0)
                                     {
                                         foreach($query_run as $student)
                                         {
