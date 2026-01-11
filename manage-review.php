@@ -40,18 +40,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
     $stmt->bind_param('ii', $newStatus, $id);
     
-    if ($stmt->execute()) {
-        // Success - Show success message and redirect after a delay
-        showDebug("Update Successful! Redirecting in 3 seconds...");
-        echo "<script>setTimeout(function(){ window.location.href = 'manage-review.php'; }, 3000);</script>";
-        // Stop script execution here to let the user see the message, but render the rest of the page? 
-        // Actually, to show the message on the *next* page load is better, or pause here.
-        // Let's pause here by NOT exiting immediately, but we need to render the page to see it.
-        // Better approach: set a session variable or just show it and rely on the JS timeout.
-    } else {
-        // Error - Show specific error
-        showDebug("Execute Failed: " . $stmt->error);
-        die("Error updating status: " . $stmt->error);
+    try {
+        if ($stmt->execute()) {
+            // Success - Show success message
+            $affected = $stmt->affected_rows;
+            showDebug("Update Successful! Affected Rows: $affected");
+            
+            if ($affected === 0) {
+                showDebug("Warning: No rows were changed. Did you make any edits?");
+            }
+            
+            // Disable auto-redirect for debugging purposes
+            echo "<div class='alert alert-success' style='z-index: 9999; position: relative;'>
+                    <strong>Operation Completed.</strong><br>
+                    Please check the database or the table below to see if changes applied.<br>
+                    <a href='manage-review.php' class='btn btn-primary mt-2'>Click here to Refresh/Continue</a>
+                  </div>";
+        }
+    } catch (Exception $e) {
+        showDebug("Exception during execution: " . $e->getMessage());
+        die("Error updating status: " . $e->getMessage());
     }
     $stmt->close();
 }
@@ -61,8 +69,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-review']) && i
     $delId = (int)$_POST['delete_id'];
     $stmt = $conn->prepare('DELETE FROM customer_reviews WHERE id=?');
     $stmt->bind_param('i', $delId);
-    $stmt->execute();
-    echo "<script>alert('Review deleted successfully!'); window.location.href = 'manage-review.php';</script>";
+    try {
+        $stmt->execute();
+        echo "<script>alert('Review deleted successfully!'); window.location.href = 'manage-review.php';</script>";
+    } catch (Exception $e) {
+        showDebug("Delete Failed: " . $e->getMessage());
+        echo "<script>alert('Error deleting review: " . addslashes($e->getMessage()) . "');</script>";
+    }
     exit();
 }
 
@@ -104,12 +117,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['update-review']) || 
     
     $stmt->bind_param('ssssisii', $author, $image, $text, $photo, $rating, $created_at, $isActive, $id);
 
-    if ($stmt->execute()) {
-        showDebug("Review updated successfully! Redirecting in 3 seconds...");
-        echo "<script>setTimeout(function(){ window.location.href = 'manage-review.php'; }, 3000);</script>";
-    } else {
-        showDebug("Update Execute Failed: " . $stmt->error);
-        echo "<script>alert('Error updating review: " . addslashes($stmt->error) . "');</script>";
+    try {
+        if ($stmt->execute()) {
+            $affected = $stmt->affected_rows;
+            showDebug("Update Successful! Affected Rows: $affected");
+            
+            if ($affected === 0) {
+                showDebug("Warning: No rows were changed. This usually means the data was identical to what was already in the database.");
+            }
+    
+            echo "<div class='alert alert-success' style='z-index: 9999; position: relative;'>
+                    <strong>Review Updated.</strong><br>
+                    Affected Rows: $affected<br>
+                    <a href='manage-review.php' class='btn btn-primary mt-2'>Click here to Refresh/Continue</a>
+                  </div>";
+        }
+    } catch (Exception $e) {
+        showDebug("Update Execute Failed: " . $e->getMessage());
+        echo "<script>alert('Error updating review: " . addslashes($e->getMessage()) . "');</script>";
     }
 
     $stmt->close();
