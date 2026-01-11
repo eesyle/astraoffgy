@@ -6,35 +6,18 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Helper to show debug on page
-function showDebug($msg) {
-    echo "<div class='alert alert-info alert-dismissible fade show' role='alert' style='z-index: 9999; position: relative;'>
-            <strong>DEBUG:</strong> " . htmlspecialchars($msg) . "
-            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-                <span aria-hidden='true'>&times;</span>
-            </button>
-          </div>";
-}
-
-// Quick Toggle Status Logic (New Feature)
+// Quick Toggle Status Logic
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'toggle_status') {
-    // Show debug info
-    showDebug("Toggle Status Requested. POST Data: " . json_encode($_POST));
-
     $id = (int)$_POST['review_id'];
     $currentStatus = (int)$_POST['current_status'];
     $newStatus = $currentStatus ? 0 : 1; // Toggle: 1 -> 0, 0 -> 1
     
-    showDebug("Toggling ID $id from $currentStatus to $newStatus");
-
     if ($conn->connect_error) {
-        showDebug("DB Connection Failed: " . $conn->connect_error);
         die("Connection failed: " . $conn->connect_error);
     }
 
     $stmt = $conn->prepare('UPDATE customer_reviews SET isActive=? WHERE id=?');
     if (!$stmt) {
-        showDebug("Prepare Failed: " . $conn->error);
         die("Prepare failed: " . $conn->error);
     }
 
@@ -42,23 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     
     try {
         if ($stmt->execute()) {
-            // Success - Show success message
-            $affected = $stmt->affected_rows;
-            showDebug("Update Successful! Affected Rows: $affected");
-            
-            if ($affected === 0) {
-                showDebug("Warning: No rows were changed. Did you make any edits?");
-            }
-            
-            // Disable auto-redirect for debugging purposes
-            echo "<div class='alert alert-success' style='z-index: 9999; position: relative;'>
-                    <strong>Operation Completed.</strong><br>
-                    Please check the database or the table below to see if changes applied.<br>
-                    <a href='manage-review.php' class='btn btn-primary mt-2'>Click here to Refresh/Continue</a>
-                  </div>";
+            // Success - Redirect immediately
+            header("Location: manage-review.php");
+            exit();
         }
     } catch (Exception $e) {
-        showDebug("Exception during execution: " . $e->getMessage());
         die("Error updating status: " . $e->getMessage());
     }
     $stmt->close();
@@ -73,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-review']) && i
         $stmt->execute();
         echo "<script>alert('Review deleted successfully!'); window.location.href = 'manage-review.php';</script>";
     } catch (Exception $e) {
-        showDebug("Delete Failed: " . $e->getMessage());
         echo "<script>alert('Error deleting review: " . addslashes($e->getMessage()) . "');</script>";
     }
     exit();
@@ -81,9 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-review']) && i
 
 // Update review logic for customer_reviews
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['update-review']) || (isset($_POST['action']) && $_POST['action'] === 'update_review'))) {
-    // Show debug info
-    showDebug("Update Review Requested. POST Data: " . json_encode($_POST));
-
     $id = (int)$_POST['review_id'];
     $author = $_POST['author'];
     $text = $_POST['text'];
@@ -101,17 +68,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['update-review']) || 
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $image = 'uploads/' . basename($_FILES['image']['name']);
         move_uploaded_file($_FILES['image']['tmp_name'], $image);
-        showDebug("New image uploaded: $image");
     }
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $photo = 'uploads/' . basename($_FILES['photo']['name']);
         move_uploaded_file($_FILES['photo']['tmp_name'], $photo);
-        showDebug("New photo uploaded: $photo");
     }
 
     $stmt = $conn->prepare('UPDATE customer_reviews SET author=?, image=?, text=?, photo=?, rating=?, created_at=?, isActive=? WHERE id=?');
     if (!$stmt) {
-        showDebug("Update Prepare Failed: " . $conn->error);
         die("Update prepare failed: " . $conn->error);
     }
     
@@ -119,21 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['update-review']) || 
 
     try {
         if ($stmt->execute()) {
-            $affected = $stmt->affected_rows;
-            showDebug("Update Successful! Affected Rows: $affected");
-            
-            if ($affected === 0) {
-                showDebug("Warning: No rows were changed. This usually means the data was identical to what was already in the database.");
-            }
-    
-            echo "<div class='alert alert-success' style='z-index: 9999; position: relative;'>
-                    <strong>Review Updated.</strong><br>
-                    Affected Rows: $affected<br>
-                    <a href='manage-review.php' class='btn btn-primary mt-2'>Click here to Refresh/Continue</a>
-                  </div>";
+            echo "<script>alert('Review updated successfully!'); window.location.href = 'manage-review.php';</script>";
         }
     } catch (Exception $e) {
-        showDebug("Update Execute Failed: " . $e->getMessage());
         echo "<script>alert('Error updating review: " . addslashes($e->getMessage()) . "');</script>";
     }
 
