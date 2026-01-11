@@ -5,6 +5,25 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Quick Toggle Status Logic (New Feature)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle-status'])) {
+    $id = (int)$_POST['review_id'];
+    $currentStatus = (int)$_POST['current_status'];
+    $newStatus = $currentStatus ? 0 : 1; // Toggle: 1 -> 0, 0 -> 1
+    
+    $stmt = $conn->prepare('UPDATE customer_reviews SET isActive=? WHERE id=?');
+    $stmt->bind_param('ii', $newStatus, $id);
+    
+    if ($stmt->execute()) {
+        // Success - simple redirect to refresh
+        echo "<script>window.location.href = 'manage-review.php';</script>";
+    } else {
+        echo "<script>alert('Error updating status: " . addslashes($stmt->error) . "');</script>";
+    }
+    $stmt->close();
+    exit();
+}
+
 // Delete review logic (optional, aligns with existing UI)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-review']) && isset($_POST['delete_id'])) {
     $delId = (int)$_POST['delete_id'];
@@ -124,7 +143,15 @@ $conn->close();
                                     </td>
                                     <td><?php echo (int)$row['rating']; ?></td>
                                     <td><?php echo htmlspecialchars($row['created_at']); ?></td>
-                                    <td><?php echo $row['isActive'] ? '<span class="text-success">Active</span>' : '<span class="text-danger">Inactive</span>'; ?></td>
+                                    <td>
+                                        <form method="POST" style="display:inline;">
+                                            <input type="hidden" name="review_id" value="<?php echo $row['id']; ?>">
+                                            <input type="hidden" name="current_status" value="<?php echo $row['isActive']; ?>">
+                                            <button type="submit" name="toggle-status" class="btn btn-sm <?php echo $row['isActive'] ? 'btn-success' : 'btn-secondary'; ?>" title="Click to Toggle Status">
+                                                <?php echo $row['isActive'] ? 'Active' : 'Inactive'; ?>
+                                            </button>
+                                        </form>
+                                    </td>
                                     <td>
                                         <!-- Edit Button triggers modal -->
                                         <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#editReviewModal<?php echo $row['id']; ?>">Edit</button>
@@ -193,9 +220,16 @@ $conn->close();
                                 <label for="created_at">Created At</label>
                                 <input type="datetime-local" class="form-control" name="created_at" value="<?php echo date('Y-m-d\TH:i', strtotime($row['created_at'])); ?>" required>
                             </div>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" name="isActive" id="isActive<?php echo $row['id']; ?>" <?php echo $row['isActive'] ? 'checked' : ''; ?>>
-                                <label class="form-check-label" for="isActive<?php echo $row['id']; ?>">Active</label>
+                            
+                            <!-- Improved Switch Design for Active Status -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Status</label>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" name="isActive" id="isActiveSwitch<?php echo $row['id']; ?>" <?php echo $row['isActive'] ? 'checked' : ''; ?>>
+                                    <label class="custom-control-label" for="isActiveSwitch<?php echo $row['id']; ?>">
+                                        Make this review active
+                                    </label>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
