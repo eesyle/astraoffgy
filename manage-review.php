@@ -6,31 +6,52 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Quick Toggle Status Logic
+// Helper to show debug on page
+function showDebug($msg) {
+    echo "<div class='alert alert-info alert-dismissible fade show' role='alert' style='z-index: 9999; position: relative;'>
+            <strong>DEBUG:</strong> " . htmlspecialchars($msg) . "
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+            </button>
+          </div>";
+}
+
+// Quick Toggle Status Logic (New Feature)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'toggle_status') {
+    // Show debug info
+    showDebug("Toggle Status Requested. POST Data: " . json_encode($_POST));
+
     $id = (int)$_POST['review_id'];
     $currentStatus = (int)$_POST['current_status'];
     $newStatus = $currentStatus ? 0 : 1; // Toggle: 1 -> 0, 0 -> 1
     
+    showDebug("Toggling ID $id from $currentStatus to $newStatus");
+
     if ($conn->connect_error) {
+        showDebug("DB Connection Failed: " . $conn->connect_error);
         die("Connection failed: " . $conn->connect_error);
     }
 
     $stmt = $conn->prepare('UPDATE customer_reviews SET isActive=? WHERE id=?');
     if (!$stmt) {
+        showDebug("Prepare Failed: " . $conn->error);
         die("Prepare failed: " . $conn->error);
     }
 
     $stmt->bind_param('ii', $newStatus, $id);
     
-    try {
-        if ($stmt->execute()) {
-            // Success - Redirect immediately
-            header("Location: manage-review.php");
-            exit();
-        }
-    } catch (Exception $e) {
-        die("Error updating status: " . $e->getMessage());
+    if ($stmt->execute()) {
+        // Success - Show success message and redirect after a delay
+        showDebug("Update Successful! Redirecting in 3 seconds...");
+        echo "<script>setTimeout(function(){ window.location.href = 'manage-review.php'; }, 3000);</script>";
+        // Stop script execution here to let the user see the message, but render the rest of the page? 
+        // Actually, to show the message on the *next* page load is better, or pause here.
+        // Let's pause here by NOT exiting immediately, but we need to render the page to see it.
+        // Better approach: set a session variable or just show it and rely on the JS timeout.
+    } else {
+        // Error - Show specific error
+        showDebug("Execute Failed: " . $stmt->error);
+        die("Error updating status: " . $stmt->error);
     }
     $stmt->close();
 }
@@ -40,17 +61,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-review']) && i
     $delId = (int)$_POST['delete_id'];
     $stmt = $conn->prepare('DELETE FROM customer_reviews WHERE id=?');
     $stmt->bind_param('i', $delId);
-    try {
-        $stmt->execute();
-        echo "<script>alert('Review deleted successfully!'); window.location.href = 'manage-review.php';</script>";
-    } catch (Exception $e) {
-        echo "<script>alert('Error deleting review: " . addslashes($e->getMessage()) . "');</script>";
-    }
+    $stmt->execute();
+    echo "<script>alert('Review deleted successfully!'); window.location.href = 'manage-review.php';</script>";
     exit();
 }
 
 // Update review logic for customer_reviews
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['update-review']) || (isset($_POST['action']) && $_POST['action'] === 'update_review'))) {
+    // Show debug info
+    showDebug("Update Review Requested. POST Data: " . json_encode($_POST));
+
     $id = (int)$_POST['review_id'];
     $author = $_POST['author'];
     $text = $_POST['text'];
@@ -68,25 +88,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['update-review']) || 
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $image = 'uploads/' . basename($_FILES['image']['name']);
         move_uploaded_file($_FILES['image']['tmp_name'], $image);
+        showDebug("New image uploaded: $image");
     }
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $photo = 'uploads/' . basename($_FILES['photo']['name']);
         move_uploaded_file($_FILES['photo']['tmp_name'], $photo);
+        showDebug("New photo uploaded: $photo");
     }
 
     $stmt = $conn->prepare('UPDATE customer_reviews SET author=?, image=?, text=?, photo=?, rating=?, created_at=?, isActive=? WHERE id=?');
     if (!$stmt) {
+        showDebug("Update Prepare Failed: " . $conn->error);
         die("Update prepare failed: " . $conn->error);
     }
     
     $stmt->bind_param('ssssisii', $author, $image, $text, $photo, $rating, $created_at, $isActive, $id);
 
-    try {
-        if ($stmt->execute()) {
-            echo "<script>alert('Review updated successfully!'); window.location.href = 'manage-review.php';</script>";
-        }
-    } catch (Exception $e) {
-        echo "<script>alert('Error updating review: " . addslashes($e->getMessage()) . "');</script>";
+    if ($stmt->execute()) {
+        showDebug("Review updated successfully! Redirecting in 3 seconds...");
+        echo "<script>setTimeout(function(){ window.location.href = 'manage-review.php'; }, 3000);</script>";
+    } else {
+        showDebug("Update Execute Failed: " . $stmt->error);
+        echo "<script>alert('Error updating review: " . addslashes($stmt->error) . "');</script>";
     }
 
     $stmt->close();
