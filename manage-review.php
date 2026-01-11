@@ -58,7 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete-review']) && i
 }
 
 // Update review logic for customer_reviews
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update-review'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (isset($_POST['update-review']) || (isset($_POST['action']) && $_POST['action'] === 'update_review'))) {
+    // DEBUG: Log POST data
+    echo "<script>console.log('Debug: Update Review Requested', " . json_encode($_POST) . ");</script>";
+
     $id = (int)$_POST['review_id'];
     $author = $_POST['author'];
     $text = $_POST['text'];
@@ -83,12 +86,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update-review'])) {
     }
 
     $stmt = $conn->prepare('UPDATE customer_reviews SET author=?, image=?, text=?, photo=?, rating=?, created_at=?, isActive=? WHERE id=?');
+    if (!$stmt) {
+        echo "<script>console.error('Debug: Update Prepare Failed: " . addslashes($conn->error) . "');</script>";
+        die("Update prepare failed: " . $conn->error);
+    }
+    
     $stmt->bind_param('ssssisii', $author, $image, $text, $photo, $rating, $created_at, $isActive, $id);
 
     if ($stmt->execute()) {
         echo "<script>alert('Review updated successfully!'); window.location.href = 'manage-review.php';</script>";
     } else {
-        echo "<script>alert('Error updating review. Please try again.');</script>";
+        echo "<script>console.error('Debug: Update Execute Failed: " . addslashes($stmt->error) . "');</script>";
+        echo "<script>alert('Error updating review: " . addslashes($stmt->error) . "');</script>";
     }
 
     $stmt->close();
@@ -172,7 +181,7 @@ $conn->close();
                                             <input type="hidden" name="review_id" value="<?php echo $row['id']; ?>">
                                             <input type="hidden" name="current_status" value="<?php echo $row['isActive']; ?>">
                                             <button type="submit" class="btn btn-sm <?php echo $row['isActive'] ? 'btn-success' : 'btn-secondary'; ?>" title="Click to Toggle Status">
-                                                <?php echo $row['isActive'] ? 'Active' : 'Inactive'; ?>
+                                                <?php echo $row['isActive'] ? 'Deactivate' : 'Activate'; ?>
                                             </button>
                                         </form>
                                     </td>
@@ -200,6 +209,7 @@ $conn->close();
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <form method="POST" action="" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="update_review">
                         <div class="modal-header">
                             <h5 class="modal-title">Edit Review</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
