@@ -1,4 +1,5 @@
 <?php
+ ob_start(); // Start output buffering to prevent header errors
  require_once 'config.php';
 
 if ($conn->connect_error) {
@@ -6,22 +7,44 @@ if ($conn->connect_error) {
 }
 
 // Quick Toggle Status Logic (New Feature)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle-status'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'toggle_status') {
+    // DEBUG: Log POST data to console
+    echo "<script>console.log('Debug: Toggle Status Requested', " . json_encode($_POST) . ");</script>";
+
     $id = (int)$_POST['review_id'];
     $currentStatus = (int)$_POST['current_status'];
     $newStatus = $currentStatus ? 0 : 1; // Toggle: 1 -> 0, 0 -> 1
     
+    // DEBUG: Log calculated values
+    echo "<script>console.log('Debug: Toggling ID $id from $currentStatus to $newStatus');</script>";
+
+    if ($conn->connect_error) {
+        echo "<script>console.error('Debug: DB Connection Failed: " . addslashes($conn->connect_error) . "');</script>";
+        die("Connection failed: " . $conn->connect_error);
+    }
+
     $stmt = $conn->prepare('UPDATE customer_reviews SET isActive=? WHERE id=?');
+    if (!$stmt) {
+        echo "<script>console.error('Debug: Prepare Failed: " . addslashes($conn->error) . "');</script>";
+        die("Prepare failed: " . $conn->error);
+    }
+
     $stmt->bind_param('ii', $newStatus, $id);
     
     if ($stmt->execute()) {
-        // Success - simple redirect to refresh
+        // Success - log success and redirect
+        echo "<script>console.log('Debug: Update Successful');</script>";
+        // Delay redirect slightly to ensure console log is visible (optional, remove for production speed)
+        // header("Location: manage-review.php"); 
+        // For debugging, use JS redirect after a short pause or just JS redirect to keep logs visible if 'Preserve Log' is on
         echo "<script>window.location.href = 'manage-review.php';</script>";
+        exit();
     } else {
-        echo "<script>alert('Error updating status: " . addslashes($stmt->error) . "');</script>";
+        // Error - Show specific error
+        echo "<script>console.error('Debug: Execute Failed: " . addslashes($stmt->error) . "');</script>";
+        die("Error updating status: " . $stmt->error);
     }
     $stmt->close();
-    exit();
 }
 
 // Delete review logic (optional, aligns with existing UI)
@@ -145,9 +168,10 @@ $conn->close();
                                     <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                                     <td>
                                         <form method="POST" style="display:inline;">
+                                            <input type="hidden" name="action" value="toggle_status">
                                             <input type="hidden" name="review_id" value="<?php echo $row['id']; ?>">
                                             <input type="hidden" name="current_status" value="<?php echo $row['isActive']; ?>">
-                                            <button type="submit" name="toggle-status" class="btn btn-sm <?php echo $row['isActive'] ? 'btn-success' : 'btn-secondary'; ?>" title="Click to Toggle Status">
+                                            <button type="submit" class="btn btn-sm <?php echo $row['isActive'] ? 'btn-success' : 'btn-secondary'; ?>" title="Click to Toggle Status">
                                                 <?php echo $row['isActive'] ? 'Active' : 'Inactive'; ?>
                                             </button>
                                         </form>
