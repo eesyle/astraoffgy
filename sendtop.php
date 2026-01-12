@@ -206,7 +206,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             // Append username to the link to ensure auto-login/context
             $link = "https://holdlogix.live/verified_products.php?username=" . urlencode($username);
             
-            $mail->Body = "<p>Your $bankText order has been verified.</p>"
+            $mail->Body = "<p>Your order has been verified.</p>"
                 . "<p>Kindly click on the option link below to view your account details.</p>"
                 . "<p><a href='$link' style='background-color: #696cff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;'>View Order Details</a></p>"
                 . "<p>Or copy this link: $link</p>"
