@@ -49,6 +49,27 @@ if(!$_topbalance)
 if (!isset($WoodForest)) {
     $WoodForest = '';
 }
+
+// Determine text based on product type
+$productType = isset($_GET['type']) ? $_GET['type'] : (isset($_SESSION['product_type']) ? $_SESSION['product_type'] : 'logs');
+
+if ($productType === 'dumps') {
+    $infoLabel = 'dumps and pin infos';
+    $infoDetails = 'dumps and pin details';
+    $modalTitle = 'Your Dumps and Pin infos';
+} elseif ($productType === 'cashapp') {
+    $infoLabel = 'cashapp details';
+    $infoDetails = 'cashapp details';
+    $modalTitle = 'Your Cashapp Details';
+} elseif ($productType === 'paypal') {
+    $infoLabel = 'paypal details';
+    $infoDetails = 'paypal details';
+    $modalTitle = 'Your Paypal Details';
+} else {
+    $infoLabel = 'logs infos';
+    $infoDetails = 'log details';
+    $modalTitle = 'Your Logs infos';
+}
  
 ?>
 
@@ -208,7 +229,7 @@ if (!isset($WoodForest)) {
                                                 <label for="defaultFormControlInput" class="form-label text-white">Confirm E-mail</label>
                                                <input type="text" name="email" value=" <?=$email?>" class="form-control" id="defaultFormControlInput" aria-describedby="defaultFormControlHelp">
                                                 <div id="defaultFormControlHelp" class="form-text">
-                                                    please verify if the above email is correct, your logs infos will be sent to this email.
+                                                    please verify if the above email is correct, your <?= $infoLabel ?> will be sent to this email.
                                                 </div>
                                                 <input type="hidden" name="wfprice" value="<?= $wfprice ?>" />
                                                 <input type="hidden" name="dw" value="<?= $WoodForest ?>" />
@@ -217,7 +238,7 @@ if (!isset($WoodForest)) {
                                         </form>
                                         <div class="py-3">
                                             <p>
-                                                NOTE: Double-check the email address you enter to receive the logs infos. The relevant information for cashing out on purchases will also be sent to the email address you supplied above along with the log details. If you have any questions after receiving the
+                                                NOTE: Double-check the email address you enter to receive the <?= $infoLabel ?>. The relevant information for cashing out on purchases will also be sent to the email address you supplied above along with the <?= $infoDetails ?>. If you have any questions after receiving the
                                                 email, get in touch 
                                                 <span class="tg-highlight-wrap">
                                                     <a href="https://t.me/jayw2w" target="_blank" rel="noopener" class="btn btn-success tg-highlight-link" aria-label="Text us on Telegram">
@@ -259,7 +280,7 @@ if (!isset($WoodForest)) {
                         <div class="modal-dialog card-bg" role="document" style="background-color: black !important; color: white !important">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Your Logs infos</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel"><?= $modalTitle ?></h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -271,7 +292,7 @@ if (!isset($WoodForest)) {
                                             <label for="defaultFormControlInput" class="form-label">Email to be sent to</label>
                                             <input type="text" name="email-verify" value= '<?=$email?>', class="form-control" id="defaultFormControlInput" aria-describedby="defaultFormControlHelp">
                                             <div id="defaultFormControlHelp" class="form-text">
-                                                please verify if the above email is correct, your logs infos will be sent to this email.
+                                                please verify if the above email is correct, your <?= $infoLabel ?> will be sent to this email.
                                             </div>
                                             <input type="hidden" name="wfprice" value="<?= $wfprice ?>" />
                                             <input type="hidden" name="dw" value="<?= $WoodForest ?>" />

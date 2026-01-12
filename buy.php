@@ -24,13 +24,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['bank'] = $_POST['bank'];
         }
 
+        // Capture product type (defaults to 'logs' if not set)
+        $productType = isset($_POST['product_type']) ? $_POST['product_type'] : 'logs';
+        $_SESSION['product_type'] = $productType;
+
         // Ensure session data is flushed before redirect
         if (function_exists('session_write_close')) {
             session_write_close();
         }
 
         // Also pass price via query string to cover any session edge cases
-        header('Location: CnfirmEmailToBuyW.php?wfprice=' . urlencode($normalized));
+        header('Location: CnfirmEmailToBuyW.php?wfprice=' . urlencode($normalized) . '&type=' . urlencode($productType));
         exit();
     }
 }

@@ -136,6 +136,7 @@
                         <td>
                             <form method="post" action="buy.php">
                                 <input type="hidden" name="price" value="<?php echo htmlspecialchars($row['price']); ?>">
+                                <input type="hidden" name="product_type" value="paypal">
                                 <button type="submit" class="btn btn-rounded btn-primary btn-xs">Buy</button>
                             </form>
                         </td>
