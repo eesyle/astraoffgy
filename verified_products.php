@@ -24,32 +24,52 @@ if ($result) {
     // Use 'price' as balance based on findings in CnfirmEmailToBuyW.php
     $balance = (float)($row['price'] ?? 0.00);
 }
-
 // Product Prices
 $socksPrice = 60.00;
 $ratsPrice = 50.00;
-
 ?>
-<!DOCTYPE html>
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="static/" data-template="vertical-menu-template-free">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Verified Products | HoldLogix</title>
-    
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="static/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="static/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="static/vendor/fonts/boxicons.css" />
 
-    <!-- Custom Styles -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <title>HoldLogix</title>
+    <meta property="og:description" content="Explicit Dumps">
+    <meta property="og:image" content="assets/logo.png">
+    <!-- FAVICONS ICON -->
+    <link rel="shortcut icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="xui-main/vendor/toastr/css/toastr.min.css">
+    <link href="xui-main/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+    <link href="xui-main/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="xui-main/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="xui-main/vendor/jquery-autocomplete/jquery-ui.css" rel="stylesheet">
+      <!-- Bootstrap Icons -->
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Style css -->
     <link href="xui-main/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="static/css/grayscale.css">
-    
+    <link href="static/css/grayscale.css" rel="stylesheet">
+    <style>
+        /* Custom Responsive Fixes */
+        @media (max-width: 768px) {
+            .content-body {
+                margin-left: 0 !important;
+                padding-top: 80px; /* Ensure content is not hidden behind header */
+            }
+            .header {
+                width: 100% !important;
+            }
+        }
+    </style>
     <style>
         .product-card {
             background: rgba(35, 39, 68, 0.8);
@@ -121,12 +141,16 @@ $ratsPrice = 50.00;
             transform: translate(-50%, -52%) scale(1);
         }
     </style>
+    
 </head>
 
 <body>
 
-    <?php include './navHeader.php'; ?>
-
+    <!-- **********************************
+        Main wrapper start
+    *********************************** -->
+    <div id="main-wrapper">
+           <?php include './navHeader.php'; ?>
     <!-- Header Start -->
     <div class="header" style="background: #2d2362; opacity: .9;">
         <div class="header-content">
@@ -148,18 +172,11 @@ $ratsPrice = 50.00;
         </div>
     </div>
     <!-- Header End -->
-
     <?php include './sidebar.php'; ?>
-
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            <div class="layout-page">
-                <div class="content-wrapper">
-                    
-                    <div class="container-fluid text-white pt-5 pb-5">
-                        
-                        <div class="row mb-4">
+    
+    <div class="content-body">
+        <div class="container-fluid text-white pt-5 pb-5">
+            <div class="row mb-4">
                             <div class="col-12 text-center">
                                 <h2 class="text-white mb-3">Premium Verified Products</h2>
                                 <p class="text-muted">Exclusive access for verified account holders.</p>
@@ -280,15 +297,29 @@ $ratsPrice = 50.00;
                             });
                         </script>
                     </div>
-                    
-                </div>
-            </div>
         </div>
     </div>
 
     <?php include 'topModel.php'; ?>
-    <!-- Core JS -->
- <!--**********************************
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+
+    <!-- Modal -->
+     <?php include './topModel.php'?>;
+    <!-- /Modal -->
+
+    <!-- Modal -->
+     <?php include './supportModel.php'?>;
+    <!-- /Modal -->
+
+
+
+    <!-- Reset-Password Modal -->
+ 
+    <!-- /Reset-Password Modal -->
+
+    <!--**********************************
         Scripts
     ***********************************-->
     <!-- Required vendors -->
@@ -321,6 +352,7 @@ $ratsPrice = 50.00;
             alert("Copied: " + c);
         }
     </script>
-    
+
 </body>
+
 </html>

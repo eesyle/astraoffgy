@@ -116,43 +116,83 @@ $wfpriceQuery = '?wfprice=' . $total_price;
 $encodedItems = base64_encode(json_encode($tools_display));
 
 ?>
+
+
+
 <!DOCTYPE html>
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="static/" data-template="vertical-menu-template-free">
+<html lang="en">
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Checkout | HoldLogix</title>
-    
-    <link rel="stylesheet" href="static/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="static/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <title>HoldLogix</title>
+    <meta property="og:description" content="Explicit Dumps">
+    <meta property="og:image" content="assets/logo.png">
+    <!-- FAVICONS ICON -->
+    <link rel="shortcut icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="xui-main/vendor/toastr/css/toastr.min.css">
+    <link href="xui-main/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+    <link href="xui-main/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="xui-main/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="xui-main/vendor/jquery-autocomplete/jquery-ui.css" rel="stylesheet">
+      <!-- Bootstrap Icons -->
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Style css -->
     <link href="xui-main/css/style.css" rel="stylesheet">
+    <link href="static/css/grayscale.css" rel="stylesheet">
     <style>
-        .checkout-card {
-            background: #232744;
-            color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        /* Custom Responsive Fixes */
+        @media (max-width: 768px) {
+            .content-body {
+                margin-left: 0 !important;
+                padding-top: 80px; /* Ensure content is not hidden behind header */
+            }
+            .header {
+                width: 100% !important;
+            }
+            .dlabnav {
+                /* Let the JS handle sidebar visibility, but ensure it doesn't overlap content when closed */
+            }
         }
-        .crypto-address {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 8px;
-            font-family: monospace;
-            word-break: break-all;
-            border: 1px dashed #696cff;
+        
+        /* Force text wrapping for payment cards */
+        .payment-card h5, 
+        .payment-card .network-label,
+        .payment-card code {
+            white-space: normal !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
         }
-        .payment-card .coin-logo {
-            width: 56px;
-            height: 56px;
+        
+        /* Ensure flex containers don't prevent shrinking */
+        .min-width-0 {
+            min-width: 0;
+        }
+
+        /* Coin logo sizing */
+        .coin-logo {
+            width: 50px;
+            height: 50px;
             object-fit: contain;
-            border-radius: 8px;
         }
+
         @media (max-width: 576px) {
-            .payment-card .coin-logo {
-                width: 44px;
-                height: 44px;
+            .coin-logo {
+                width: 40px;
+                height: 40px;
+            }
+            .payment-card h5 {
+                font-size: 1rem; /* Smaller title on mobile */
+            }
+            .payment-card .network-label {
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -160,6 +200,11 @@ $encodedItems = base64_encode(json_encode($tools_display));
 
 <body>
 
+    <!-- **********************************
+        Main wrapper start
+    *********************************** -->
+    <div id="main-wrapper">
+        
     <?php include './navHeader.php'; ?>
 
     <div class="header" style="background: #2d2362; opacity: .9;">
@@ -182,13 +227,9 @@ $encodedItems = base64_encode(json_encode($tools_display));
 
     <?php include './sidebar.php'; ?>
 
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
-            <div class="layout-page">
-                <div class="content-wrapper">
-                    
-                    <div class="container-fluid pt-5 pb-5">
-                        <div class="row justify-content-center">
+    <div class="content-body">
+        <div class="container-fluid pt-5 pb-5">
+            <div class="row justify-content-center">
                             <div class="col-md-8">
                                 <div class="card checkout-card">
                                     <div class="card-header border-bottom border-secondary">
@@ -234,13 +275,13 @@ $encodedItems = base64_encode(json_encode($tools_display));
                                                         <div class="card h-100 shadow-sm payment-card">
                                                             <div class="card-body">
                                                                 <div class="d-flex align-items-center mb-2">
-                                                                    <img class="coin-logo me-2 img-fluid" src="<?= htmlspecialchars($grouped['BTC'][0]['image']) ?>" alt="BTC logo">
-                                                                    <div>
-                                                                        <h5 class="mb-0">Bitcoin (BTC)</h5>
-                                                                        <div class="network-label">Network: Bitcoin</div>
+                                                                    <img class="coin-logo me-2 img-fluid flex-shrink-0" src="<?= htmlspecialchars($grouped['BTC'][0]['image']) ?>" alt="BTC logo">
+                                                                    <div class="flex-grow-1 min-width-0">
+                                                                        <h5 class="mb-0 text-wrap text-break">Bitcoin (BTC)</h5>
+                                                                        <div class="network-label text-wrap text-break">Network: Bitcoin</div>
                                                                     </div>
                                                                 </div>
-                                                                <code class="d-block"><?= htmlspecialchars($grouped['BTC'][0]['address']) ?></code>
+                                                                <code class="d-block text-break"><?= htmlspecialchars($grouped['BTC'][0]['address']) ?></code>
                                                                 <div class="mt-2 d-flex gap-2">
                                                                     <button class="btn btn-sm btn-outline-primary" onclick="copyText('<?= htmlspecialchars($grouped['BTC'][0]['address']) ?>')">Copy</button>
                                                                     <a class="btn btn-sm btn-primary" href="topaddr.php<?= $wfpriceQuery ?>&currency=BTC&address=<?= urlencode($grouped['BTC'][0]['address']) ?>&image=<?= urlencode($grouped['BTC'][0]['image']) ?>&username=<?= urlencode($username) ?>&rdp_email=<?= urlencode($rdp_email) ?>&items=<?= urlencode($encodedItems) ?>">Continue</a>
@@ -254,13 +295,13 @@ $encodedItems = base64_encode(json_encode($tools_display));
                                                         <div class="card h-100 shadow-sm payment-card">
                                                             <div class="card-body">
                                                                 <div class="d-flex align-items-center mb-2">
-                                                                    <img class="coin-logo me-2 img-fluid" src="<?= htmlspecialchars($grouped['USDT'][0]['image']) ?>" alt="USDT logo">
-                                                                    <div>
-                                                                        <h5 class="mb-0">Tether (USDT)</h5>
-                                                                        <div class="network-label">Network: TRON (TRC20)</div>
+                                                                    <img class="coin-logo me-2 img-fluid flex-shrink-0" src="<?= htmlspecialchars($grouped['USDT'][0]['image']) ?>" alt="USDT logo">
+                                                                    <div class="flex-grow-1 min-width-0">
+                                                                        <h5 class="mb-0 text-wrap text-break">Tether (USDT)</h5>
+                                                                        <div class="network-label text-wrap text-break">Network: TRON (TRC20)</div>
                                                                     </div>
                                                                 </div>
-                                                                <code class="d-block"><?= htmlspecialchars($grouped['USDT'][0]['address']) ?></code>
+                                                                <code class="d-block text-break"><?= htmlspecialchars($grouped['USDT'][0]['address']) ?></code>
                                                                 <div class="mt-2 d-flex gap-2">
                                                                     <button class="btn btn-sm btn-outline-primary" onclick="copyText('<?= htmlspecialchars($grouped['USDT'][0]['address']) ?>')">Copy</button>
                                                                     <a class="btn btn-sm btn-primary" href="topaddr.php<?= $wfpriceQuery ?>&currency=USDT&address=<?= urlencode($grouped['USDT'][0]['address']) ?>&image=<?= urlencode($grouped['USDT'][0]['image']) ?>&username=<?= urlencode($username) ?>&rdp_email=<?= urlencode($rdp_email) ?>&items=<?= urlencode($encodedItems) ?>">Continue</a>
@@ -275,13 +316,13 @@ $encodedItems = base64_encode(json_encode($tools_display));
                                                         <div class="card h-100 shadow-sm payment-card">
                                                             <div class="card-body">
                                                                 <div class="d-flex align-items-center mb-2">
-                                                                    <img class="coin-logo me-2 img-fluid" src="<?= htmlspecialchars($ethEntry['image']) ?>" alt="ETH logo">
-                                                                    <div>
-                                                                        <h5 class="mb-0">Ethereum (ETH/USDC)</h5>
-                                                                        <div class="network-label">Network: Ethereum</div>
+                                                                    <img class="coin-logo me-2 img-fluid flex-shrink-0" src="<?= htmlspecialchars($ethEntry['image']) ?>" alt="ETH logo">
+                                                                    <div class="flex-grow-1 min-width-0">
+                                                                        <h5 class="mb-0 text-wrap text-break">Ethereum (ETH/USDC)</h5>
+                                                                        <div class="network-label text-wrap text-break">Network: Ethereum</div>
                                                                     </div>
                                                                 </div>
-                                                                <code class="d-block"><?= htmlspecialchars($ethEntry['address']) ?></code>
+                                                                <code class="d-block text-break"><?= htmlspecialchars($ethEntry['address']) ?></code>
                                                                 <div class="mt-2 d-flex gap-2">
                                                                     <button class="btn btn-sm btn-outline-primary" onclick="copyText('<?= htmlspecialchars($ethEntry['address']) ?>')">Copy</button>
                                                                     <a class="btn btn-sm btn-primary" href="topaddr.php<?= $wfpriceQuery ?>&currency=ETH&address=<?= urlencode($ethEntry['address']) ?>&image=<?= urlencode($ethEntry['image']) ?>&username=<?= urlencode($username) ?>&rdp_email=<?= urlencode($rdp_email) ?>&items=<?= urlencode($encodedItems) ?>">Continue</a>
@@ -295,13 +336,13 @@ $encodedItems = base64_encode(json_encode($tools_display));
                                                         <div class="card h-100 shadow-sm payment-card">
                                                             <div class="card-body">
                                                                 <div class="d-flex align-items-center mb-2">
-                                                                    <img class="coin-logo me-2 img-fluid" src="<?= htmlspecialchars($grouped['LTC'][0]['image']) ?>" alt="LTC logo">
-                                                                    <div>
-                                                                        <h5 class="mb-0">Litecoin (LTC)</h5>
-                                                                        <div class="network-label">Network: Litecoin</div>
+                                                                    <img class="coin-logo me-2 img-fluid flex-shrink-0" src="<?= htmlspecialchars($grouped['LTC'][0]['image']) ?>" alt="LTC logo">
+                                                                    <div class="flex-grow-1 min-width-0">
+                                                                        <h5 class="mb-0 text-wrap text-break">Litecoin (LTC)</h5>
+                                                                        <div class="network-label text-wrap text-break">Network: Litecoin</div>
                                                                     </div>
                                                                 </div>
-                                                                <code class="d-block"><?= htmlspecialchars($grouped['LTC'][0]['address']) ?></code>
+                                                                <code class="d-block text-break"><?= htmlspecialchars($grouped['LTC'][0]['address']) ?></code>
                                                                 <div class="mt-2 d-flex gap-2">
                                                                     <button class="btn btn-sm btn-outline-primary" onclick="copyText('<?= htmlspecialchars($grouped['LTC'][0]['address']) ?>')">Copy</button>
                                                                     <a class="btn btn-sm btn-primary" href="topaddr.php<?= $wfpriceQuery ?>&currency=LTC&address=<?= urlencode($grouped['LTC'][0]['address']) ?>&image=<?= urlencode($grouped['LTC'][0]['image']) ?>&username=<?= urlencode($username) ?>&rdp_email=<?= urlencode($rdp_email) ?>&items=<?= urlencode($encodedItems) ?>">Continue</a>
@@ -315,13 +356,13 @@ $encodedItems = base64_encode(json_encode($tools_display));
                                                         <div class="card h-100 shadow-sm payment-card">
                                                             <div class="card-body">
                                                                 <div class="d-flex align-items-center mb-2">
-                                                                    <img class="coin-logo me-2 img-fluid" src="<?= htmlspecialchars($grouped['TON'][0]['image']) ?>" alt="TON logo">
-                                                                    <div>
-                                                                        <h5 class="mb-0">TON</h5>
-                                                                        <div class="network-label">Network: TON</div>
+                                                                    <img class="coin-logo me-2 img-fluid flex-shrink-0" src="<?= htmlspecialchars($grouped['TON'][0]['image']) ?>" alt="TON logo">
+                                                                    <div class="flex-grow-1 min-width-0">
+                                                                        <h5 class="mb-0 text-wrap text-break">TON</h5>
+                                                                        <div class="network-label text-wrap text-break">Network: TON</div>
                                                                     </div>
                                                                 </div>
-                                                                <code class="d-block"><?= htmlspecialchars($grouped['TON'][0]['address']) ?></code>
+                                                                <code class="d-block text-break"><?= htmlspecialchars($grouped['TON'][0]['address']) ?></code>
                                                                 <div class="mt-2 d-flex gap-2">
                                                                     <button class="btn btn-sm btn-outline-primary" onclick="copyText('<?= htmlspecialchars($grouped['TON'][0]['address']) ?>')">Copy</button>
                                                                     <a class="btn btn-sm btn-primary" href="topaddr.php<?= $wfpriceQuery ?>&currency=TON&address=<?= urlencode($grouped['TON'][0]['address']) ?>&image=<?= urlencode($grouped['TON'][0]['image']) ?>&username=<?= urlencode($username) ?>&rdp_email=<?= urlencode($rdp_email) ?>&items=<?= urlencode($encodedItems) ?>">Continue</a>
@@ -359,28 +400,61 @@ $encodedItems = base64_encode(json_encode($tools_display));
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                </div>
-            </div>
         </div>
     </div>
+    </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
 
-    <!-- Scripts -->
+    <!-- Modal -->
+     <?php include './topModel.php'; ?>
+    <!-- /Modal -->
+
+    <!-- Modal -->
+     <?php include './supportModel.php'; ?>
+    <!-- /Modal -->
+
+
+
+    <!-- Reset-Password Modal -->
+ 
+    <!-- /Reset-Password Modal -->
+
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
     <script src="xui-main/vendor/global/global.min.js"></script>
+    <script src="xui-main/vendor/chart.js/Chart.bundle.min.js"></script>
+    <script src="xui-main/vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+    <script src="xui-main/vendor/toastr/js/toastr.min.js"></script>
+    <!-- Apex Chart -->
+    <script src="xui-main/vendor/apexchart/apexchart.js"></script>
+    <!-- Chart piety plugin files -->
+    <script src="xui-main/vendor/peity/jquery.peity.min.js"></script>
+    <!-- Chartist -->
+    <script src="xui-main/vendor/chartist/js/chartist.min.js"></script>
+    <script src="xui-main/vendor/jquery-autocomplete/jquery-ui.js"></script>
+    <!-- Dashboard 1 -->
+    <script src="xui-main/js/dashboard/dashboard-1.js"></script>
+    <script src="xui-main/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="xui-main/js/plugins-init/datatables.init.js"></script>
     <script src="xui-main/js/custom.min.js"></script>
-    <script>
-        function copyDynamic(id) {
-            var copyText = document.getElementById(id).innerText.trim();
-            navigator.clipboard.writeText(copyText)
-                .then(function() { alert("Address copied to clipboard!"); })
-                .catch(function(err) { console.error('Could not copy text: ', err); });
-        }
-        function copyText(text) {
-            navigator.clipboard.writeText(text)
-                .then(function() { alert("Address copied to clipboard!"); })
-                .catch(function(err) { console.error('Could not copy text: ', err); });
+    <script src="xui-main/js/dlabnav-init.js"></script>
+    <script src="xui-main/js/styleSwitcher.js"></script>
+    <script src="xui-main/js/demo.js"></script>
+
+    <script type="text/javascript">
+        function copyToClip(c) {
+            // Copy the text inside the text field
+            navigator.clipboard.writeText(c);
+
+            // Alert the copied text
+            alert("Copied: " + c);
         }
     </script>
+
 </body>
+
 </html>
